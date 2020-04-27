@@ -5,6 +5,8 @@ namespace RMS\WP2S\GitHub;
 class Controller {
     public function run() : void {
         add_filter('wp2static_add_menu_items', [ 'RMS\WP2S\GitHub\Controller', 'addSubMenuPage' ]);
+
+        Database::instance()->update_db();
     }
 
     public static function addSubMenuPage(array $submenu_pages) : array {
