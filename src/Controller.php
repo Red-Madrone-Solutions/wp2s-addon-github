@@ -3,8 +3,13 @@
 namespace RMS\WP2S\GitHub;
 
 class Controller {
+    private static $options_action = 'rms_wp2s_gh_options';
+    private static $options_nonce_name = 'rms_options_security_nonce';
+
     public function run() : void {
         add_filter('wp2static_add_menu_items', [ 'RMS\WP2S\GitHub\Controller', 'addSubMenuPage' ]);
+
+        add_action('admin_post_' . self::$options_action, [ $this, 'saveOptionsFromUi' ]);
 
         Database::instance()->update_db();
     }
@@ -16,6 +21,10 @@ class Controller {
     }
 
     public static function renderOptionsPage() : void {
+        $view_params = [
+            'action' => self::$options_action,
+            'nonce_name' => self::$options_nonce_name,
+        ];
         require_once RMS_WP2S_GH_PATH . 'views/options-page.php';
     }
 
@@ -23,5 +32,11 @@ class Controller {
     }
 
     public static function deactivate() : void {
+    }
+
+    public function saveOptionsFromUi() : void {
+        check_admin_referer(self::$options_action, self::$options_nonce_name);
+
+        error_log("POST: " . print_r($_POST, 1));
     }
 }
