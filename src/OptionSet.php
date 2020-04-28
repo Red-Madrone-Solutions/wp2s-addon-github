@@ -19,7 +19,7 @@ class OptionSet implements \IteratorAggregate {
         $this->list[]= new Option('account', 'Account', 'The account at GitHub that owns the repository you want to deploy to');
         $this->list[]= new Option('repository', 'Repository');
         $this->list[]= new Option('branch', 'Branch');
-        $this->list[]= new EncryptedOption('personal_access_token', 'Personal Access Token');
+        $this->list[]= new EncryptedOption('personal_access_token', 'Personal Access Token', 'Not displayed for security. Enter an invalid token value to disable.');
         $this->list[]= new Option('subdirectory', 'Subdirectory');
         $this->list[]= new Option('commit_message', 'Commit Message');
     }
