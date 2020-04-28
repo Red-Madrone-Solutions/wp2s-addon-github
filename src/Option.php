@@ -42,6 +42,10 @@ class Option {
         return '';
     }
 
+    public function ui_value() {
+        return $this->value();
+    }
+
     public function value() {
         return $this->value;
     }

@@ -60,4 +60,8 @@ class EncryptedOption extends Option {
             $this->value_changed = true;
         }
     }
+
+    public function ui_value() {
+        return '';
+    }
 }
