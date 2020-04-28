@@ -5,8 +5,10 @@ namespace RMS\WP2S\GitHub;
 if ( !defined('ABSPATH') ) exit;
 
 class Database {
-    private $db_version     = '0.5.0';
+    private $db_version     = '0.6.0';
     private $db_version_key = 'rms_wp2s_gh_db_version';
+
+    private $option_set = null;
 
     private $options_table_name = '';
 
@@ -26,6 +28,11 @@ class Database {
     public function update_db() {
         if ( get_option($this->db_version_key) != $this->db_version ) {
             $this->setup_db();
+
+            if ( $this->option_set_needs_seeding() ) {
+                $this->seed_option_set();
+            }
+            update_option($this->db_version_key, $this->db_version);
         }
     }
 
@@ -35,16 +42,78 @@ class Database {
 
         $options_table_sql = <<< EOSQL
 CREATE TABLE {$this->options_table_name} (
-    `id` MEDIUMINT(9) UNSIGNED NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255) NOT NULL,
     `value` VARCHAR(255) NOT NULL,
-    `label` VARCHAR(255) NULL,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`name`)
 ) $charset_collate
 EOSQL;
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta([$options_table_sql]);
-        update_option($this->db_version_key, $this->db_version);
+    }
+
+    private function optionSet() : OptionSet {
+        if ( is_null($this->option_set) ) {
+            $this->option_set = new OptionSet();
+        }
+
+        return $this->option_set;
+    }
+
+    private function option_set_needs_seeding() : bool {
+        global $wpdb;
+
+        $query_vals = [];
+        $placeholders = [];
+
+        $option_set = $this->optionSet();
+        foreach ( $option_set as $option ) {
+            $placeholders[]= '%s';
+            $query_vals[]= $option->name();
+        }
+
+        $prepare_sql = sprintf(
+            "SELECT count(*) FROM %s WHERE `name` IN (%s)",
+            $this->options_table_name,
+            implode(', ', $placeholders)
+        );
+
+
+        $seeded_count = (int) $wpdb->get_var(
+            $wpdb->prepare($prepare_sql, $query_vals)
+        );
+
+        return $seeded_count !== $option_set->count();
+    }
+
+    private function seed_option_set() {
+        $option_set = $this->optionSet();
+
+        foreach ($option_set as $option) {
+            $this->seed_option($option);
+        }
+    }
+
+    private function seed_option($option) : bool {
+        global $wpdb;
+
+        // Check for existing option
+        $count = (int) $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT count(*) FROM {$this->options_table_name} WHERE `name` = %s", $option->name()
+            )
+        );
+
+        // Seed option if no existing
+        if ( $count === 0 ) {
+            $result = $wpdb->insert(
+                $this->options_table_name,
+                [ 'name' => $option->name(), 'value' => $option->default_value() ],
+                [ '%s', '%s' ]
+            );
+            return $result === 1;
+        }
+
+        return false;
     }
 }

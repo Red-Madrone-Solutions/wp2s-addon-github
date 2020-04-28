@@ -55,6 +55,10 @@ class Option {
     public function type() {
         return 'text';
     }
+
+    public function default_value() {
+        return '';
+    }
 }
 
 class EncryptedOption extends Option {
