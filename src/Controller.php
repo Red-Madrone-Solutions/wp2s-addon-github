@@ -30,6 +30,22 @@ class Controller {
     }
 
     public static function activate() : void {
+        self::generateAndSaveEncryptionKey();
+        self::generateAndSaveHashSalt();
+    }
+
+    private static function generateAndSaveEncryptionKey() {
+        $key = Util::random_bytes(32);
+        $bits = wp_upload_dir();
+        $outfile = $bits['basedir'] . '/.rms-wp2s-gh-enc-key';
+        file_put_contents($outfile, base64_encode($key));
+    }
+
+    private static function generateAndSaveHashSalt() {
+        $key = Util::random_bytes(16);
+        $bits = wp_upload_dir();
+        $outfile = $bits['basedir'] . '/.rms-wp2s-gh-hash-salt';
+        file_put_contents($outfile, base64_encode($key));
     }
 
     public static function deactivate() : void {
