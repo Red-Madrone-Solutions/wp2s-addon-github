@@ -64,4 +64,8 @@ class EncryptedOption extends Option {
     public function ui_value() {
         return '';
     }
+
+    public function value($decrypt = false) {
+        return $decrypt ? Util::decrypt($this->value, self::key(), self::salt(), $encoded = true) : $this->value;
+    }
 }
