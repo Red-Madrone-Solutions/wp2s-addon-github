@@ -16,7 +16,7 @@ class OptionSet implements \IteratorAggregate {
     }
 
     protected function setup() {
-        $this->list[]= new Option('account', 'Account');
+        $this->list[]= new Option('account', 'Account', 'The account at GitHub that owns the repository you want to deploy to');
         $this->list[]= new Option('repository', 'Repository');
         $this->list[]= new Option('branch', 'Branch');
         $this->list[]= new EncryptedOption('personal_access_token', 'Personal Access Token');

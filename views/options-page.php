@@ -6,10 +6,15 @@
     <input name="action" type="hidden" value="<?php echo esc_attr($view_params['action']); ?>">
     <table class="form-table" role="presentation">
         <tbody>
-            <?php foreach ( $view_params['option_set'] as $option ) : ?>
+            <?php foreach ( $view_params['option_set'] as $option ) : $description = $option->description(); ?>
                 <tr>
                     <th scope="row"><label for="<?php echo esc_attr($option->id()); ?>"><?php echo esc_html($option->label()); ?></label></th>
-                    <td><input name="<?php echo esc_attr($option->name()); ?>" type="<?php echo esc_attr($option->type()); ?>" id="<?php echo esc_attr($option->id()); ?>" class="regular-text" value="<?php echo esc_attr($option->value()); ?>"></td>
+                    <td>
+                    <input name="<?php echo esc_attr($option->name()); ?>" type="<?php echo esc_attr($option->type()); ?>" id="<?php echo esc_attr($option->id()); ?>" class="regular-text" value="<?php echo esc_attr($option->value()); ?>" <?php echo $description ? sprintf('aria-describedby="%s-description"', $option->name()) : ''; ?>>
+                        <?php if ( $description ) : ?>
+                            <p class="description" id="<?php echo esc_attr($option->name()); ?>-description"><?php echo esc_html($description); ?></p>
+                        <?php endif; ?>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
