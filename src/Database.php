@@ -20,6 +20,18 @@ class Database {
         return $instance;
     }
 
+    public static function teardown() {
+        $self = self::instance();
+        $self->teardown_db();
+    }
+
+    private function teardown_db() {
+        global $wpdb;
+        $sql = "DROP TABLE IF EXISTS {$this->options_table_name}";
+        $wpdb->query($sql);
+        delete_option($this->db_version_key);
+    }
+
     private function __construct() {
         global $wpdb;
         $this->options_table_name = $wpdb->prefix . 'rms_wp2s_addon_github_options';

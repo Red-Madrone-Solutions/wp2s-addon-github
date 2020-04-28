@@ -35,6 +35,7 @@ class Controller {
 
     public static function deactivate() : void {
         EncryptedOption::teardown();
+        Database::teardown();
     }
 
     public function saveOptionsFromUi() : void {
