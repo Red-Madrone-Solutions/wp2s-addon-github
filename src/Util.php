@@ -34,7 +34,7 @@ class Util {
         $cipher_text = $iv . openssl_encrypt($message, self::ENCRYPT_METHOD, $enc_key, OPENSSL_RAW_DATA, $iv);
 
         $mac = self::hash($cipher_text, $auth_key, $salt);
-        $return = $mac . $ciphertext;
+        $return = $mac . $cipher_text;
         return $encode ? base64_encode($return) : $return;
     }
 
