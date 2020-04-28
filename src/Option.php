@@ -8,8 +8,8 @@ class Option {
     private $name;
     private $label;
     private $description;
-    private $value;
-    private $value_changed = false;
+    protected $value;
+    protected $value_changed = false;
 
     public function __construct($name, $label, $description = '') {
         $this->name = $name;
