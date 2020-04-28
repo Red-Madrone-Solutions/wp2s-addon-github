@@ -10,9 +10,21 @@ class EncryptedOption extends Option {
         return $bits['basedir'] . '/.rms-wp2s-gh-enc-key';
     }
 
+    private static function key() {
+        return base64_decode(
+            file_get_contents( self::encryption_key_file() )
+        );
+    }
+
     private static function hash_salt_file() {
         $bits = wp_get_upload_dir();
         return $bits['basedir'] . '/.rms-wp2s-gh-hash-salt';
+    }
+
+    private static function salt() {
+        return base64_decode(
+            file_get_contents( self::hash_salt_file() )
+        );
     }
 
     public static function setup($overwrite = false) {
