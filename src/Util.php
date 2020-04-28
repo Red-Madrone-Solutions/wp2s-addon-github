@@ -28,12 +28,14 @@ class Util {
     public static function encrypt($message, $key, $salt, $encode = false) {
         list($enc_key, $auth_key) = self::splitKeys($key, $salt);
 
-        if ( $encoded ) {
-            $message = base64_decode($message, true);
-            if ( $message === false ) {
-                throw new Exception('Encryption failure');
-            }
-        }
+        $iv_size = openssl_cipher_iv_length(self::ENCRYPT_METHOD);
+        $iv = self::random_bytes($iv_size);
+
+        $cipher_text = $iv . openssl_encrypt($message, self::ENCRYPT_METHOD, $enc_key, OPENSSL_RAW_DATA, $iv);
+
+        $mac = self::hash($cipher_text, $auth_key, $salt);
+        $return = $mac . $ciphertext;
+        return $encode ? base64_encode($return) : $return;
     }
 
     protected static function hash($message, $key, $salt) {
