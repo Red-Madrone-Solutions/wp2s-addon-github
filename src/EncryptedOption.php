@@ -31,6 +31,11 @@ class EncryptedOption extends Option {
         }
     }
 
+    public static function teardown() {
+        unlink( self::encryption_key_file() );
+        unlink( self::hash_salt_file() );
+    }
+
     public function type() {
         return 'password';
     }
