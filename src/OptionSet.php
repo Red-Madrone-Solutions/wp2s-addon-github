@@ -7,7 +7,7 @@ if ( !defined('ABSPATH') ) exit;
 class OptionSet implements \IteratorAggregate {
     private $list = [];
 
-    public function __construct($data = [], $load_from_db = false) {
+    public function __construct($load_from_db = false, $data = []) {
         $this->setup();
         if ( $load_from_db ) {
             $this->load_option_values_from_db();
