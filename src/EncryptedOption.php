@@ -51,4 +51,13 @@ class EncryptedOption extends Option {
     public function type() {
         return 'password';
     }
+
+    public function update($value) {
+        if ( $value !== '' ) {
+            $sanitized_value = $this->sanitize($value);
+            // Always update encrypted values
+            $this->value = Util::encrypt($sanitized_value, self::key(), self::salt(), $encode = true);
+            $this->value_changed = true;
+        }
+    }
 }
