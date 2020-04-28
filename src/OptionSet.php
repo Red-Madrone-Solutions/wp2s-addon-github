@@ -21,7 +21,6 @@ class OptionSet implements \IteratorAggregate {
     }
 
     public function getIterator() {
-        error_log("getIterator()");
         return new \ArrayIterator($this->list);
     }
 }
