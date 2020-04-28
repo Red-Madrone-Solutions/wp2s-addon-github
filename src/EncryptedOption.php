@@ -20,12 +20,14 @@ class EncryptedOption extends Option {
         if ( !file_exists($key_file) || $overwrite ) {
             $key = Util::random_bytes(32);
             file_put_contents($key_file, base64_encode($key));
+            chmod($key_file, 0400);
         }
 
         $salt_file = self::hash_salt_file();
         if ( !file_exists($salt_file) || $overwrite ) {
             $salt = Util::random_bytes(16);
             file_put_contents($salt_file, base64_encode($salt));
+            chmod($salt_file, 0400);
         }
     }
 
