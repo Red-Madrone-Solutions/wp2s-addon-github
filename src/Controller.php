@@ -24,6 +24,7 @@ class Controller {
         $view_params = [
             'action' => self::$options_action,
             'nonce_name' => self::$options_nonce_name,
+            'option_set' => new OptionSet(),
         ];
         require_once RMS_WP2S_GH_PATH . 'views/options-page.php';
     }
