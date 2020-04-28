@@ -7,14 +7,14 @@ if ( !defined('ABSPATH') ) exit;
 class Option {
     private $name;
     private $label;
-    private $hint;
+    private $description;
     private $value;
     private $value_changed = false;
 
-    public function __construct($name, $label, $hint = '') {
+    public function __construct($name, $label, $description = '') {
         $this->name = $name;
         $this->label = $label;
-        $this->hint = $hint;
+        $this->description = $description;
         $this->value = $this->default_value();
     }
 
