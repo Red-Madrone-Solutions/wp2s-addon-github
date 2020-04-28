@@ -30,6 +30,10 @@ class Option {
         return $this->label;
     }
 
+    public function description() {
+        return $this->description;
+    }
+
     public function type() {
         return 'text';
     }
