@@ -23,6 +23,10 @@ class OptionSet implements \IteratorAggregate {
     public function getIterator() {
         return new \ArrayIterator($this->list);
     }
+
+    public function count() : int {
+        return count($this->list);
+    }
 }
 
 class Option {
