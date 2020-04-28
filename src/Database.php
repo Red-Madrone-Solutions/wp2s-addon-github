@@ -94,6 +94,17 @@ EOSQL;
         }
     }
 
+    public function get_option_value($option) : string {
+        global $wpdb;
+
+        return (string) $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT `value` FROM {$this->options_table_name} WHERE `name` = %s",
+                $option->name()
+            )
+        );
+    }
+
     private function seed_option($option) : bool {
         global $wpdb;
 
@@ -115,5 +126,23 @@ EOSQL;
         }
 
         return false;
+    }
+
+    public function updateOptions($option_set) {
+        foreach ( $option_set->changedOptions() as $option ) {
+            $this->update_option($option);
+        }
+    }
+
+    private function update_option($option) {
+        global $wpdb;
+
+        return $wpdb->update(
+            $this->options_table_name,
+            [ 'value' => $option->value() ], // data
+            [ 'name' => $option->name() ], // where
+            [ '%s' ], // data format
+            [ '%s' ] // where format
+        );
     }
 }

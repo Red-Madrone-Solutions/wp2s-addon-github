@@ -39,5 +39,7 @@ class Controller {
     public function saveOptionsFromUi() : void {
         check_admin_referer(self::$options_action, self::$options_nonce_name);
 
+        $option_set = new OptionSet($_POST, $load_from_db = 1);
+        Database::instance()->updateOptions($option_set);
     }
 }
