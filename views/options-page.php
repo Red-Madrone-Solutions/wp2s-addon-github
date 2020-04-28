@@ -8,8 +8,8 @@
         <tbody>
             <?php foreach ( $view_params['option_set'] as $option ) : ?>
                 <tr>
-                    <th scope="row"><label for="<?php echo $option->id(); ?>"><?php echo $option->label(); ?></label></th>
-                    <td><input name="<?php echo $option->name(); ?>" type="<?php echo $option->type(); ?>" id="<?php echo $option->id(); ?>" class="regular-text" value="<?php echo esc_attr($option->value()); ?>"></td>
+                    <th scope="row"><label for="<?php echo esc_attr($option->id()); ?>"><?php echo esc_html($option->label()); ?></label></th>
+                    <td><input name="<?php echo esc_attr($option->name()); ?>" type="<?php echo esc_attr($option->type()); ?>" id="<?php echo esc_attr($option->id()); ?>" class="regular-text" value="<?php echo esc_attr($option->value()); ?>"></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
