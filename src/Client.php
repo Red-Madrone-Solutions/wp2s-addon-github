@@ -19,10 +19,12 @@ class Client {
         if ( is_null($hash) ) {
             return false;
         }
+
         $branch = $this->create_branch($hash, 'rms-wp2s-gh-test-branch');
         if ( !$branch->is_valid() ) {
             return false;
         }
+
         // cleanup
         $this->delete_branch($branch);
         return true;
