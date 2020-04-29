@@ -27,10 +27,10 @@ class Controller {
 
     public static function renderOptionsPage() : void {
         $view_params = [
-            'action' => self::$options_action,
-            'nonce_name' => self::$options_nonce_name,
-            'option_set' => new OptionSet($load_from_db = true),
-            'test_action' => self::$test_action,
+            'action'          => self::$options_action,
+            'nonce_name'      => self::$options_nonce_name,
+            'option_set'      => new OptionSet($load_from_db = true),
+            'test_action'     => self::$test_action,
             'test_nonce_name' => self::$test_nonce_name,
         ];
         require_once RMS_WP2S_GH_PATH . 'views/options-page.php';
