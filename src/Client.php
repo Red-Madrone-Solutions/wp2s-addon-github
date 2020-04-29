@@ -16,6 +16,9 @@ class Client {
 
     public function canAccess() : bool {
         $hash = $this->get_latest_commit_hash();
+        if ( is_null($hash) ) {
+            return false;
+        }
         $branch = $this->create_branch($hash, 'rms-wp2s-gh-test-branch');
         if ( !$branch->is_valid() ) {
             return false;
@@ -54,7 +57,7 @@ class Client {
         return $this->repo;
     }
 
-    protected function get_latest_commit_hash() : string {
+    protected function get_latest_commit_hash() {
         $url = sprintf(
             // https://api.github.com/repos/<AUTHOR>/<REPO>/git/refs/heads
             '%s/repos/%s/%s/git/refs/heads',
