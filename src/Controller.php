@@ -14,6 +14,9 @@ class Controller {
         add_action('admin_post_' . self::$options_action, [ $this, 'saveOptionsFromUi' ]);
         add_action('admin_post_' . self::$test_action, [ $this, 'testGitHubIntegration' ]);
 
+        add_action('wp2static_deploy', [ $this, 'deploy' ]);
+        add_action('wp2static_post_deploy_trigger', [ $this, 'postDeploy' ]);
+
         Database::instance()->update_db();
 
         AdminNotice::setup();
@@ -69,5 +72,14 @@ class Controller {
 
         wp_safe_redirect( admin_url('admin.php?page=wp2static-GitHub') );
         exit;
+    }
+
+    public function deploy(string $processed_site_path) : void {
+        $deployer = new Deployer();
+        $deployer->setup($processed_site_path);
+        $deployer->execute();
+    }
+
+    public function postDeploy() : void {
     }
 }
