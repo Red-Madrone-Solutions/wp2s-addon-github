@@ -58,7 +58,15 @@ class Controller {
     public function testGitHubIntegration() : void {
         check_admin_referer(self::$test_action, self::$test_nonce_name);
 
-        ( new AdminNotice('called test GH integration', 'info') )->save();
+        $option_set = new OptionSet($load_from_db = 1);
+        $client = new Client($option_set);
+
+        if ( $client->canAccess() ) {
+            ( new AdminNotice('GitHub Integration Test Succeeded') )->save();
+        } else {
+            ( new AdminNotice('GitHub Integration Test Failed', 'error') )->save();
+        }
+
         wp_safe_redirect( admin_url('admin.php?page=wp2static-GitHub') );
         exit;
     }
