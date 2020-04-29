@@ -1,7 +1,6 @@
 <h2>GitHub Deployment Options</h2>
 
 <form method="post" action="<?php echo esc_url( admin_url('admin-post.php') ); ?>">
-
     <?php wp_nonce_field($view_params['action'], $view_params['nonce_name']); ?>
     <input name="action" type="hidden" value="<?php echo esc_attr($view_params['action']); ?>">
     <table class="form-table" role="presentation">
