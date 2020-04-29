@@ -23,3 +23,11 @@
     </p>
 </form>
 
+<form method="post" action="<?php echo esc_url( admin_url('admin-post.php') ); ?>">
+    <?php wp_nonce_field($view_params['test_action'], $view_params['test_nonce_name']); ?>
+    <input name="action" type="hidden" value="<?php echo esc_attr($view_params['test_action']); ?>">
+    <p class="submit">
+        <input type="submit" name="submit" id="submit" class="button action" value="Test GitHub Integration">
+    </p>
+</form>
+
