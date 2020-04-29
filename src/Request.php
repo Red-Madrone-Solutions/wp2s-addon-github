@@ -32,6 +32,10 @@ class Request {
             curl_setopt($ch, CURLOPT_POST, 1);
         }
 
+        if ( strtoupper($this->type) === 'DELETE' ) {
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+        }
+
         if ( $this->body ) {
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($this->body));
         }
