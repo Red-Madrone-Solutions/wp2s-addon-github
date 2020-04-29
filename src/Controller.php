@@ -12,7 +12,7 @@ class Controller {
         add_filter('wp2static_add_menu_items', [ 'RMS\WP2S\GitHub\Controller', 'addSubMenuPage' ]);
 
         add_action('admin_post_' . self::$options_action, [ $this, 'saveOptionsFromUi' ]);
-        add_action('admin_post_' . self::$test_action, [ $this, 'testGitHubIntegration' ] );
+        add_action('admin_post_' . self::$test_action, [ $this, 'testGitHubIntegration' ]);
 
         Database::instance()->update_db();
 
