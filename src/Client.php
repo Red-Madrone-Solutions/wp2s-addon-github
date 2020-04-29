@@ -6,6 +6,7 @@ if ( !defined('ABSPATH') ) exit;
 
 class Client {
     private $option_set;
+    private $api_base = 'https://api.github.com';
     private $account = null;
     private $repo = null;
 
@@ -14,6 +15,7 @@ class Client {
     }
 
     public function canAccess() : bool {
+        $sha = $this->get_latest_commit_hash();
         return false;
     }
 
@@ -44,5 +46,19 @@ class Client {
             }
         }
         return $this->repo;
+    }
+
+    protected function get_latest_commit_hash() : string {
+        $url = sprintf(
+            // https://api.github.com/repos/<AUTHOR>/<REPO>/git/refs/heads
+            '%s/repos/%s/%s/git/refs/heads',
+            $this->api_base,
+            $this->account(),
+            $this->repo()
+        );
+        $request = new Request($this->token(), $url);
+        $response = $request->exec();
+
+        return $response->pluck([0, 'object', 'sha']);
     }
 }
