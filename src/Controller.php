@@ -12,6 +12,8 @@ class Controller {
         add_action('admin_post_' . self::$options_action, [ $this, 'saveOptionsFromUi' ]);
 
         Database::instance()->update_db();
+
+        AdminNotice::setup();
     }
 
     public static function addSubMenuPage(array $submenu_pages) : array {
@@ -43,7 +45,7 @@ class Controller {
 
         $option_set = new OptionSet($load_from_db = 1, $_POST);
         Database::instance()->updateOptions($option_set);
-        // TODO add message about options saved
+        ( new AdminNotice('Options saved') )->save();
         wp_safe_redirect( admin_url('admin.php?page=wp2static-GitHub') );
         exit;
     }
