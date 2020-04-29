@@ -12,7 +12,7 @@ class AdminNotice {
     private $dismissible;
 
     private function _valid_types() {
-        return [ 'success', 'warning', 'error' ];
+        return [ 'info', 'success', 'warning', 'error' ];
     }
 
     public function __construct($message, $type = 'success', $dismissible = true) {
