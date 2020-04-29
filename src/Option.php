@@ -55,12 +55,10 @@ class Option {
     }
 
     public function update($value) {
-        if ( $value !== '' ) {
-            $sanitized_value = $this->sanitize($value);
-            if ( $sanitized_value !== $this->value ) {
-                $this->value = $sanitized_value;
-                $this->value_changed = true;
-            }
+        $sanitized_value = $this->sanitize($value);
+        if ( $sanitized_value !== $this->value ) {
+            $this->value = $sanitized_value;
+            $this->value_changed = true;
         }
     }
 
