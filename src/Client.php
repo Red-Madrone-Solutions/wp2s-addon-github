@@ -61,4 +61,30 @@ class Client {
 
         return $response->pluck([0, 'object', 'sha']);
     }
+
+    protected function create_branch($hash, $name) {
+        $url = sprintf(
+            // https://api.github.com/repos/<AUTHOR>/<REPO>/git/refs
+            '%s/repos/%s/%s/git/refs',
+            $this->api_base,
+            $this->account(),
+            $this->repo()
+        );
+
+        $request_body = [
+            "ref" => "refs/heads/$name",
+            "sha" => $hash,
+        ];
+
+        $request = new Request($this->token(), $url, 'POST');
+        $request->body($request_body);
+
+        $response = $request->exec();
+
+        list($ref, $node_id, $url) = $response->pluckAll(['ref', 'node_id', 'url']);
+        if ( $node_id ) {
+            return new Branch($node_id, $url, $ref);
+        }
+        return new NullBranch();
+    }
 }
