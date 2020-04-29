@@ -43,5 +43,8 @@ class Controller {
 
         $option_set = new OptionSet($load_from_db = 1, $_POST);
         Database::instance()->updateOptions($option_set);
+        // TODO add message about options saved
+        wp_safe_redirect( admin_url('admin.php?page=wp2static-GitHub') );
+        exit;
     }
 }
