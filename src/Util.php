@@ -92,4 +92,14 @@ class Util {
         ];
     }
 
+    public static function pluck(array $struct, array $keys) {
+        $curr_key = array_shift($keys);
+        if ( isset($struct[$curr_key]) ) {
+            if ( count($keys) === 0 ) {
+                return $struct[$curr_key];
+            }
+            return self::pluck($struct[$curr_key], $keys);
+        }
+        return null;
+    }
 }
