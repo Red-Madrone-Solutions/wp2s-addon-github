@@ -14,4 +14,11 @@ class Client {
     public function canAccess() : bool {
         return false;
     }
+
+    private function token() {
+        if ( $token_option = $this->option_set->findByName('personal_access_token') ) {
+            return $token_option->value($decrypt = true);
+        }
+        throw new \Exception('Cannot find token');
+    }
 }
