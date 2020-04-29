@@ -20,6 +20,8 @@ class Client {
         if ( !$branch->is_valid() ) {
             return false;
         }
+        // cleanup
+        $this->delete_branch($branch);
         return true;
     }
 
@@ -90,5 +92,20 @@ class Client {
             return new Branch($node_id, $url, $ref);
         }
         return new NullBranch();
+    }
+
+    protected function delete_branch($branch) {
+        $url = sprintf(
+            // https://api.github.com/repos/:owner/:repo/git/refs/:ref
+            '%s/repos/%s/%s/git/refs/heads/%s',
+            $this->api_base,
+            $this->account(),
+            $this->repo(),
+            $branch->name()
+        );
+
+        $request = new Request($this->token(), $url, 'DELETE');
+        $request->exec();
+        unset($request);
     }
 }
