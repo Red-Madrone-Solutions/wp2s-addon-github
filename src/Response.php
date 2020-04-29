@@ -24,7 +24,13 @@ class Response {
         return $this->body;
     }
 
-    public function pluck(array $keys) {
+    public function pluckAll($keys) {
+        return array_map( function($key) {
+            return $this->pluck($key);
+        }, $keys );
+    }
+
+    public function pluck($keys) {
         // Allow passing single arg for convenience
         if ( !is_array($keys) ) {
             $keys = [ $keys ];
