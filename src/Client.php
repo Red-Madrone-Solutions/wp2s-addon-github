@@ -16,7 +16,7 @@ class Client {
 
     public function canAccess() : bool {
         $hash = $this->get_latest_commit_hash();
-        $branch = $this->create_branch($hash, 'test');
+        $branch = $this->create_branch($hash, 'rms-wp2s-gh-test-branch');
         if ( !$branch->is_valid() ) {
             return false;
         }
