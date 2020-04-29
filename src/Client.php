@@ -16,7 +16,11 @@ class Client {
 
     public function canAccess() : bool {
         $hash = $this->get_latest_commit_hash();
-        return false;
+        $branch = $this->create_branch($hash, 'test');
+        if ( !$branch->is_valid() ) {
+            return false;
+        }
+        return true;
     }
 
     private function token() {
