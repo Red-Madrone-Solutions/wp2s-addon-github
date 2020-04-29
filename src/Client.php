@@ -15,7 +15,7 @@ class Client {
     }
 
     public function canAccess() : bool {
-        $sha = $this->get_latest_commit_hash();
+        $hash = $this->get_latest_commit_hash();
         return false;
     }
 
