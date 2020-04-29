@@ -25,6 +25,10 @@ class Response {
     }
 
     public function pluck(array $keys) {
+        // Allow passing single arg for convenience
+        if ( !is_array($keys) ) {
+            $keys = [ $keys ];
+        }
         return Util::pluck($this->body_json, $keys);
     }
 
