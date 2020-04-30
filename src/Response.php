@@ -19,6 +19,7 @@ class Response {
         if ( !is_null($value) ) {
             $this->body = $value;
             $this->body_json = json_decode($value, $assoc = true);
+            error_log("response body: " . print_r($this->body_json, 1));
         }
 
         return $this->body;

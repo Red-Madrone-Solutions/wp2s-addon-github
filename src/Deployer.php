@@ -9,7 +9,6 @@ class Deployer {
     public function setup(string $processed_site_path) : void {
         $this->processed_site_path = $processed_site_path;
         $this->processed_site_path_len = strlen($processed_site_path);
-
     }
 
     public function execute() : void {
@@ -22,49 +21,31 @@ class Deployer {
 
         $option_set = new OptionSet($load_from_db = 1);
         $client = new Client($option_set);
-        if ( !$client->canAccess() ) {
-            return;
+        // Use the hash for this branch when creating files
+        $branch = $client->deploySetup();
+        if ( !$branch->is_valid() ) {
+            throw new \Exception('Error getting branch from git');
         }
 
+        File::setup($this->processed_site_path);
         foreach ( $iterator as $filename => $file_object ) {
-            if ( !is_string($filename) ) {
+            $file = File::create($filename);
+            if ( is_null($file) ) {
                 continue;
             }
 
-            $basename = basename($filename);
-            if ( $basename == '.' || $basename == '..' ) {
+            if ( $file->already_deployed() ) {
                 continue;
             }
 
-            $real_filepath = realpath($filename);
-            if ( !$real_filepath ) {
-                continue;
-            }
+            // Collect file for commit
+            $branch->addFile($file);
 
-            // Standardize on forward slash for dir separator
-            $filename = str_replace('\\', '/', $filename);
-
-            $cache_filename = $this->normalize_filename_for_cache($filename);
-            if ( \WP2Static\DeployCache::fileisCached($cache_filename, 'GitHub') ) {
-                continue;
-            }
-
-            // Commit file...
-            $client->commit($filename);
-
+            break;
             // Add to deploy cache
             // \WP2Static\DeployCache::addFile($filename);
         }
-    }
-
-    private function normalize_filename_for_cache($filename) {
-        if (
-            substr($filename, 0, $this->processed_site_path_len)
-            === $this->processed_site_path
-        ) {
-            $filename = substr($filename, $this->processed_site_path_len);
-        }
-        return $filename;
+        $branch->commit();
     }
 }
 
