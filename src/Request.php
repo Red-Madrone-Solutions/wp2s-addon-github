@@ -32,8 +32,9 @@ class Request {
             curl_setopt($ch, CURLOPT_POST, 1);
         }
 
-        if ( strtoupper($this->type) === 'DELETE' ) {
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+        $custom_types = [ 'DELETE', 'PATCH', 'PUT' ];
+        if ( in_array(strtoupper($this->type), $custom_types) ) {
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, strtoupper($this->type));
         }
 
         if ( $this->body ) {
