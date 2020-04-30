@@ -113,4 +113,8 @@ class Client {
         $request->exec();
         unset($request);
     }
+
+    public function commit($filename) {
+        error_log("commit: $filename");
+    }
 }

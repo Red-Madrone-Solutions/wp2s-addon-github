@@ -20,6 +20,12 @@ class Deployer {
             )
         );
 
+        $option_set = new OptionSet($load_from_db = 1);
+        $client = new Client($option_set);
+        if ( !$client->canAccess() ) {
+            return;
+        }
+
         foreach ( $iterator as $filename => $file_object ) {
             if ( !is_string($filename) ) {
                 continue;
@@ -44,7 +50,7 @@ class Deployer {
             }
 
             // Commit file...
-            error_log("commit: $filename");
+            $client->commit($filename);
 
             // Add to deploy cache
             // \WP2Static\DeployCache::addFile($filename);
