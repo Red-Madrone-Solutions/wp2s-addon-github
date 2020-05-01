@@ -7,8 +7,11 @@ if ( !defined('ABSPATH') ) exit;
 class File {
     protected static $processed_site_path;
     protected static $processed_site_path_len;
+    protected static $mime_type;
+
     private $file_path;
     private $commit_path;
+    private $sha;
 
     public static function setup($processed_site_path) {
         self::$processed_site_path = $processed_site_path;
@@ -16,12 +19,14 @@ class File {
         //     self::$processed_site_path .= '/';
         // }
         self::$processed_site_path_len = strlen($processed_site_path);
+        self::$mime_type = new \finfo(FILEINFO_MIME);
     }
 
     private function __construct($filepath) {
         $this->file_path   = $filepath;
         $this->commit_path = null;
         $this->cache_key   = null;
+        $this->sha         = null;
     }
 
     private function commit_path() : string {
@@ -59,6 +64,14 @@ class File {
         return $this->cache_key;
     }
 
+    public function sha($value = null) {
+        if ( !is_null($value) ) {
+            $this->sha = $value;
+        }
+
+        return $this->sha;
+    }
+
     public static function create($filepath) {
         if ( self::is_valid($filepath) ) {
             return new self($filepath);
@@ -85,16 +98,41 @@ class File {
         return true;
     }
 
+    private function mime_type() : string {
+        return self::$mime_type->file($this->file_path);
+    }
+
+    public function is_text() : bool {
+        return 'text' === substr($this->mime_type(), 0, 4);
+    }
+
+    public function is_binary() : bool {
+        return !$this->is_text();
+    }
+
     public function already_deployed() : bool {
         return \WP2Static\DeployCache::fileisCached($this->cache_key(), 'GitHub');
     }
 
+    public function contents($encoding = 'base64') {
+        $contents = file_get_contents($this->file_path);
+
+        return $encoding === 'base64' ? base64_encode($contents) : $contents;
+    }
+
     public function tree_payload() : array {
-        return [
+        $payload = [
             'path' => $this->commit_path(),
             'mode' => '100644',
             'type' => 'blob',
-            'content' => file_get_contents($this->file_path),
         ];
+
+        if ( $this->sha ) {
+            $payload['sha'] = $this->sha;
+        } else {
+            $payload['content'] = $this->contents();
+        }
+
+       return $payload;
     }
 }

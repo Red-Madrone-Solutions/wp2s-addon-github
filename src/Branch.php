@@ -20,7 +20,7 @@ class Branch {
         $this->url     = $url;
         $this->ref     = $ref;
         $this->object  = $object;
-        $this->files   = [];
+        $this->file_list = new FileList();
         $this->ancestors = [];
     }
 
@@ -82,18 +82,24 @@ class Branch {
     }
 
     public function addFile(File $file) {
-        $this->files[]= $file;
+        $this->file_list->add($file);
     }
 
     public function commit() {
+        $binary_files = $this->file_list->binaryFiles();
+
+        foreach ($binary_files as $file) {
+            $this->client->create_blob($file);
+        }
+
         $tree = array_map(function($file) {
             return $file->tree_payload();
-        }, $this->files);
+        }, $this->file_list->allFiles());
 
         $tree_hash = $this->client->create_tree($this->hash(), $tree);
-        error_log("tree_hash: " . $tree_hash);
+        // error_log("tree_hash: " . $tree_hash);
         $commit_hash = $this->client->create_commit($tree_hash, $this->hash());
-        error_log("commit_hash: " . $commit_hash);
+        // error_log("commit_hash: " . $commit_hash);
 
         $this->update_to_hash($commit_hash);
     }

@@ -28,6 +28,8 @@ class Deployer {
         }
 
         File::setup($this->processed_site_path);
+
+        $count = 0;
         foreach ( $iterator as $filename => $file_object ) {
             $file = File::create($filename);
             if ( is_null($file) ) {
@@ -38,10 +40,17 @@ class Deployer {
                 continue;
             }
 
+
+            if ( $file->is_text() ) {
+                continue;
+            }
+
             // Collect file for commit
             $branch->addFile($file);
 
-            break;
+            if ( $count++ > 5 ) {
+                break;
+            }
             // Add to deploy cache
             // \WP2Static\DeployCache::addFile($filename);
         }

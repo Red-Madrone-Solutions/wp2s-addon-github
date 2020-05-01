@@ -37,7 +37,7 @@ class Client {
         }
 
         // TODO handle generating unique branch name
-        $branch = $this->create_branch($hash, 'rms-wp2s-gh-deploy-branch-16');
+        $branch = $this->create_branch($hash, 'rms-wp2s-gh-deploy-branch-30');
         $branch->client($this);
         return $branch;
     }
@@ -204,5 +204,28 @@ class Client {
 
     public function commit($filename) {
         // error_log("commit: $filename");
+    }
+
+    public function create_blob(File $file) : void {
+        $url = sprintf(
+            // https://api.github.com/repos/:owner/:repo/git/blobs
+            '%s/repos/%s/%s/git/blobs',
+            $this->api_base,
+            $this->account(),
+            $this->repo()
+        );
+
+        $encoding = 'base64';
+        $request_body = [
+            'content'  => $file->contents($encoding),
+            'encoding' => $encoding,
+        ];
+
+        $request = new Request($this->token(), $url, 'POST');
+        $request->body($request_body);
+        $response = $request->exec();
+        unset($request);
+
+        $file->sha($response->pluck('sha'));
     }
 }
