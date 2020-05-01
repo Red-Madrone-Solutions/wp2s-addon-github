@@ -17,12 +17,32 @@ class Response {
 
     public function body($value = null) : string {
         if ( !is_null($value) ) {
+            if ( $this->is_gzipped() ) {
+                $value = gzdecode($value);
+            } else if ( $this->is_deflated() ) {
+                $value = gzinflate($value);
+            }
             $this->body = $value;
             $this->body_json = json_decode($value, $assoc = true);
             error_log("response body: " . print_r($this->body_json, 1));
         }
 
         return $this->body;
+    }
+
+    private function is_gzipped() {
+        return $this->is_encoded_as('gzip');
+    }
+
+    private function is_deflated() {
+        return $this->is_encoded_as('deflate');
+    }
+
+    private function is_encoded_as($encoding) {
+        if ( isset($this->headers['content-encoding']) ) {
+           return in_array($encoding, $this->headers['content-encoding']);
+        }
+        return false;
     }
 
     public function pluckAll($keys) {
