@@ -41,13 +41,17 @@ class Request {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, strtoupper($this->type));
         }
 
+        $request_headers = [
+            'Authorization: token ' . $this->token,
+            'Accept-Encoding: gzip, deflate',
+            'Content-Type: application/json; charset=utf-8',
+        ];
+
         if ( $this->body ) {
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($this->body));
         }
 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Authorization: token ' . $this->token,
-        ]);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $request_headers);
 
         $response->body(curl_exec($ch));
         curl_close($ch);
