@@ -28,6 +28,10 @@ class Request {
         curl_setopt($ch, CURLOPT_USERAGENT, 'RMS WP2S Addon - GitHub v1');
         curl_setopt($ch, CURLOPT_HEADERFUNCTION, [ $response, 'collect_headers' ]);
 
+        curl_setopt($ch, CURLOPT_PROXY, 'localhost:8888');
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_PROXY_SSL_VERIFYPEER, false);
+
         if ( strtoupper($this->type) === 'POST' ) {
             curl_setopt($ch, CURLOPT_POST, 1);
         }
