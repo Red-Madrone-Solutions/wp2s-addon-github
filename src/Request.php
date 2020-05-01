@@ -48,7 +48,9 @@ class Request {
         ];
 
         if ( $this->body ) {
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($this->body));
+            $body = json_encode($this->body);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+            $request_headers[]= 'Content-Length: ' . strlen($body);
         }
 
         curl_setopt($ch, CURLOPT_HTTPHEADER, $request_headers);
