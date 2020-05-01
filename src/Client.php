@@ -37,7 +37,7 @@ class Client {
         }
 
         // TODO handle generating unique branch name
-        $branch = $this->create_branch($hash, 'rms-wp2s-gh-deploy-branch-30');
+        $branch = $this->create_branch($hash, 'rms-wp2s-gh-deploy-branch-' . time());
         $branch->client($this);
         return $branch;
     }
