@@ -81,6 +81,10 @@ class File {
         return $this->size;
     }
 
+    public function blob_exists() : bool {
+        return !is_null($this->sha);
+    }
+
     public static function create($filepath) {
         if ( self::is_valid($filepath) ) {
             return new self($filepath);
