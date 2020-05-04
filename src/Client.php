@@ -207,6 +207,11 @@ class Client {
     }
 
     public function create_blob(File $file) : void {
+        // Don't try to create blob twice on same file
+        if ( $file->blob_exists() ) {
+            return;
+        }
+
         $url = sprintf(
             // https://api.github.com/repos/:owner/:repo/git/blobs
             '%s/repos/%s/%s/git/blobs',
