@@ -25,4 +25,11 @@ class FileList {
     public function allFiles() : array {
         return $this->files;
     }
+
+    public function largeFiles() : array {
+        $fifty_k = 1024 * 50;
+        return array_filter($this->files, function($file) use ($fifty_k) {
+            return $file->size() > $fifty_k;
+        });
+    }
 }
