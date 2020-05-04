@@ -87,7 +87,6 @@ class Branch {
 
     public function commit() {
         $binary_files = $this->file_list->binaryFiles();
-
         foreach ($binary_files as $file) {
             $this->client->create_blob($file);
         }
