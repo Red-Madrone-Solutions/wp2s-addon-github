@@ -12,6 +12,7 @@ class File {
     private $file_path;
     private $commit_path;
     private $sha;
+    private $size;
 
     public static function setup($processed_site_path) {
         self::$processed_site_path = $processed_site_path;
@@ -27,6 +28,7 @@ class File {
         $this->commit_path = null;
         $this->cache_key   = null;
         $this->sha         = null;
+        $this->size        = null;
     }
 
     private function commit_path() : string {
@@ -70,6 +72,13 @@ class File {
         }
 
         return $this->sha;
+    }
+
+    public function size() : int {
+        if ( is_null($this->size) ) {
+            $this->size = filesize($this->file_path);
+        }
+        return $this->size;
     }
 
     public static function create($filepath) {
