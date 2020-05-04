@@ -91,6 +91,11 @@ class Branch {
             $this->client->create_blob($file);
         }
 
+        $large_files = $this->file_list->largeFiles();
+        foreach ($large_files as $file) {
+            $this->client->create_blob($file);
+        }
+
         $tree = array_map(function($file) {
             return $file->tree_payload();
         }, $this->file_list->allFiles());
