@@ -233,4 +233,52 @@ class Client {
 
         $file->sha($response->pluck('sha'));
     }
+
+    public function create_pull_request(Branch $source_branch, string $target_branch_name) {
+        $url = sprintf(
+            // https://api.github.com/repos/:owner/:repo/pulls
+            '%s/repos/%s/%s/pulls',
+            $this->api_base,
+            $this->account(),
+            $this->repo()
+        );
+
+        $request_body = [
+            'title' => 'PR title', // TODO make PR title editable
+            'head' => $source_branch->name(),
+            'base' => $target_branch_name,
+            'body' => 'PR body', // TODO make PR body editable
+        ];
+
+        $request = new Request($this->token(), $url, 'POST');
+        $request->body($request_body);
+        $response = $request->exec();
+        unset($request);
+
+        $pull_number = (int) $response->pluck('number');
+        return new PullRequest($pull_number, $this);
+    }
+
+    public function merge_pull_request(PullRequest $pr) {
+        $url = sprintf(
+            // https://api.github.com/repos/:owner/:repo/pulls/:pull_number/merge
+            '%s/repos/%s/%s/pulls/%s/merge',
+            $this->api_base,
+            $this->account(),
+            $this->repo(),
+            $pr->pull_number()
+        );
+
+        $request_body = [
+            'commit_title'   => 'PR Merge Title', // TODO make merge title editable
+            'commit_message' => 'PR Merge Message', // TODO make merge message editable
+        ];
+
+        $request = new Request($this->token(), $url, 'PUT');
+        $request->body($request_body);
+        $response = $request->exec();
+        unset($request);
+
+        return $response->is_success();
+    }
 }
