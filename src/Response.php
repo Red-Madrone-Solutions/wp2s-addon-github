@@ -8,6 +8,7 @@ class Response {
     private $headers;
     private $body;
     private $body_json;
+    private $status_code = null;
 
     public function __construct() {
         $this->body = '';
@@ -69,6 +70,21 @@ class Response {
         $this->headers[strtolower(trim($parts[0]))][]= trim($parts[1]);
 
         return $len;
+    }
+
+    public function status_code() : int {
+        if ( is_null($this->status_code) ) {
+            $this->status_code = (int) $this->headers['status'];
+        }
+        return $this->status_code;
+    }
+
+    public function is_success() : bool {
+        return $this->status_code() >= 200 && $this->status_code() < 300;
+    }
+
+    public function is_error() : bool {
+        return $this->status_code() >= 400;
     }
 
     public function headers() : array {
