@@ -85,6 +85,10 @@ class Branch {
         $this->file_list->add($file);
     }
 
+    public function files() {
+        return $this->file_list->allFiles();
+    }
+
     public function commit() {
         $binary_files = $this->file_list->binaryFiles();
         foreach ($binary_files as $file) {
