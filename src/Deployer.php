@@ -55,6 +55,9 @@ class Deployer {
             // \WP2Static\DeployCache::addFile($filename);
         }
         $branch->commit();
+        foreach ( $branch->files() as $file ) {
+            $file->mark_deployed();
+        }
     }
 }
 
