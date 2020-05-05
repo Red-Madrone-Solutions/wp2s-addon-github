@@ -116,4 +116,15 @@ class Branch {
         $branch = $this->client->update_reference($this->ref, $commit_hash);
         $this->update($branch);
     }
+
+    /**
+     * Delete branch after merge
+     */
+    private function delete() {
+        if ( !$this->merged() ) {
+            return false;
+        }
+
+        // TODO implement delete()
+    }
 }
