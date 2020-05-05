@@ -127,6 +127,10 @@ class File {
         return \WP2Static\DeployCache::fileisCached($this->cache_key(), 'GitHub');
     }
 
+    public function mark_deployed() {
+        \WP2Static\DeployCache::addFile($this->cache_key(), 'GitHub');
+    }
+
     public function contents($encoding = 'base64') {
         $contents = file_get_contents($this->file_path);
 
