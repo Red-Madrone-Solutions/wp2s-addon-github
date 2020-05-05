@@ -110,6 +110,19 @@ class Branch {
         // error_log("commit_hash: " . $commit_hash);
 
         $this->update_to_hash($commit_hash);
+        $pr = $this->client->create_pull_request($this, 'master');
+        if ( $pr->merge() ) {
+            $this->merged(true);
+            $this->delete();
+        }
+    }
+
+    private function merged($value = null) {
+        if ( !is_null($value) ) {
+            $this->merged = $value;
+        }
+
+        return $this->merged;
     }
 
     private function update_to_hash($commit_hash) {
