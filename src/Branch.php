@@ -83,7 +83,7 @@ class Branch {
 
     public function addFile(File $file) {
         $this->file_list->add($file);
-        \WP2Static\WsLog::l('Adding file for GH deploy: ' . $file->commit_path());
+        Log::l('Adding file for GH deploy: ' . $file->commit_path());
     }
 
     public function files() {
