@@ -31,7 +31,7 @@ class File {
         $this->size        = null;
     }
 
-    private function commit_path() : string {
+    public function commit_path() : string {
         if ( is_null($this->commit_path) ) {
             if (
                 substr($this->file_path, 0, self::$processed_site_path_len)
