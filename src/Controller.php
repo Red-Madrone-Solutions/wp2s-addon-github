@@ -40,7 +40,7 @@ class Controller {
     }
 
     public static function activate() : void {
-        EncryptedOption::setup();
+        EncryptedOption::activate();
     }
 
     public static function deactivate() : void {

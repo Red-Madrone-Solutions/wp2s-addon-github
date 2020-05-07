@@ -37,7 +37,7 @@ class EncryptedOption extends Option {
         );
     }
 
-    public static function setup($overwrite = false) {
+    public static function activate($overwrite = false) {
         self::create_encryption_key_file($overwrite);
         self::create_hash_salt_file($overwrite);
     }
