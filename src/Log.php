@@ -24,10 +24,30 @@ class Log {
                 )
             );
         }
-        \WP2Static\WsLog::l($message);
+        \WP2Static\WsLog::l(
+            sprintf(
+                '<code>[%s]</code> %s',
+                self::levelLabel($level),
+                $message
+            )
+        );
     }
 
     public static function debug($message, ...$message_args) {
         self::l($message, self::DEBUG, ...$message_args);
+    }
+
+    protected static function levelLabel($level) : string {
+        $lookup = [
+            self::ERROR => 'Error',
+            self::WARN  => 'Warn',
+            self::INFO  => 'Info',
+            self::DEBUG => 'Debug',
+        ];
+
+        return isset($lookup[$level])
+            ? $lookup[$level]
+            : 'Unknown'
+        ;
     }
 }
