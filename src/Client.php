@@ -44,9 +44,14 @@ class Client {
 
     private function token() {
         if ( $token_option = $this->option_set->findByName('personal_access_token') ) {
-            return $token_option->value($decrypt = true);
+            try {
+                $clear_token = $token_option->value($decrypt = true);
+            } catch (DecryptionErrorException $e) {
+                throw new TokenException('Unable to decrypt token', $e->getCode(), $e);
+            }
+            return $clear_token;
         }
-        throw new \Exception('Cannot find token');
+        throw new TokenException('Cannot find token');
     }
 
     private function account() : string {
