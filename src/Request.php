@@ -19,7 +19,6 @@ class Request {
     }
 
     public function exec() : Response {
-        Log::debug('Executing request: %s', '[' . $this->type . '] ' . $this->url);
         $ch = curl_init();
 
         $response = new Response();
@@ -48,12 +47,19 @@ class Request {
             'Content-Type: application/json; charset=utf-8',
         ];
 
+        $log_template = 'Request: %s';
+        $log_args = [
+            '[' . $this->type . '] ' . $this->url,
+        ];
         if ( $this->body ) {
             $body = json_encode($this->body);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
             $request_headers[]= 'Content-Length: ' . strlen($body);
+            $log_template .= ' %s';
+            $log_args[]= $this->body;
         }
 
+        Log::debug($log_template, ...$log_args);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $request_headers);
 
         $response->body(curl_exec($ch));
