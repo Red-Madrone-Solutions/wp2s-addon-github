@@ -5,6 +5,19 @@ namespace RMS\WP2S\GitHub;
 if ( !defined('ABSPATH') ) exit;
 
 class EncryptedOption extends Option {
+    // Don't detect private files
+    public static function setup() {
+        add_filter('wp2static_filenames_to_ignore', function($filenames_to_ignore) {
+            return array_merge(
+                $filenames_to_ignore,
+                [
+                    self::encryption_key_file(),
+                    self::hash_salt_file()
+                ]
+            );
+        });
+    }
+
     private static function encryption_key_file() {
         $bits = wp_get_upload_dir();
         return $bits['basedir'] . '/.rms-wp2s-gh-enc-key';

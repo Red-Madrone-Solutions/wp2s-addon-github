@@ -20,6 +20,7 @@ class Controller {
         Database::instance()->update_db();
 
         AdminNotice::setup();
+        EncryptedOption::setup();
     }
 
     public static function addSubMenuPage(array $submenu_pages) : array {
