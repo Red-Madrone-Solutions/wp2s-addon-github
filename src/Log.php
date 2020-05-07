@@ -26,4 +26,8 @@ class Log {
         }
         \WP2Static\WsLog::l($message);
     }
+
+    public static function debug($message, ...$message_args) {
+        self::l($message, self::DEBUG, ...$message_args);
+    }
 }
