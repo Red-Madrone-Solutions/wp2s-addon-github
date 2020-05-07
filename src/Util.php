@@ -44,7 +44,7 @@ class Util {
         if ( $encoded ) {
             $message = base64_decode($message, true);
             if ( $message === false ) {
-                throw new \Exception('Decryption failure');
+                throw new DecryptionErrorException('Decryption failure');
             }
         }
 
@@ -55,7 +55,7 @@ class Util {
         $calc_mac = self::hash($iv_and_cipher_text, $auth_key, $salt);
 
         if ( !self::hashEquals($msg_mac, $calc_mac) ) {
-            throw new \Exception('Decryption failure');
+            throw new DecryptionErrorException('Decryption failure');
         }
 
         $iv_size = openssl_cipher_iv_length(self::ENCRYPT_METHOD);

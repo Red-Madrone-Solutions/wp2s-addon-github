@@ -11,8 +11,13 @@ class EncryptedOption extends Option {
     }
 
     private static function key() {
+        $key_file = self::encryption_key_file();
+        if ( !file_exists($key_file) ) {
+            self::create_encryption_key_file();
+        }
+
         return base64_decode(
-            file_get_contents( self::encryption_key_file() )
+            file_get_contents($key_file)
         );
     }
 
@@ -22,19 +27,31 @@ class EncryptedOption extends Option {
     }
 
     private static function salt() {
+        $salt_file = self::hash_salt_file();
+        if ( !file_exists($salt_file) ) {
+            self::create_hash_salt_file();
+        }
+
         return base64_decode(
-            file_get_contents( self::hash_salt_file() )
+            file_get_contents($salt_file)
         );
     }
 
     public static function setup($overwrite = false) {
+        self::create_encryption_key_file($overwrite);
+        self::create_hash_salt_file($overwrite);
+    }
+
+    private static final function create_encryption_key_file($overwrite = false) {
         $key_file = self::encryption_key_file();
         if ( !file_exists($key_file) || $overwrite ) {
             $key = Util::random_bytes(32);
             file_put_contents($key_file, base64_encode($key));
             chmod($key_file, 0400);
         }
+    }
 
+    private static final function create_hash_salt_file($overwrite = false) {
         $salt_file = self::hash_salt_file();
         if ( !file_exists($salt_file) || $overwrite ) {
             $salt = Util::random_bytes(16);

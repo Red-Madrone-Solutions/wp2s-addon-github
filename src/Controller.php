@@ -62,12 +62,17 @@ class Controller {
         check_admin_referer(self::$test_action, self::$test_nonce_name);
 
         $option_set = new OptionSet($load_from_db = 1);
-        $client = new Client($option_set);
 
-        if ( $client->canAccess() ) {
-            ( new AdminNotice('GitHub Integration Test Succeeded') )->save();
-        } else {
-            ( new AdminNotice('GitHub Integration Test Failed', 'error') )->save();
+        try {
+            $client = new Client($option_set);
+
+            if ( $client->canAccess() ) {
+                ( new AdminNotice('GitHub Integration Test Succeeded') )->save();
+            } else {
+                ( new AdminNotice('GitHub Integration Test Failed', 'error') )->save();
+            }
+        } catch (TokenException $e) {
+            ( new AdminNotice('Cannot read token from database, please re-enter', 'error') )->save();
         }
 
         wp_safe_redirect( admin_url('admin.php?page=wp2static-GitHub') );
