@@ -112,7 +112,7 @@ class Client {
     }
 
     public function create_tree($hash, $tree) {
-        error_log("create_tree('$hash', tree..)");
+        // error_log("create_tree('$hash', tree..)");
         $url = sprintf(
             // https://api.github.com/repos/:owner/:repo/git/trees
             '%s/repos/%s/%s/git/trees',
