@@ -131,7 +131,7 @@ class File {
         \WP2Static\DeployCache::addFile($this->cache_key(), 'GitHub');
     }
 
-    public function contents($encoding = 'base64') {
+    public function contents($encoding = 'none') {
         $contents = file_get_contents($this->file_path);
 
         return $encoding === 'base64' ? base64_encode($contents) : $contents;
