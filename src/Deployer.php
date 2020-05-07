@@ -12,6 +12,7 @@ class Deployer {
     }
 
     public function execute() : void {
+        \WP2Static\WsLog::l('Starting GitHub deploy');
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator(
                 $this->processed_site_path,
@@ -26,6 +27,7 @@ class Deployer {
         if ( !$branch->is_valid() ) {
             throw new \Exception('Error getting branch from git');
         }
+        \WP2Static\WsLog::l('Created branch for GH deploy: ' . $branch->name());
 
         File::setup($this->processed_site_path);
 
@@ -58,6 +60,7 @@ class Deployer {
         foreach ( $branch->files() as $file ) {
             $file->mark_deployed();
         }
+        \WP2Static\WsLog::l('Finished GitHub deploy');
     }
 }
 
