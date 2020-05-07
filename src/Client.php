@@ -217,6 +217,7 @@ class Client {
             return;
         }
 
+        Log::l('Creating blob: ' . $file->commit_path());
         $url = sprintf(
             // https://api.github.com/repos/:owner/:repo/git/blobs
             '%s/repos/%s/%s/git/blobs',

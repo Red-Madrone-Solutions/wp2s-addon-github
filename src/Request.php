@@ -19,6 +19,7 @@ class Request {
     }
 
     public function exec() : Response {
+        Log::l('Executing request: %s', Log::DEBUG, '[' . $this->type . '] ' . $this->url);
         $ch = curl_init();
 
         $response = new Response();
