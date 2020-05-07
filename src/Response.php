@@ -25,10 +25,33 @@ class Response {
             }
             $this->body = $value;
             $this->body_json = json_decode($value, $assoc = true);
-            Log::debug('Response: %s', $this->body_json);
+            Log::debug('Response: %s', $this->simpleBody());
         }
 
         return $this->body;
+    }
+
+    private function simpleBody() {
+        $simple_body = $this->body_json;
+        $wanted_keys = [
+            # Common Keys
+            'url', 'node_id',
+
+            # PR keys
+            'id', 'diff_url', 'issue_url', 'state', 'number', 'title', 'body',
+            'html_url', 'tree', 'message',
+
+            # Branch keys
+            'ref', 'object', 'sha', 'merged'
+        ];
+
+        foreach ( array_keys($simple_body) as $key ) {
+            if ( !in_array($key, $wanted_keys) ) {
+                unset($simple_body[$key]);
+            }
+        }
+
+        return $simple_body;
     }
 
     private function is_gzipped() {
