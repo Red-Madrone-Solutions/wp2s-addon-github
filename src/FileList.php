@@ -32,4 +32,12 @@ class FileList {
             return $file->size() > $fifty_k;
         });
     }
+
+    public function isEmpty() : bool {
+        return $this->count() === 0;
+    }
+
+    public function count() : int {
+        return count($this->files);
+    }
 }
