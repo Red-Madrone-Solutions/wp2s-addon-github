@@ -25,7 +25,7 @@ class Response {
             }
             $this->body = $value;
             $this->body_json = json_decode($value, $assoc = true);
-            Log::l('Response: %s', Log::DEBUG, $this->body_json);
+            Log::debug('Response: %s', $this->body_json);
         }
 
         return $this->body;
