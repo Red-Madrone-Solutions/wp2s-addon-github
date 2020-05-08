@@ -146,10 +146,9 @@ class Branch {
      * Delete branch after merge
      */
     private function delete() {
-        if ( !$this->merged() ) {
-            return false;
+        if ( $this->merged() || $this->empty() ) {
+            Log::l('Deleted branch for GH deploy: ' . $this->name());
+            $this->client->delete_branch($this);
         }
-
-        // TODO implement delete()
     }
 }
