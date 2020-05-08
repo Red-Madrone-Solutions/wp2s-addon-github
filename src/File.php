@@ -160,7 +160,9 @@ class File {
             'type' => 'blob',
         ];
 
-        if ( $this->sha ) {
+        if ( $this->needs_delete ) {
+            $payload['sha'] = null;
+        } elseif ( $this->sha ) {
             $payload['sha'] = $this->sha;
         } else {
             $payload['content'] = $this->contents();
