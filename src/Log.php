@@ -44,6 +44,19 @@ class Log {
         );
     }
 
+    private static function format_message_for_cli(
+        string $message,
+        array $message_args
+    ) {
+        return vsprintf(
+            $message,
+            array_map(
+                function($obj) { return print_r($obj, 1); },
+                $message_args
+            )
+        );
+    }
+
     // TODO add support for limiting logging by levels
     public static function l($message, int $level = self::INFO, ...$message_args) {
         if ( $level > RMS_WP2S_GITHUB_LOG_LEVEL) {
@@ -51,16 +64,30 @@ class Log {
         }
 
         if ( count($message_args) > 0 ) {
-            $message = self::format_message_for_browser($message, $message_args);
+            if ( defined('WP_CLI') ) {
+                $message = self::format_message_for_cli($message, $message_args);
+            } else {
+                $message = self::format_message_for_browser($message, $message_args);
+            }
         }
 
-        \WP2Static\WsLog::l(
-            sprintf(
-                '<code>[%s]</code> %s',
-                self::levelLabel($level),
-                $message
-            )
+        $log_template =
+            defined('WP_CLI')
+            ? '[%s] %s'
+            : '<code>[%s]</code> %s'
+        ;
+
+        $log_message = sprintf(
+            $log_template,
+            self::levelLabel($level),
+            $message
         );
+
+        if ( defined('WP_CLI') ) {
+            \WP_CLI::line($log_message);
+        } else {
+            \WP2Static\WsLog::l($log_message);
+        }
     }
 
     public static function debug($message, ...$message_args) {
