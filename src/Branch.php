@@ -115,7 +115,7 @@ class Branch {
 
         $tree = array_map(function($file) {
             return $file->tree_payload();
-        }, $this->file_list->allFiles());
+        }, $this->file_list->updatableFiles());
 
         $tree_hash = $this->client->create_tree($this->hash(), $tree);
         // error_log("tree_hash: " . $tree_hash);
