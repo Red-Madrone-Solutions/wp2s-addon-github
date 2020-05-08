@@ -113,6 +113,9 @@ class Branch {
             $this->client->create_blob($file);
         }
 
+        // $deleted_files = DeployCache::findDeleted($this->file_list);
+        // $this->file_list->merge($deleted_files);
+
         $tree = array_map(function($file) {
             return $file->tree_payload();
         }, $this->file_list->updatableFiles());
@@ -121,6 +124,7 @@ class Branch {
         // error_log("tree_hash: " . $tree_hash);
         $commit_hash = $this->client->create_commit($tree_hash, $this->hash());
         // error_log("commit_hash: " . $commit_hash);
+
 
         $this->update_to_hash($commit_hash);
         $pr = $this->client->create_pull_request($this, 'master');
