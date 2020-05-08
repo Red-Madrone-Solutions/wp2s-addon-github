@@ -14,6 +14,7 @@ class Branch {
     private $files;
     private $client = null;
     private $ancestors;
+    private $merged = false;
 
     public function __construct($node_id, $url, $ref, $object = []) {
         $this->node_id = $node_id;
