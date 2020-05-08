@@ -42,7 +42,7 @@ class FileList {
     }
 
     public function largeFiles($filter_for_update = true) : array {
-        $fifty_k = 1024 * 50;
+        $fifty_k = 1024 * 5;
         return array_filter(
             array_values($this->files),
             function($file) use ($fifty_k, $filter_for_update) {
@@ -77,5 +77,9 @@ class FileList {
 
     public function cacheKeyExists($cache_key) : bool {
         return isset($this->files[$cache_key]);
+    }
+
+    public function merge(FileList $other_list) : void {
+        $this->files = array_merge($this->files, $other_list->allFiles());
     }
 }
