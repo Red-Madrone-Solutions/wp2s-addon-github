@@ -38,10 +38,10 @@ class Deployer {
                 continue;
             }
 
-            if ( $file->already_deployed() ) {
-                continue;
-            }
-
+            // if ( $file->already_deployed() ) {
+            //     $already_deployed_files->addFile($file);
+            //     continue;
+            // }
 
             if ( $file->is_text() ) {
                 continue;
