@@ -50,6 +50,18 @@ class FileList {
         return $this->count() === 0;
     }
 
+    public function updatableFiles() {
+        return array_filter(array_values($this->files), function($file) {
+            return $file->needs_update() || $file->needs_delete();
+        });
+    }
+
+    public function deletableFiles() {
+        return array_filter(array_values($this->files), function($file) {
+            return $file->needs_delete();
+        });
+    }
+
     public function count() : int {
         return count($this->files);
     }
