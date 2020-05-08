@@ -8,8 +8,30 @@ class Log {
     const INFO = 10;
     const DEBUG = 20;
 
+    public static function setup() {
+        add_action('init', function() {
+            if ( !defined('RMS_WP2S_GITHUB_LOG_LEVEL') ) {
+                define(
+                    'RMS_WP2S_GITHUB_LOG_LEVEL',
+                    /**
+                     * ```
+                     * add_action('rms/wp2s/github/log-level', function($log_level) {
+                     *   return \RMS\WP2S\GitHub\Log::INFO;
+                     * });
+                     * ```
+                     */
+                    apply_filters('rms/wp2s/github/log-level', self::INFO)
+                );
+            }
+        });
+    }
+
     // TODO add support for limiting logging by levels
     public static function l($message, int $level = self::INFO, ...$message_args) {
+        if ( $level > RMS_WP2S_GITHUB_LOG_LEVEL) {
+            return;
+        }
+
         if ( count($message_args) > 0 ) {
             $message = vsprintf(
                 $message,

@@ -17,6 +17,8 @@ class Controller {
         add_action('wp2static_deploy', [ $this, 'deploy' ]);
         add_action('wp2static_post_deploy_trigger', [ $this, 'postDeploy' ]);
 
+        Log::Setup();
+
         Database::instance()->update_db();
 
         AdminNotice::setup();
