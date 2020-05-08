@@ -23,6 +23,13 @@ class Controller {
 
         AdminNotice::setup();
         EncryptedOption::setup();
+
+        if ( defined( 'WP_CLI' ) ) {
+            \WP_CLI::add_command(
+                'wp2static github',
+                [ 'RMS\WP2S\GitHub\CLI', 'github' ]
+            );
+        }
     }
 
     public static function addSubMenuPage(array $submenu_pages) : array {
