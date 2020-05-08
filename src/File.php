@@ -13,6 +13,8 @@ class File {
     private $commit_path;
     private $sha;
     private $size;
+    private $needs_update = false;
+    private $needs_delete = false;
 
     public static function setup($processed_site_path) {
         self::$processed_site_path = $processed_site_path;
@@ -23,12 +25,14 @@ class File {
         self::$mime_type = new \finfo(FILEINFO_MIME);
     }
 
-    private function __construct($filepath) {
+    private function __construct($filepath, $needs_delete = false) {
         $this->file_path   = $filepath;
         $this->commit_path = null;
         $this->cache_key   = null;
         $this->sha         = null;
         $this->size        = null;
+        $this->needs_update = !DeployCache::fileIsCached($this->cache_key());
+        $this->needs_delete = $needs_delete;
     }
 
     public function commit_path() : string {
@@ -121,6 +125,14 @@ class File {
 
     public function is_binary() : bool {
         return !$this->is_text();
+    }
+
+    public function needs_update() : bool {
+        return $this->needs_update;
+    }
+
+    public function needs_delete() : bool {
+        return $this->needs_delete;
     }
 
     public function already_deployed() : bool {
