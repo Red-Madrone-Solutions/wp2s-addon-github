@@ -125,6 +125,7 @@ class Branch {
         $this->update_to_hash($commit_hash);
         $pr = $this->client->create_pull_request($this, 'master');
         if ( $pr->merge() ) {
+            // TODO check merged response from PR request
             $this->merged(true);
             $this->delete();
         }
