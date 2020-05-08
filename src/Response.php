@@ -33,6 +33,12 @@ class Response {
 
     private function simpleBody() {
         $simple_body = $this->body_json;
+
+        // Gracefully handle empty JSON response
+        if ( is_null($simple_body) ) {
+            return [];
+        }
+
         $wanted_keys = [
             # Common Keys
             'url', 'node_id',
