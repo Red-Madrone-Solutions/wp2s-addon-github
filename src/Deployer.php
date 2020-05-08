@@ -50,8 +50,6 @@ class Deployer {
             if ( $count++ > 5 ) {
                 break;
             }
-            // Add to deploy cache
-            // \WP2Static\DeployCache::addFile($filename);
         }
         $branch->commit();
         foreach ( $branch->files() as $file ) {
