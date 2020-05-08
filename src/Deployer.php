@@ -43,9 +43,6 @@ class Deployer {
             //     continue;
             // }
 
-            if ( $file->is_text() ) {
-                continue;
-            }
 
             // Collect file for commit
             $branch->addFile($file);
