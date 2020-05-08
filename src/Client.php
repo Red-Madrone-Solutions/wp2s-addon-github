@@ -192,7 +192,7 @@ class Client {
         return new NullBranch();
     }
 
-    protected function delete_branch($branch) {
+    public function delete_branch(Branch $branch) {
         $url = sprintf(
             // https://api.github.com/repos/:owner/:repo/git/refs/:ref
             '%s/repos/%s/%s/git/refs/heads/%s',
