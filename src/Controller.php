@@ -101,4 +101,10 @@ class Controller {
 
     public function postDeploy() : void {
     }
+
+    public static function dryRun(string $processed_site_path) : void {
+        $dry_run = new DryRun();
+        $dry_run->setup($processed_site_path);
+        $dry_run->execute();
+    }
 }
