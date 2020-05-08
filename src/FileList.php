@@ -18,11 +18,11 @@ class FileList {
     public function binaryFiles($filter_for_update = true) : array {
         return array_filter(
             array_values($this->files),
-            function($file) {
+            function($file) use ($filter_for_update) {
                 return
                     $file->is_binary()
                     &&
-                    ($filter_for_upate ? $file->needs_update() : true)
+                    ($filter_for_update ? $file->needs_update() : true)
                 ;
             }
         );
