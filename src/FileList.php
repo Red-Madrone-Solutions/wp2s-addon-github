@@ -12,25 +12,38 @@ class FileList {
     }
 
     public function add(File $file) {
-        // TODO check for duplicates?
-        $this->files[]= $file;
+        $this->files[$file->cache_key()] = $file;
     }
 
-    public function binaryFiles() : array {
-        return array_filter($this->files, function($file) {
-            return $file->is_binary();
-        });
+    public function binaryFiles($filter_for_update = true) : array {
+        return array_filter(
+            array_values($this->files),
+            function($file) {
+                return
+                    $file->is_binary()
+                    &&
+                    ($filter_for_upate ? $file->needs_update() : true)
+                ;
+            }
+        );
     }
 
     public function allFiles() : array {
         return $this->files;
     }
 
-    public function largeFiles() : array {
+    public function largeFiles($filter_for_update = true) : array {
         $fifty_k = 1024 * 50;
-        return array_filter($this->files, function($file) use ($fifty_k) {
-            return $file->size() > $fifty_k;
-        });
+        return array_filter(
+            array_values($this->files),
+            function($file) use ($fifty_k) {
+                return
+                    ($file->size() > $fifty_k)
+                    &&
+                    ($filter_for_update ? $file->needs_update() : true)
+                ;
+            }
+        );
     }
 
     public function isEmpty() : bool {
