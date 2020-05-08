@@ -9,6 +9,7 @@ class DryRun {
     public function setup(string $processed_site_path) : void {
         $this->processed_site_path = $processed_site_path;
         $this->processed_site_path_len = strlen($processed_site_path);
+        DeployCache::$CACHE_NAMESPACE = 'GitHub Dry Run';
     }
 
     public function execute() : void {
@@ -33,6 +34,12 @@ class DryRun {
             $branch->addFile($file);
         }
 
-
+        $branch->commit();
+        foreach ( $branch->files() as $file ) {
+            // $file->mark_deployed();
+        }
+        Log::l('Finished GitHub dry-run');
+        // Log::l('Looking at deleted files');
+        // $deleted_file = DeployCache::findDeleted($branch->fileList());
     }
 }
