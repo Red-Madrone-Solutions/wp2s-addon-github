@@ -91,6 +91,10 @@ class Branch {
         return $this->file_list->allFiles();
     }
 
+    public function empty() : bool {
+        return $this->file_list->isEmpty();
+    }
+
     public function commit() {
         $binary_files = $this->file_list->binaryFiles();
         foreach ($binary_files as $file) {
