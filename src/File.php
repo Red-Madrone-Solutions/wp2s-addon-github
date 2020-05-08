@@ -70,6 +70,10 @@ class File {
         return $this->cache_key;
     }
 
+    public static function pathForCacheKey($cache_key) : string {
+        return self::$processed_site_path . $cache_key;
+    }
+
     public function sha($value = null) {
         if ( !is_null($value) ) {
             $this->sha = $value;
