@@ -28,6 +28,15 @@ class FileList {
         );
     }
 
+    public function deletedFiles() : array {
+        return array_filter(
+            array_values($this->files),
+            function($file) {
+                return $file->needs_delete();
+            }
+        );
+    }
+
     public function allFiles() : array {
         return $this->files;
     }
