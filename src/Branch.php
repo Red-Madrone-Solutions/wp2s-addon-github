@@ -96,6 +96,12 @@ class Branch {
     }
 
     public function commit() {
+        if ( $this->empty() ) {
+            Log::l('No files to deploy');
+            $this->delete();
+            return;
+        }
+
         $binary_files = $this->file_list->binaryFiles();
         foreach ($binary_files as $file) {
             $this->client->create_blob($file);
