@@ -65,4 +65,8 @@ class FileList {
     public function count() : int {
         return count($this->files);
     }
+
+    public function cacheKeyExists($cache_key) : bool {
+        return isset($this->files[$cache_key]);
+    }
 }
