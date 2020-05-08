@@ -102,6 +102,7 @@ class Branch {
             return;
         }
 
+        Log::l( sprintf('Deploying %d files', $this->file_list->count()) );
         $binary_files = $this->file_list->binaryFiles();
         foreach ($binary_files as $file) {
             $this->client->create_blob($file);
