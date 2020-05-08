@@ -124,11 +124,11 @@ class File {
     }
 
     public function already_deployed() : bool {
-        return \WP2Static\DeployCache::fileisCached($this->cache_key(), 'GitHub');
+        return DeployCache::fileIsCached($this->cache_key());
     }
 
     public function mark_deployed() {
-        \WP2Static\DeployCache::addFile($this->cache_key(), 'GitHub');
+        return DeployCache::addFile($this->cache_key());
     }
 
     public function contents($encoding = 'none') {
