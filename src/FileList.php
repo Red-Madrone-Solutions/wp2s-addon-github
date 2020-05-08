@@ -36,7 +36,7 @@ class FileList {
         $fifty_k = 1024 * 50;
         return array_filter(
             array_values($this->files),
-            function($file) use ($fifty_k) {
+            function($file) use ($fifty_k, $filter_for_update) {
                 return
                     ($file->size() > $fifty_k)
                     &&
