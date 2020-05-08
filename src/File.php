@@ -56,7 +56,7 @@ class File {
         return $this->commit_path;
     }
 
-    private function cache_key() : string {
+    public function cache_key() : string {
         if ( is_null($this->cache_key) ) {
             if (
                 substr($this->file_path, 0, self::$processed_site_path_len)
