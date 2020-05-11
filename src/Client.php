@@ -299,6 +299,24 @@ class Client {
         return (bool) $this->option_value('merge_pr');
     }
 
+    public function pr_merge_title() : string {
+        return $this->option_value('pr_title')
+            ?: apply_filter(
+                'rms/wp2s/github/default-pr-merge-title',
+                'WP2Static merge'
+            )
+        ;
+    }
+
+    public function pr_merge_body() : string {
+        return $this->option_value('pr_body')
+            ?: apply_filter(
+                'rms/wp2s/github/default-pr-merge-body',
+                ''
+            )
+        ;
+    }
+
     public function merge_pull_request(PullRequest $pr) {
         if ( !$this->should_auto_merge_pr() ) {
             Log::l('Skipping auto-merge of PR per option setting');
@@ -315,8 +333,8 @@ class Client {
         );
 
         $request_body = [
-            'commit_title'   => 'PR Merge Title', // TODO make merge title editable
-            'commit_message' => 'PR Merge Message', // TODO make merge message editable
+            'commit_title'   => $this->pr_merge_title(),
+            'commit_message' => $this->pr_merge_body(),
         ];
 
         $request = new Request($this->token(), $url, 'PUT');
