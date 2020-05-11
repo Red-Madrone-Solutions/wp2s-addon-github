@@ -24,6 +24,7 @@ class OptionSet implements \IteratorAggregate {
         $this->list[]= new Option('commit_message', 'Commit Message', 'Message to use for commit to GitHub');
         $this->list[]= new Option('pr_title', 'PR Title', 'Text to use for title of Pull Request');
         $this->list[]= new Option('pr_body', 'PR Body', 'Text to use for body of Pull Request');
+        $this->list[]= new BooleanOption('merge_pr', 'Merge PR', 'Should the PR be automatically merged or not?');
         // $this->list[]= new DisabledOption('subdirectory', 'Subdirectory');
         // $this->list[]= new DisabledOption('commit_message', 'Commit Message');
     }
