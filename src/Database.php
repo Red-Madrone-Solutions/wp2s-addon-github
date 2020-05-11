@@ -5,7 +5,7 @@ namespace RMS\WP2S\GitHub;
 if ( !defined('ABSPATH') ) exit;
 
 class Database {
-    private $db_version     = '0.6.2';
+    private $db_version     = '0.6.3';
     private $db_version_key = 'rms_wp2s_gh_db_version';
 
     private $option_set = null;
