@@ -147,6 +147,15 @@ class Client {
         return $response->pluck('sha');
     }
 
+    public function commit_message() {
+        return $this->option_value('commit_message')
+            ?: apply_filter(
+                'rms/wp2s/github/default-commit-message',
+                'WP2Static commit'
+            )
+        ;
+    }
+
     private function option_value($name) {
         if ( $option = $this->option_set->findByName($name) ) {
             return $option->value();
@@ -164,7 +173,7 @@ class Client {
         );
 
         $request_body = [
-            'message' => 'Test commit', // TODO replace with actual commit message
+            'message' => $this->commit_message(),
             'tree'    => $tree_hash,
             'parents' => [ $parent_hash ],
             // TODO Does it make sense to set the committer to a WP user?
