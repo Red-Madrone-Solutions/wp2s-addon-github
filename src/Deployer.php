@@ -29,6 +29,7 @@ class Deployer {
                 'Error getting branch (`%s`) from git',
                 $client->source_branch()
             );
+            Log::error($message);
             throw new DeployException($message);
         }
         Log::l('Created branch for GH deploy: ' . $branch->name());
