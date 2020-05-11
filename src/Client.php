@@ -300,6 +300,11 @@ class Client {
     }
 
     public function merge_pull_request(PullRequest $pr) {
+        if ( !$this->should_auto_merge_pr() ) {
+            Log::l('Skipping auto-merge of PR per option setting');
+            return false;
+        }
+
         $url = sprintf(
             // https://api.github.com/repos/:owner/:repo/pulls/:pull_number/merge
             '%s/repos/%s/%s/pulls/%s/merge',
