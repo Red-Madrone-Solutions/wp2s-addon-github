@@ -88,7 +88,20 @@ class Client {
         $request = new Request($this->token(), $url);
         $response = $request->exec();
 
-        return $response->pluck([0, 'object', 'sha']);
+        $entry = $response->find('ref', sprintf('refs/head/%s', $this->source_branch()));
+        if ( is_null($entry) ) {
+            return null;
+        }
+        return Util::pluck($entry, ['object', 'sha']);
+    }
+
+    public function source_branch() {
+        $source_branch = '';
+        if ( $branch_option = $this->option_set->findByName('source_branch') ) {
+            $source_branch = $branch_option->value();
+        }
+
+        return $source_branch ?: 'master';
     }
 
     protected function create_branch($hash, $name) {
