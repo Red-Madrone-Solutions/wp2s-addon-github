@@ -284,10 +284,10 @@ class Client {
         );
 
         $request_body = [
-            'title' => 'PR title', // TODO make PR title editable
+            'title' => $this->pr_title(),
             'head' => $source_branch->name(),
             'base' => $target_branch_name,
-            'body' => 'PR body', // TODO make PR body editable
+            'body' => $this->pr_body(),
         ];
 
         $request = new Request($this->token(), $url, 'POST');
@@ -303,17 +303,35 @@ class Client {
         return (bool) $this->option_value('merge_pr');
     }
 
-    public function pr_merge_title() : string {
+    public function pr_title() : string {
         return $this->option_value('pr_title')
             ?: apply_filter(
+                'rms/wp2s/github/default-pr-title',
+                'WP2Static PR'
+            )
+        ;
+    }
+
+    public function pr_body() : string {
+        return $this->option_value('pr_body')
+            ?: apply_filter(
+                'rms/wp2s/github/default-pr-body',
+                ''
+            )
+        ;
+    }
+
+    public function pr_merge_title() : string {
+        return $this->option_value('pr_merge_title')
+            ?: apply_filter(
                 'rms/wp2s/github/default-pr-merge-title',
-                'WP2Static merge'
+                'WP2Static Auto-merge PR'
             )
         ;
     }
 
     public function pr_merge_body() : string {
-        return $this->option_value('pr_body')
+        return $this->option_value('pr_merge_body')
             ?: apply_filter(
                 'rms/wp2s/github/default-pr-merge-body',
                 ''
