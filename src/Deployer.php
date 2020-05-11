@@ -25,7 +25,11 @@ class Deployer {
         // Use the hash for this branch when creating files
         $branch = $client->deploySetup();
         if ( !$branch->is_valid() ) {
-            throw new \Exception('Error getting branch from git');
+            $message = sprintf(
+                'Error getting branch (`%s`) from git',
+                $client->source_branch()
+            );
+            throw new DeployException($message);
         }
         Log::l('Created branch for GH deploy: ' . $branch->name());
 
