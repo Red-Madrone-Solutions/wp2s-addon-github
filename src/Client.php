@@ -147,6 +147,13 @@ class Client {
         return $response->pluck('sha');
     }
 
+    private function option_value($name) {
+        if ( $option = $this->option_set->findByName($name) ) {
+            return $option->value();
+        }
+        return null;
+    }
+
     public function create_commit($tree_hash, $parent_hash) {
         $url = sprintf(
             // https://api.github.com/repos/:owner/:repo/git/commits
