@@ -96,12 +96,12 @@ class Client {
     }
 
     public function source_branch() {
-        $source_branch = '';
-        if ( $branch_option = $this->option_set->findByName('source_branch') ) {
-            $source_branch = $branch_option->value();
-        }
-
-        return $source_branch ?: apply_filter('rms/wp2s/github/default-source-branch', 'master');
+        return $this->option_value('source_branch')
+            ?: apply_filter(
+                'rms/wp2s/github/default-source-branch',
+                'master'
+            )
+        ;
     }
 
     protected function create_branch($hash, $name) {
