@@ -89,6 +89,15 @@ class Response {
         return Util::pluck($this->body_json, $keys);
     }
 
+    public function find($key, $value) {
+        foreach( $this->body_json as $entry ) {
+            if ( isset($entry[$key]) && $entry[$key] === $value ) {
+                return $entry;
+            }
+        }
+        return null;
+    }
+
     public function collect_headers($curl, $header) : int {
         $len = strlen($header);
         $parts = explode(':', $header, 2);
