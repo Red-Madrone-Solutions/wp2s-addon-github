@@ -17,6 +17,7 @@ class Client {
     public function canAccess() : bool {
         $hash = $this->get_latest_commit_hash();
         if ( is_null($hash) ) {
+            Log::warn("Didn't get good hash for latest commit");
             return false;
         }
 
@@ -90,6 +91,9 @@ class Client {
 
         $entry = $response->find('ref', sprintf('refs/head/%s', $this->source_branch()));
         if ( is_null($entry) ) {
+            Log::warn(
+                sprintf('Cannot find branch: ', $this->source_branch())
+            );
             return null;
         }
         return Util::pluck($entry, ['object', 'sha']);
