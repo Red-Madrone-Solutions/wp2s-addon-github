@@ -36,7 +36,7 @@ class Client {
             return new NullBranch();
         }
 
-        // TODO handle generating unique branch name
+        // TODO Allow user to change name of deploy branch
         $branch = $this->create_branch($hash, 'rms-wp2s-gh-deploy-branch-' . time());
         $branch->client($this);
         return $branch;
