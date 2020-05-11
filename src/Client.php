@@ -319,6 +319,11 @@ class Client {
         $response = $request->exec();
         unset($request);
 
-        return $response->is_success();
+        if ( !$response->is_success() ) {
+            Log::warn('PR was not merged: ' . $response->pluck('message'));
+            return false;
+        }
+
+        return true;
     }
 }
