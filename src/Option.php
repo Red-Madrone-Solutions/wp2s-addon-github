@@ -18,6 +18,14 @@ class Option {
         $this->value = $this->default_value();
     }
 
+    public function partial() {
+        return View::partialPath( $this->partial_name() );
+    }
+
+    public function partial_name() {
+        return 'option';
+    }
+
     public function formatAttrs($attrs = null) {
         if ( is_null($attrs) ) {
             $attrs = $this->attrs();
