@@ -89,7 +89,7 @@ class Client {
         $request = new Request($this->token(), $url);
         $response = $request->exec();
 
-        $entry = $response->find('ref', sprintf('refs/head/%s', $this->source_branch()));
+        $entry = $response->find('ref', sprintf('refs/heads/%s', $this->source_branch()));
         if ( is_null($entry) ) {
             Log::warn(
                 sprintf('Cannot find branch: ', $this->source_branch())
