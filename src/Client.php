@@ -77,6 +77,7 @@ class Client {
     }
 
     protected function get_latest_commit_hash() {
+        // TODO use GraphQL (v4) instead of v3 query
         $url = sprintf(
             // https://api.github.com/repos/<AUTHOR>/<REPO>/git/refs/heads
             '%s/repos/%s/%s/git/refs/heads',
