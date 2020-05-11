@@ -17,11 +17,15 @@ class BooleanOption extends Option {
         return 'checkbox-option';
     }
 
+    public function value() {
+        return $this->value === self::TRUE_VALUE;
+    }
+
     public function attrs() {
         $attrs = [];
 
         // Mark checked if saved value
-        if ( $this->value() === $this->ui_value() ) {
+        if ( $this->value === $this->ui_value() ) {
             $attrs[]= 'checked';
         }
 
