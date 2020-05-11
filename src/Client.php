@@ -295,6 +295,10 @@ class Client {
         return new PullRequest($pull_number, $this);
     }
 
+    private function should_auto_merge_pr() : bool {
+        return (bool) $this->option_value('merge_pr');
+    }
+
     public function merge_pull_request(PullRequest $pr) {
         $url = sprintf(
             // https://api.github.com/repos/:owner/:repo/pulls/:pull_number/merge
