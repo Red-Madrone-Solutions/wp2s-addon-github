@@ -101,7 +101,7 @@ class Client {
             $source_branch = $branch_option->value();
         }
 
-        return $source_branch ?: 'master';
+        return $source_branch ?: apply_filter('rms/wp2s/github/default-source-branch', 'master');
     }
 
     protected function create_branch($hash, $name) {
