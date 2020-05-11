@@ -98,6 +98,10 @@ class Log {
         self::l($message, self::ERROR, ...$message_args);
     }
 
+    public static function warn($message, ...$message_args) {
+        self::l($message, self::WARN, ...$message_args);
+    }
+
     protected static function levelLabel($level) : string {
         $lookup = [
             self::ERROR => 'Error',
