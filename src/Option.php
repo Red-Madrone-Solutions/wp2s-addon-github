@@ -18,6 +18,23 @@ class Option {
         $this->value = $this->default_value();
     }
 
+    public function formatAttrs($attrs = null) {
+        if ( is_null($attrs) ) {
+            $attrs = $this->attrs();
+        }
+
+        return implode(
+            ' ',
+            array_map(function($k, $v) {
+                if ( is_int($k) ) {
+                    return $v;
+                } else {
+                    return sprintf('%s="%s"', $k, esc_attr($v));
+                }
+            }, array_keys($attrs), array_values($attrs))
+        );
+    }
+
     public function name() {
         return $this->name;
     }
@@ -40,6 +57,10 @@ class Option {
 
     public function default_value() {
         return '';
+    }
+
+    public function attrs() {
+        return [];
     }
 
     public function ui_value() {
