@@ -28,11 +28,11 @@ composer install --no-dev --optimize-autoloader
 
 
 # cp all required sources to build dir
-cp -r $EXEC_DIR/src $TMP_DIR/static-html-output-plugin/
-cp -r $EXEC_DIR/vendor $TMP_DIR/static-html-output-plugin/
-cp -r $EXEC_DIR/README.md $TMP_DIR/static-html-output-plugin/
-cp -r $EXEC_DIR/views $TMP_DIR/static-html-output-plugin/
-cp -r $EXEC_DIR/*.php $TMP_DIR/static-html-output-plugin/
+cp -r $EXEC_DIR/src $TMP_DIR/rms-wp2s-gh-plugin/
+cp -r $EXEC_DIR/vendor $TMP_DIR/rms-wp2s-gh-plugin/
+cp -r $EXEC_DIR/README.md $TMP_DIR/rms-wp2s-gh-plugin/
+cp -r $EXEC_DIR/views $TMP_DIR/rms-wp2s-gh-plugin/
+cp -r $EXEC_DIR/*.php $TMP_DIR/rms-wp2s-gh-plugin/
 
 cd $TMP_DIR
 
