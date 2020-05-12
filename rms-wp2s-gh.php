@@ -4,7 +4,7 @@
  * Plugin Name: RMS WP2Static Add-on - GitHub Deployment
  * Plugin URI:  https://redmadronesolutions.com/wp2static-github/
  * Description: GitHub deployment add-on for WP2Static v7+
- * Version:     1.0-alpha-001
+ * Version:     1.0-alpha-002
  * Author:      Matt Vanderpol
  * Author URI:  https://mattvanderpol.com
  * License:     Unlicense
