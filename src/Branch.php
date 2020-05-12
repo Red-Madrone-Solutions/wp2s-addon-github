@@ -120,7 +120,7 @@ class Branch {
             return $file->tree_payload();
         }, $this->file_list->updatableFiles());
 
-        $tree_hash = $this->client->create_tree($this->hash(), $tree);
+        $tree_hash = $this->client->create_tree($this->hash(), array_values($tree));
         // error_log("tree_hash: " . $tree_hash);
         $commit_hash = $this->client->create_commit($tree_hash, $this->hash());
         // error_log("commit_hash: " . $commit_hash);
