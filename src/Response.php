@@ -116,7 +116,8 @@ class Response {
 
     public function status_code() : int {
         if ( is_null($this->status_code) ) {
-            $this->status_code = (int) $this->headers['status'];
+            Log::debug2('Raw status: "' . $this->header('status') . '"');
+            $this->status_code = (int) $this->header('status');
         }
         Log::debug2('Response status code: ' . $this->status_code);
         return $this->status_code;
