@@ -17,12 +17,9 @@ class Controller {
         add_action('wp2static_deploy', [ $this, 'deploy' ]);
         add_action('wp2static_post_deploy_trigger', [ $this, 'postDeploy' ]);
 
-        Log::Setup();
+        self::setup();
 
         Database::instance()->update_db();
-
-        AdminNotice::setup();
-        EncryptedOption::setup();
 
         if ( defined( 'WP_CLI' ) ) {
             \WP_CLI::add_command(
@@ -30,6 +27,12 @@ class Controller {
                 [ 'RMS\WP2S\GitHub\CLI', 'github' ]
             );
         }
+    }
+
+    public static function setup() {
+        Log::Setup();
+        AdminNotice::setup();
+        EncryptedOption::setup();
     }
 
     public static function addSubMenuPage(array $submenu_pages) : array {
