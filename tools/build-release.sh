@@ -28,7 +28,7 @@ composer install --no-dev --optimize-autoloader
 
 
 # cp all required sources to build dir
-cp -r $EXEC_DIR/src $TMP_DIR/rms-wp2s-gh-plugin/
+rsync -av --exclude="*.swp" $EXEC_DIR/src $TMP_DIR/rms-wp2s-gh-plugin/
 cp -r $EXEC_DIR/vendor $TMP_DIR/rms-wp2s-gh-plugin/
 cp -r $EXEC_DIR/README.md $TMP_DIR/rms-wp2s-gh-plugin/
 cp -r $EXEC_DIR/views $TMP_DIR/rms-wp2s-gh-plugin/
