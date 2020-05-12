@@ -14,5 +14,8 @@
 		"psr-4": {
 			"RMS\\WP2S\\GitHub\\": "src/"
 		}
+	},
+	"scripts": {
+		"build": "/bin/sh tools/build-release.sh"
 	}
 }
