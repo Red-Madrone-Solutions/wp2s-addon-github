@@ -95,6 +95,10 @@ class Branch {
         return $this->file_list->isEmpty();
     }
 
+    public function updated_files() : array {
+        return $this->file_list->updatableFiles();
+    }
+
     public function commit() {
         if ( $this->empty() ) {
             Log::l('No files to deploy');
