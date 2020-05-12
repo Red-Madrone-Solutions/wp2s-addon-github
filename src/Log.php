@@ -7,6 +7,8 @@ class Log {
     const WARN = 5;
     const INFO = 10;
     const DEBUG = 20;
+    const DEBUG2 = 30;
+    const DEBUG3 = 40;
 
     public static function setup() {
         add_action('init', function() {
@@ -94,6 +96,14 @@ class Log {
         self::l($message, self::DEBUG, ...$message_args);
     }
 
+    public static function debug2($message, ...$message_args) {
+        self::l($message, self::DEBUG2, ...$message_args);
+    }
+
+    public static function debug3($message, ...$message_args) {
+        self::l($message, self::DEBUG3, ...$message_args);
+    }
+
     public static function error($message, ...$message_args) {
         self::l($message, self::ERROR, ...$message_args);
     }
@@ -108,6 +118,8 @@ class Log {
             self::WARN  => 'Warn',
             self::INFO  => 'Info',
             self::DEBUG => 'Debug',
+            self::DEBUG2 => 'Debug-2',
+            self::DEBUG3 => 'Debug-3',
         ];
 
         return isset($lookup[$level])
