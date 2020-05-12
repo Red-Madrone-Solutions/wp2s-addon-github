@@ -30,7 +30,7 @@ class Controller {
     }
 
     public static function setup() {
-        Log::Setup();
+        Log::setup();
         AdminNotice::setup();
         EncryptedOption::setup();
     }
