@@ -33,6 +33,7 @@ class Controller {
         Log::setup();
         AdminNotice::setup();
         EncryptedOption::setup();
+        Request::setup();
         Response::setup();
     }
 

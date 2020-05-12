@@ -10,6 +10,9 @@ class Request {
     private $type;
     private $body;
 
+    public static function setup() {
+    }
+
     public function __construct($token, $url, $type = 'GET') {
         $this->token   = $token;
         $this->url     = $url;
