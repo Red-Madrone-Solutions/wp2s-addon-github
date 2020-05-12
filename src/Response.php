@@ -110,6 +110,10 @@ class Response {
         return $len;
     }
 
+    public function header($name) : string {
+        return isset($this->headers[$name]) ? implode(',', $this->headers[$name]) : '';
+    }
+
     public function status_code() : int {
         if ( is_null($this->status_code) ) {
             $this->status_code = (int) $this->headers['status'];
