@@ -33,6 +33,7 @@ class Controller {
         Log::setup();
         AdminNotice::setup();
         EncryptedOption::setup();
+        Response::setup();
     }
 
     public static function addSubMenuPage(array $submenu_pages) : array {
