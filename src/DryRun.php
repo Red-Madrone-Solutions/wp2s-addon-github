@@ -9,7 +9,9 @@ class DryRun {
     public function setup(string $processed_site_path) : void {
         $this->processed_site_path = $processed_site_path;
         $this->processed_site_path_len = strlen($processed_site_path);
+        $standard_cache_namespace = DeployCache::$CACHE_NAMESPACE;
         DeployCache::$CACHE_NAMESPACE = 'GitHub Dry Run';
+        DeployCache::seedFrom($standard_cache_namespace);
     }
 
     public function execute() : void {

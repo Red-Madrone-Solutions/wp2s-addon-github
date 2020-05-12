@@ -24,4 +24,8 @@ class DeployCache {
         }
         return $deleted_files;
     }
+
+    public static function seedFrom(string $namespace) {
+        Database::instance()->truncateAndSeedDeployCache($namespace, self::$CACHE_NAMESPACE);
+    }
 }
