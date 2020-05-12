@@ -101,7 +101,7 @@ class Client {
 
     public function source_branch() {
         return $this->option_value('source_branch')
-            ?: apply_filter(
+            ?: apply_filters(
                 'rms/wp2s/github/default-source-branch',
                 'master'
             )
@@ -153,7 +153,7 @@ class Client {
 
     public function commit_message() {
         return $this->option_value('commit_message')
-            ?: apply_filter(
+            ?: apply_filters(
                 'rms/wp2s/github/default-commit-message',
                 'WP2Static commit'
             )
@@ -305,7 +305,7 @@ class Client {
 
     public function pr_title() : string {
         return $this->option_value('pr_title')
-            ?: apply_filter(
+            ?: apply_filters(
                 'rms/wp2s/github/default-pr-title',
                 'WP2Static PR'
             )
@@ -314,7 +314,7 @@ class Client {
 
     public function pr_body() : string {
         return $this->option_value('pr_body')
-            ?: apply_filter(
+            ?: apply_filters(
                 'rms/wp2s/github/default-pr-body',
                 ''
             )
@@ -323,7 +323,7 @@ class Client {
 
     public function pr_merge_title() : string {
         return $this->option_value('pr_merge_title')
-            ?: apply_filter(
+            ?: apply_filters(
                 'rms/wp2s/github/default-pr-merge-title',
                 'WP2Static Auto-merge PR'
             )
@@ -332,7 +332,7 @@ class Client {
 
     public function pr_merge_body() : string {
         return $this->option_value('pr_merge_body')
-            ?: apply_filter(
+            ?: apply_filters(
                 'rms/wp2s/github/default-pr-merge-body',
                 ''
             )
