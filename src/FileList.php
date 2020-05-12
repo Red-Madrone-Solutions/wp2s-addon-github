@@ -42,7 +42,7 @@ class FileList {
     }
 
     public function largeFiles($filter_for_update = true) : array {
-        $fifty_k = 1024 * 5;
+        $fifty_k = 1024 * 50;
         return array_filter(
             array_values($this->files),
             function($file) use ($fifty_k, $filter_for_update) {
