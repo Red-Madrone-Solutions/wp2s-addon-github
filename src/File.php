@@ -144,6 +144,7 @@ class File {
     }
 
     public function mark_deployed() {
+        Log::info('Add to deploy cache: ' . $this->cache_key());
         return DeployCache::addFile($this->cache_key());
     }
 
