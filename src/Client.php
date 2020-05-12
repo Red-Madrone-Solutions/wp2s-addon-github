@@ -108,6 +108,15 @@ class Client {
         ;
     }
 
+    public function target_branch() {
+        return $this->option_value('target_branch')
+            ?: apply_filters(
+                'rms/wp2s/github/default-target-branch',
+                'master'
+            )
+        ;
+    }
+
     protected function create_branch($hash, $name) {
         $url = sprintf(
             // https://api.github.com/repos/<AUTHOR>/<REPO>/git/refs
@@ -278,7 +287,7 @@ class Client {
         $file->sha($response->pluck('sha'));
     }
 
-    public function create_pull_request(Branch $source_branch, string $target_branch_name) {
+    public function create_pull_request(Branch $source_branch) {
         $url = sprintf(
             // https://api.github.com/repos/:owner/:repo/pulls
             '%s/repos/%s/%s/pulls',
@@ -290,7 +299,7 @@ class Client {
         $request_body = [
             'title' => $this->pr_title(),
             'head' => $source_branch->name(),
-            'base' => $target_branch_name,
+            'base' => $this->target_branch(),
             'body' => $this->pr_body(),
         ];
 
