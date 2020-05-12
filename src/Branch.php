@@ -84,7 +84,6 @@ class Branch {
 
     public function addFile(File $file) {
         $this->file_list->add($file);
-        Log::l('Adding file for GH deploy: ' . $file->commit_path());
     }
 
     public function files() {
