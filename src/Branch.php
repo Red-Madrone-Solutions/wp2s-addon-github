@@ -91,7 +91,7 @@ class Branch {
     }
 
     public function empty() : bool {
-        return $this->file_list->isEmpty();
+        return count($this->updated_files()) === 0;
     }
 
     public function updated_files() : array {
