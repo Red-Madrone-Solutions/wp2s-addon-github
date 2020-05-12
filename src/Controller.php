@@ -96,7 +96,11 @@ class Controller {
     public function deploy(string $processed_site_path) : void {
         $deployer = new Deployer();
         $deployer->setup($processed_site_path);
-        $deployer->execute();
+        try {
+            $deployer->execute();
+        } catch (DeployException $e) {
+            Log::error('Deploy Error: ' . $e->getMessage());
+        }
     }
 
     public function postDeploy() : void {
