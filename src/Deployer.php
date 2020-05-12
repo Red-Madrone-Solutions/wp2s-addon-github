@@ -52,9 +52,9 @@ class Deployer {
             // Collect file for commit
             $branch->addFile($file);
 
-            if ( $count++ > 5 ) {
-                break;
-            }
+            // if ( $count++ > 5 ) {
+            //     break;
+            // }
         }
         $branch->commit();
         foreach ( $branch->files() as $file ) {
