@@ -148,6 +148,10 @@ class Client {
         $request->body($request_body);
 
         $response = $request->exec();
+        if ( !$response->is_success() ) {
+            throw new DeployException('Error creating tree: ' . $response->pluck('message'));
+        }
+
         return $response->pluck('sha');
     }
 
