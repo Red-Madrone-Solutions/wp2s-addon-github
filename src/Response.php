@@ -10,6 +10,24 @@ class Response {
     private $body_json;
     private $status_code = null;
 
+    private static $RETRY_COUNT = 0;
+    private static $RETRY_MAX;
+    private static $RETRIABLE_STATUS_CODES;
+
+    public static function setup() {
+        add_action('init', function() {
+            self::$RETRY_MAX = apply_filters(
+                'rms/wp2s/github/retry-max',
+                10
+            );
+
+            self::$RETRIABLE_STATUS_CODES = apply_filters(
+                'rms/wp2s/github/retriable-status-codes',
+                [ 502 ]
+            );
+        });
+    }
+
     public function __construct() {
         $this->body = '';
         $this->body_json = '';
@@ -133,5 +151,15 @@ class Response {
 
     public function headers() : array {
         return $this->headers;
+    }
+
+    public function should_retry() : bool {
+        // TODO implement some kind of "back-off" by time - reset/reduce the retry count as we get further from last retry time
+        if ( in_array($this->status_code(), self::$RETRIABLE_STATUS_CODES) ) {
+            if ( self::$RETRY_COUNT++ <= self::$RETRY_MAX ) {
+                return true;
+            }
+        }
+        return false;
     }
 }

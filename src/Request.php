@@ -65,6 +65,11 @@ class Request {
         $response->body(curl_exec($ch));
         curl_close($ch);
 
+        if ( $response->is_error() && $response->should_retry() ) {
+            Log::info('Retrying request after error');
+            return $this->exec();
+        }
+
         return $response;
     }
 
