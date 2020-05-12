@@ -57,7 +57,7 @@ class Deployer {
             // }
         }
         $branch->commit();
-        foreach ( $branch->files() as $file ) {
+        foreach ( $branch->updated_files() as $file ) {
             $file->mark_deployed();
         }
         Log::l('Finished GitHub deploy');

@@ -37,8 +37,8 @@ class DryRun {
         }
 
         $branch->commit();
-        foreach ( $branch->files() as $file ) {
-            // $file->mark_deployed();
+        foreach ( $branch->updated_files() as $file ) {
+            $file->mark_deployed();
         }
         Log::l('Finished GitHub dry-run');
         // Log::l('Looking at deleted files');
