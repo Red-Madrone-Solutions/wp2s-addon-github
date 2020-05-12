@@ -3,7 +3,7 @@
 namespace RMS\WP2S\GitHub;
 
 class BooleanOption extends Option {
-    const TRUE_VALUE = 'yes';
+    const TRUE_VALUE = '1';
 
     public function type() {
         return 'checkbox';
