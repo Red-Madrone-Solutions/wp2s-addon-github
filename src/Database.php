@@ -11,6 +11,7 @@ class Database {
     private $option_set = null;
 
     private $options_table_name = '';
+    private $deploy_cache_table_name = '';
 
     public static function instance() {
         static $instance = null;
@@ -35,6 +36,7 @@ class Database {
     private function __construct() {
         global $wpdb;
         $this->options_table_name = $wpdb->prefix . 'rms_wp2s_addon_github_options';
+        $this->deploy_cache_table_name = $wpdb->prefix . 'wp2static_deploy_cache';
     }
 
     public function update_db() {
@@ -156,5 +158,28 @@ EOSQL;
             [ '%s' ], // data format
             [ '%s' ] // where format
         );
+    }
+
+    public function truncateAndSeedDeployCache(string $from_namespace, string $to_namespace) {
+        global $wpdb;
+
+        // Clear entries from target namespace
+        $wpdb->delete(
+            $this->deploy_cache_table_name,
+            [ 'namespace' => $to_namespace ]
+        );
+
+        // Populate target from source
+        $sql = <<< EOSQL
+INSERT
+    INTO {$this->deploy_cache_table_name}
+    (`path_hash`, `path`, `file_hash`, `namespace`)
+SELECT path_hash, path, file_hash, %s AS namespace
+FROM {$this->deploy_cache_table_name}
+WHERE namespace = %s
+EOSQL;
+
+        $sql = $wpdb->prepare($sql, $to_namespace, $from_namespace);
+        $wpdb->query($sql);
     }
 }
