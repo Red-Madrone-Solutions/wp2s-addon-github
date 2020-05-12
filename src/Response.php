@@ -25,7 +25,7 @@ class Response {
             }
             $this->body = $value;
             $this->body_json = json_decode($value, $assoc = true);
-            Log::debug('Response: %s', $this->simpleBody());
+            Log::debug2('Response: %s', $this->simpleBody());
         }
 
         return $this->body;
@@ -114,6 +114,7 @@ class Response {
         if ( is_null($this->status_code) ) {
             $this->status_code = (int) $this->headers['status'];
         }
+        Log::debug2('Response status code: ' . $this->status_code);
         return $this->status_code;
     }
 

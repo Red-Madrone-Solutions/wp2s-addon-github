@@ -59,7 +59,7 @@ class Request {
             $log_args[]= $this->body;
         }
 
-        Log::debug($log_template, ...$log_args);
+        Log::debug3($log_template, ...$log_args);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $request_headers);
 
         $response->body(curl_exec($ch));
