@@ -15,6 +15,7 @@ class File {
     private $size;
     private $needs_update = false;
     private $needs_delete = false;
+    private $path_hash;
 
     public static function setup($processed_site_path) {
         self::$processed_site_path = $processed_site_path;
@@ -31,8 +32,16 @@ class File {
         $this->cache_key   = null;
         $this->sha         = null;
         $this->size        = null;
+        $this->path_hash   = null;
         $this->needs_update = !DeployCache::fileIsCached($this->cache_key());
         $this->needs_delete = $needs_delete;
+    }
+
+    public function path_hash() : string {
+        if ( is_null($this->path_hash) ) {
+            $this->path_hash = md5($this->file_path);
+        }
+        return $this->path_hash;
     }
 
     public function commit_path() : string {
