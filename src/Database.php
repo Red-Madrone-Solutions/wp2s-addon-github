@@ -10,8 +10,8 @@ class Database {
 
     private $option_set = null;
 
-    private $options_table_name = '';
-    private $meta_table_name = '';
+    private $options_table_name      = '';
+    private $meta_table_name         = '';
     private $deploy_cache_table_name = '';
 
     public static function instance() {
@@ -41,9 +41,9 @@ class Database {
 
     private function __construct() {
         global $wpdb;
-        $this->options_table_name = $wpdb->prefix . 'rms_wp2s_addon_github_options';
+        $this->options_table_name      = $wpdb->prefix . 'rms_wp2s_addon_github_options';
         $this->deploy_cache_table_name = $wpdb->prefix . 'wp2static_deploy_cache';
-        $this->meta_table_name = $wpdb->prefix . 'rms_wp2s_addon_github_deploymeta';
+        $this->meta_table_name         = $wpdb->prefix . 'rms_wp2s_addon_github_deploymeta';
     }
 
     public function update_db() {
@@ -95,7 +95,7 @@ EOSQL;
     private function option_set_needs_seeding() : bool {
         global $wpdb;
 
-        $query_vals = [];
+        $query_vals   = [];
         $placeholders = [];
 
         $option_set = $this->optionSet();
