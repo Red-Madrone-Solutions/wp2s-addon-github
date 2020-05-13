@@ -5,12 +5,13 @@ namespace RMS\WP2S\GitHub;
 if ( !defined('ABSPATH') ) exit;
 
 class Database {
-    private $db_version     = '0.6.3';
+    private $db_version     = '0.7.0';
     private $db_version_key = 'rms_wp2s_gh_db_version';
 
     private $option_set = null;
 
     private $options_table_name = '';
+    private $meta_table_name = '';
     private $deploy_cache_table_name = '';
 
     public static function instance() {
@@ -28,8 +29,13 @@ class Database {
 
     private function teardown_db() {
         global $wpdb;
+
         $sql = "DROP TABLE IF EXISTS {$this->options_table_name}";
         $wpdb->query($sql);
+
+        $sql = "DROP TABLE IF EXISTS {$this->meta_table_name}";
+        $wpdb->query($sql);
+
         delete_option($this->db_version_key);
     }
 
@@ -37,6 +43,7 @@ class Database {
         global $wpdb;
         $this->options_table_name = $wpdb->prefix . 'rms_wp2s_addon_github_options';
         $this->deploy_cache_table_name = $wpdb->prefix . 'wp2static_deploy_cache';
+        $this->meta_table_name = $wpdb->prefix . 'rms_wp2s_addon_github_deploymeta';
     }
 
     public function update_db() {
@@ -62,8 +69,19 @@ CREATE TABLE {$this->options_table_name} (
 ) $charset_collate
 EOSQL;
 
+        $meta_table_sql = <<< EOSQL
+CREATE TABLE {$this->meta_table_name} (
+    `path_hash` CHAR(32) NOT NULL,
+    `namespace` VARCHAR(128) NOT NULL,
+    `meta_name` VARCHAR(128) NOT NULL,
+    `meta_value` VARCHAR(1024),
+    PRIMARY KEY (`path_hash`, `namespace`, `meta_name`)
+) $charset_collate
+EOSQL;
+        error_log("meta_table_sql:\n$meta_table_sql");
+
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        dbDelta([$options_table_sql]);
+        dbDelta([$options_table_sql, $meta_table_sql]);
     }
 
     private function optionSet() : OptionSet {
