@@ -46,9 +46,8 @@ class Request {
         curl_setopt($ch, CURLOPT_USERAGENT, 'RMS WP2S Addon - GitHub v1');
         curl_setopt($ch, CURLOPT_HEADERFUNCTION, [ $response, 'collect_headers' ]);
 
-        curl_setopt($ch, CURLOPT_PROXY, 'localhost:8888');
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_PROXY_SSL_VERIFYPEER, false);
+        // Allow updates to curl setup (such as proxy configuration)
+        do_action('rms/wp2s/github/curl-setup', $ch);
 
         if ( strtoupper($this->type) === 'POST' ) {
             curl_setopt($ch, CURLOPT_POST, 1);
