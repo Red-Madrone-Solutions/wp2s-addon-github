@@ -178,6 +178,60 @@ EOSQL;
         );
     }
 
+    public function upsertMetaInfo(
+        string $path_hash,
+        string $namespace,
+        array  $meta
+    ) : void {
+        global $wpdb;
+
+        $sql_template = <<< EOSQL
+INSERT INTO {$this->meta_table_name}
+    (path_hash, namespace, meta_name, meta_value)
+VALUES
+    (%s, %s, %s, %s)
+ON DUPLICATE KEY UPDATE
+    path_hash = %s,
+    namespace = %s,
+    meta_name = %s
+EOSQL;
+
+        foreach ( $meta as $name => $value ) {
+            $sql = $wpdb->prepare(
+                $sql_template,
+
+                // Insert values
+                $path_hash,
+                $namespace,
+                $name,
+                $value,
+
+                // Duplicte key values
+                $path_hash,
+                $namespace,
+                $meta_name
+            );
+            $wpdb->query($sql);
+        }
+    }
+
+    public function getMetaValue(
+        string $path_hash,
+        string $namespace,
+        string $meta_name
+    ) : string {
+        global $wpdb;
+
+        $sql = <<< EOSQL
+SELECT meta_value
+FROM {$this->meta_table_name}
+WHERE path_hash = %s AND namespace = %s AND meta_name = %s
+LIMIT 1
+EOSQL;
+        $sql = $wpdb->prepare($sql, $path_hash, $namespace, $meta_name);
+        return $wpdb->get_var($sql);
+    }
+
     public function truncateAndSeedDeployCache(string $from_namespace, string $to_namespace) {
         global $wpdb;
 
