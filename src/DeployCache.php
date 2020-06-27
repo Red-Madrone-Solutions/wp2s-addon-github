@@ -5,6 +5,13 @@ namespace RMS\WP2S\GitHub;
 class DeployCache {
     public static $CACHE_NAMESPACE = 'GitHub';
 
+    public static function setup() : void {
+        add_filter(
+            'wp2static_deploy_cache_totals_by_namespace',
+            '__return_true'
+        );
+    }
+
     public static function addFile(string $local_path) {
         \WP2Static\DeployCache::addFile($local_path, self::$CACHE_NAMESPACE);
     }
@@ -28,4 +35,25 @@ class DeployCache {
     public static function seedFrom(string $namespace) {
         Database::instance()->truncateAndSeedDeployCache($namespace, self::$CACHE_NAMESPACE);
     }
+
+
+    public static function persistFileMetaData(
+        File $file,
+        array $meta
+    ) : void {
+        Database::instance()->upsertMetaInfo(
+            $file->path_hash(),
+            self::$CACHE_NAMESPACE,
+            $meta
+        );
+    }
+
+    public static function getFileMetaValue($meta_name) : string {
+        return Database::instance()->getMetaInfo(
+            $file->path_hash(),
+            self::$CACHE_NAMESPACE,
+            $meta_name
+        );
+    }
+
 }

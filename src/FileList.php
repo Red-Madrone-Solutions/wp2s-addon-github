@@ -59,7 +59,12 @@ class FileList {
         return $this->count() === 0;
     }
 
+    public function deployableFiles() {
+
+    }
+
     public function updatableFiles() {
+        // TODO Make sure that we are taking into account all state information
         return array_filter(array_values($this->files), function($file) {
             return $file->needs_update() || $file->needs_delete();
         });

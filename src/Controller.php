@@ -35,6 +35,7 @@ class Controller {
         EncryptedOption::setup();
         Request::setup();
         Response::setup();
+        DeployCache::setup();
     }
 
     public static function addSubMenuPage(array $submenu_pages) : array {

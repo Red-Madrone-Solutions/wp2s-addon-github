@@ -258,7 +258,7 @@ class Client {
         // error_log("commit: $filename");
     }
 
-    public function create_blob(File $file) : void {
+    public function create_blob(File $file) {
         // Don't try to create blob twice on same file
         if ( $file->blob_exists() ) {
             return;
@@ -284,7 +284,7 @@ class Client {
         $response = $request->exec();
         unset($request);
 
-        $file->sha($response->pluck('sha'));
+        $file->stored($response->pluck('sha'));
     }
 
     public function create_pull_request(Branch $source_branch) {

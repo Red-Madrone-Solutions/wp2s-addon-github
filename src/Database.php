@@ -43,7 +43,7 @@ class Database {
         global $wpdb;
         $this->options_table_name      = $wpdb->prefix . 'rms_wp2s_addon_github_options';
         $this->deploy_cache_table_name = $wpdb->prefix . 'wp2static_deploy_cache';
-        $this->meta_table_name         = $wpdb->prefix . 'rms_wp2s_addon_github_deploymeta';
+        $this->meta_table_name         = $wpdb->prefix . 'rms_wp2s_addon_github_filemeta';
     }
 
     public function update_db() {

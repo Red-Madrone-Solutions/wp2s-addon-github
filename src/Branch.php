@@ -126,6 +126,7 @@ class Branch {
         $tree_hash = $this->client->create_tree($this->hash(), array_values($tree));
         // error_log("tree_hash: " . $tree_hash);
         $commit_hash = $this->client->create_commit($tree_hash, $this->hash());
+        // TODO Mark files in commit
         // error_log("commit_hash: " . $commit_hash);
 
 
