@@ -20,7 +20,7 @@ class File {
     private $file_hash       = null;
     private $local_file_hash = null;
 
-    public static function setup($processed_site_path) {
+    public static function setup(string $processed_site_path) : void {
         self::$processed_site_path = $processed_site_path;
         // if ( substr($processed_site_path, -1) !== '/' ) {
         //     self::$processed_site_path .= '/';
@@ -29,7 +29,7 @@ class File {
         self::$mime_type = new \finfo(FILEINFO_MIME);
     }
 
-    private function __construct($filepath, $needs_delete = false) {
+    private function __construct(string $filepath, bool $needs_delete = false) {
         $this->file_path    = $filepath;
         $this->is_cached    = DeployCache::fileIsCached($this->cache_key());
         $this->needs_delete = $needs_delete;
@@ -50,7 +50,7 @@ class File {
         ;
     }
 
-    public function stored($sha) {
+    public function stored(string $sha) {
         $this->stored_sha  = $sha;
         $this->file_status = FileStatus::BLOB_CREATED;
         $this->file_hash   = $this->local_file_hash();
@@ -134,7 +134,7 @@ class File {
         ;
     }
 
-    public static function create($filepath) {
+    public static function create(string $filepath) {
         if ( self::is_valid($filepath) ) {
             return new self($filepath);
         }

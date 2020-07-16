@@ -10,7 +10,7 @@ class Client {
     private $account = null;
     private $repo = null;
 
-    public function __construct($option_set) {
+    public function __construct(OptionSet $option_set) {
         $this->option_set = $option_set;
     }
 
@@ -117,7 +117,7 @@ class Client {
         ;
     }
 
-    protected function create_branch($hash, $name) {
+    protected function create_branch(string $hash, string $name) {
         $url = sprintf(
             // https://api.github.com/repos/<AUTHOR>/<REPO>/git/refs
             '%s/repos/%s/%s/git/refs',
