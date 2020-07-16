@@ -17,5 +17,9 @@
 	},
 	"scripts": {
 		"build": "/bin/sh tools/build-release.sh"
+	},
+	"require-dev": {
+		"phpdocumentor/phpdocumentor": "^2.9",
+		"squizlabs/php_codesniffer": "^3.5"
 	}
 }
