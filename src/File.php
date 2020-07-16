@@ -5,11 +5,45 @@ namespace RMS\WP2S\GitHub;
 if ( !defined('ABSPATH') ) exit;
 
 class File {
+    /**
+     * Path to processed site
+     *
+     * @var string
+     */
     protected static $processed_site_path;
+
+    /**
+     * Length of path to processed site
+     *
+     * For string manipulation
+     *
+     * @var int
+     */
     protected static $processed_site_path_len;
+
+    /**
+     * finfo reference for getting mime info for a file
+     *
+     * @var finfo
+     */
     protected static $mime_type;
 
+    /**
+     * Path to the file on the filesystem
+     *
+     * @var mixed
+     */
     private $file_path       = null;
+
+    /**
+     * Path to file in target repo
+     *
+     * Should only access through the accessor function.
+     *
+     * @used_by self::commit_path()
+     *
+     * @var mixed
+     */
     private $commit_path     = null;
     private $stored_sha      = null;
     private $size            = null;
@@ -20,6 +54,13 @@ class File {
     private $file_hash       = null;
     private $local_file_hash = null;
 
+    /**
+     * Setup File class for future usage
+     *
+     * @since 1.0
+     *
+     * @param string $processed_site_path
+     */
     public static function setup(string $processed_site_path) : void {
         self::$processed_site_path = $processed_site_path;
         // if ( substr($processed_site_path, -1) !== '/' ) {
@@ -29,6 +70,20 @@ class File {
         self::$mime_type = new \finfo(FILEINFO_MIME);
     }
 
+    /**
+     * Create a new File instance
+     *
+     * @since 1.0
+     *
+     * @uses DeployCache::fileIsCached()
+     * @uses DeployCache::getFileMetaValue()
+     * @uses self::cache_key()
+     *
+     * @param string $filepath
+     * @param bool $needs_delete
+     *
+     * @return self
+     */
     private function __construct(string $filepath, bool $needs_delete = false) {
         $this->file_path    = $filepath;
         $this->is_cached    = DeployCache::fileIsCached($this->cache_key());
@@ -50,6 +105,22 @@ class File {
         ;
     }
 
+    /**
+     * Mark file stored in DeployCache
+     *
+     * @since 1.0
+     *
+     * @uses FileStatus::BLOB_CREATED
+     * @uses MetaName::SHA
+     * @uses MetaName::FILE_STATUS
+     * @uses MetaName::FILE_HASH
+     * @uses DeployCache::upsertMetaInfo()
+     * @uses self::localFileHash()
+     *
+     * @param string $sha
+     *
+     * @return void
+     */
     public function stored(string $sha) {
         $this->stored_sha  = $sha;
         $this->file_status = FileStatus::BLOB_CREATED;
@@ -66,6 +137,13 @@ class File {
         );
     }
 
+    /**
+     * Lazily generate a hash of file path
+     *
+     * @since 1.0
+     *
+     * @return string
+     */
     public function path_hash() : string {
         if ( is_null($this->path_hash) ) {
             $this->path_hash = md5($this->file_path);
@@ -73,6 +151,16 @@ class File {
         return $this->path_hash;
     }
 
+    /**
+     * Get the commit path for the file.
+     *
+     * Lazy loads the commit path which is essentially the `$file_path` without
+     * the `$processed_site_path` or a leading directory separator.
+     *
+     * @since 1.0
+     *
+     * @return string $commit_path
+     */
     public function commit_path() : string {
         if ( is_null($this->commit_path) ) {
             if (
@@ -94,6 +182,13 @@ class File {
         return $this->commit_path;
     }
 
+    /**
+     * Generate a key for cache reference
+     *
+     * @since 1.0
+     *
+     * @returm string
+     */
     public function cache_key() : string {
         if ( is_null($this->cache_key) ) {
             if (
@@ -135,6 +230,17 @@ class File {
         ;
     }
 
+    /**
+     * create
+     *
+     * Create a new File object if valid.
+     *
+     * @uses File::is_valid to check if file is valid
+     *
+     * @param string $filepath
+     *
+     * @return File|null
+     */
     public static function create(string $filepath) {
         if ( self::is_valid($filepath) ) {
             return new self($filepath);
@@ -143,6 +249,17 @@ class File {
         return null;
     }
 
+    /**
+     * Check if file "is valid" and should be included in deploy
+     *
+     * "is valid" means it's not a directory or link
+     *
+     * @since 1.0
+     *
+     * @param mixed $filepath
+     *
+     * @return bool
+     */
     protected static function is_valid($filepath) : bool {
         if ( !is_string($filepath) ) {
             return false;
@@ -161,6 +278,12 @@ class File {
         return true;
     }
 
+    /**
+     * Get the mime type
+     *
+     * @since 1.0
+     *
+     */
     private function mime_type() : string {
         return self::$mime_type->file($this->file_path);
     }
@@ -190,6 +313,18 @@ class File {
         return DeployCache::addFile($this->cache_key());
     }
 
+    /**
+     * Get the hash for local file contents.
+     *
+     * Lazy loads and caches the hash value so multiple calls will not
+     * recalculate the hash value.
+     *
+     * @since 1.0
+     *
+     * @param bool $refresh
+     *
+     * @return string hash value
+     */
     public function localFileHash(bool $refresh = false) : string {
         if ( is_null($this->local_file_hash) || $refresh ) {
             $this->local_file_hash = md5($this->contents());

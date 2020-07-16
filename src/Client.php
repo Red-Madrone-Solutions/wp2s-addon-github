@@ -10,6 +10,11 @@ class Client {
     private $account = null;
     private $repo = null;
 
+    /**
+     * __construct
+     *
+     * @param OptionSet $option_set
+     */
     public function __construct(OptionSet $option_set) {
         $this->option_set = $option_set;
     }
@@ -31,6 +36,16 @@ class Client {
         return true;
     }
 
+    /**
+     * Setup to deploy site
+     *
+     * @since 1.0
+     *
+     * @uses self::get_latest_commit_hash()
+     * @uses self::create_branch()
+     *
+     * @return Branch $branch branch created for deploying to
+     */
     public function deploySetup() {
         $hash = $this->get_latest_commit_hash();
         if ( is_null($hash) ) {
@@ -77,6 +92,16 @@ class Client {
         return $this->repo;
     }
 
+    /**
+     * Get the latest commit hash for the base repo
+     *
+     * @since 1.0
+     *
+     * @uses Request::exec()
+     * @uses Util::pluck()
+     *
+     * @return string $sha
+     */
     protected function get_latest_commit_hash() {
         // TODO use GraphQL (v4) instead of v3 query
         $url = sprintf(
@@ -117,6 +142,16 @@ class Client {
         ;
     }
 
+    /**
+     * Create a new branch in GitHub
+     *
+     * @since 1.0
+     *
+     * @param string $hash Commit hash to base the new branch on
+     * @param string $name Name of the new aranch
+     *
+     * @return Branch $branch
+     */
     protected function create_branch(string $hash, string $name) {
         $url = sprintf(
             // https://api.github.com/repos/<AUTHOR>/<REPO>/git/refs

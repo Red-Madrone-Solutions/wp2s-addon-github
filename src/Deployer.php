@@ -11,6 +11,18 @@ class Deployer {
         $this->processed_site_path_len = strlen($processed_site_path);
     }
 
+    /**
+     * Execute a deploy
+     *
+     * Entrypoint for the process.
+     *
+     * @since 1.0
+     *
+     * @uses Client::deploySetup()
+     * @uses File::setup()
+     *
+     * @return void
+     */
     public function execute() : void {
         Log::l('Starting GitHub deploy');
         $iterator = new \RecursiveIteratorIterator(
