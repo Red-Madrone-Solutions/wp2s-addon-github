@@ -58,6 +58,7 @@ class File {
         DeployCache::upsertMetaInfo(
             $file,
             [
+                // TODO Move MetaName bits into DeployCache - to keep details isolated
                 MetaName::SHA         => $this->stored_sha,
                 MetaName::FILE_STATUS => $this->file_status,
                 MetaName::FILE_HASH   => $this->file_hash,
