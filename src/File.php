@@ -53,7 +53,7 @@ class File {
     public function stored(string $sha) {
         $this->stored_sha  = $sha;
         $this->file_status = FileStatus::BLOB_CREATED;
-        $this->file_hash   = $this->local_file_hash();
+        $this->file_hash   = $this->localFileHash();
 
         DeployCache::upsertMetaInfo(
             $file,
@@ -129,7 +129,7 @@ class File {
 
     public function blob_exists() : bool {
         return $this->file_status !== FileStatus::LOCAL_ONLY
-            && $this->file_hash === $this->local_file_hash()
+            && $this->file_hash === $this->localFileHash()
             && !is_null($this->stored_sha)
         ;
     }
@@ -189,7 +189,7 @@ class File {
         return DeployCache::addFile($this->cache_key());
     }
 
-    public function local_file_hash($refresh = false) {
+    public function localFileHash(bool $refresh = false) : string {
         if ( is_null($this->local_file_hash) || $refresh ) {
             $this->local_file_hash = md5($this->contents());
         }
