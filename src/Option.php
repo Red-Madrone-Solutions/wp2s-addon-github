@@ -12,10 +12,10 @@ class Option {
     protected $value_changed = false;
 
     public function __construct($name, $label, $description = '') {
-        $this->name = $name;
-        $this->label = $label;
+        $this->name        = $name;
+        $this->label       = $label;
         $this->description = $description;
-        $this->value = $this->default_value();
+        $this->value       = $this->default_value();
     }
 
     public function partial() {
@@ -90,7 +90,7 @@ class Option {
     public function update($value) {
         $sanitized_value = $this->sanitize($value);
         if ( $sanitized_value !== $this->value ) {
-            $this->value = $sanitized_value;
+            $this->value         = $sanitized_value;
             $this->value_changed = true;
         }
     }
