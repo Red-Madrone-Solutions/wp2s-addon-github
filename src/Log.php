@@ -5,10 +5,10 @@ namespace RMS\WP2S\GitHub;
 if ( !defined('ABSPATH') ) exit; // phpcs:ignore
 
 class Log {
-    const ERROR = 0;
-    const WARN = 5;
-    const INFO = 10;
-    const DEBUG = 20;
+    const ERROR  = 0;
+    const WARN   = 5;
+    const INFO   = 10;
+    const DEBUG  = 20;
     const DEBUG2 = 30;
     const DEBUG3 = 40;
 
