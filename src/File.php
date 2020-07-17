@@ -33,7 +33,7 @@ class File {
      *
      * @var mixed
      */
-    private $file_path       = null;
+    private $file_path = null;
 
     /**
      * Path to file in target repo
@@ -67,7 +67,7 @@ class File {
         //     self::$processed_site_path .= '/';
         // }
         self::$processed_site_path_len = strlen($processed_site_path);
-        self::$mime_type = new \finfo(FILEINFO_MIME);
+        self::$mime_type               = new \finfo(FILEINFO_MIME);
     }
 
     /**
@@ -268,7 +268,7 @@ class File {
         }
 
         $basename = basename($filepath);
-        if ( $basename == '.' || $basename == '..' ) {
+        if ( $basename === '.' || $basename === '..' ) {
             return false;
         }
 
@@ -337,8 +337,10 @@ class File {
     }
 
     public function contents($encoding = 'none') {
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
         $contents = file_get_contents($this->file_path);
 
+        // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
         return $encoding === 'base64' ? base64_encode($contents) : $contents;
     }
 

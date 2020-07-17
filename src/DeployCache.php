@@ -23,7 +23,7 @@ class DeployCache {
     }
 
     public static function findDeleted(FileList $filesystem_files) {
-        $deleted_files = new FileList();
+        $deleted_files      = new FileList();
         $deploy_cache_files = \WP2Static\DeployCache::getPaths();
         foreach ( $deploy_cache_files as $cache_key ) {
             if ( !$filesystem_files->cacheKeyExists($cache_key) ) {

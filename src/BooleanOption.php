@@ -28,7 +28,7 @@ class BooleanOption extends Option {
 
         // Mark checked if saved value
         if ( $this->value === $this->ui_value() ) {
-            $attrs[]= 'checked';
+            $attrs[]= 'checked'; // phpcs:ignore
         }
 
         return $attrs;

@@ -16,7 +16,7 @@ class Database {
 
     public static function instance() {
         static $instance = null;
-        if ( $instance == null ) {
+        if ( $instance === null ) {
             $instance = new static();
         }
         return $instance;
@@ -49,6 +49,7 @@ class Database {
     }
 
     public function update_db() {
+        // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
         if ( get_option($this->db_version_key) != $this->db_version ) {
             $this->setup_db();
 
@@ -80,9 +81,8 @@ CREATE TABLE {$this->meta_table_name} (
     PRIMARY KEY (`path_hash`, `namespace`, `meta_name`)
 ) $charset_collate
 EOSQL;
-        error_log("meta_table_sql:\n$meta_table_sql");
 
-        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         dbDelta([$options_table_sql, $meta_table_sql]);
     }
 
@@ -102,8 +102,10 @@ EOSQL;
 
         $option_set = $this->optionSet();
         foreach ( $option_set as $option ) {
+            // phpcs:disable Generic.Formatting.MultipleStatementAlignment.NotSameWarning
             $placeholders[]= '%s';
             $query_vals[]= $option->name();
+            // phpcs:enable Generic.Formatting.MultipleStatementAlignment.NotSameWarning
         }
 
         $prepare_sql = sprintf(
@@ -112,8 +114,10 @@ EOSQL;
             implode(', ', $placeholders)
         );
 
+        // TODO consider caching result
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
         $seeded_count = (int) $wpdb->get_var(
-            // @codingStandardsIgnoreLine
+            // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
             $wpdb->prepare($prepare_sql, $query_vals)
         );
 
@@ -131,9 +135,11 @@ EOSQL;
     public function get_option_value($option) : string {
         global $wpdb;
 
+        // TODO consider caching result
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
         return (string) $wpdb->get_var(
             $wpdb->prepare(
-                // @codingStandardsIgnoreLine
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
                 "SELECT `value` FROM {$this->options_table_name} WHERE `name` = %s",
                 $option->name()
             )
@@ -144,15 +150,19 @@ EOSQL;
         global $wpdb;
 
         // Check for existing option
+        // TODO consider caching result
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
         $count = (int) $wpdb->get_var(
             $wpdb->prepare(
-                // @codingStandardsIgnoreLine
-                "SELECT count(*) FROM {$this->options_table_name} WHERE `name` = %s", $option->name()
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+                "SELECT count(*) FROM {$this->options_table_name} WHERE `name` = %s",
+                $option->name()
             )
         );
 
         // Seed option if no existing
         if ( $count === 0 ) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
             $result = $wpdb->insert(
                 $this->options_table_name,
                 [
@@ -176,6 +186,7 @@ EOSQL;
     private function update_option($option) {
         global $wpdb;
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
         return $wpdb->update(
             $this->options_table_name,
             [ 'value' => $option->value() ], // data
@@ -240,7 +251,8 @@ EOSQL;
 
         // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
         $sql = $wpdb->prepare($sql, $path_hash, $namespace, $meta_name);
-        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+        // TODO consider caching result
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
         return $wpdb->get_var($sql);
     }
 
@@ -248,6 +260,7 @@ EOSQL;
         global $wpdb;
 
         // Clear entries from target namespace
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
         $wpdb->delete(
             $this->deploy_cache_table_name,
             [ 'namespace' => $to_namespace ]
@@ -265,7 +278,7 @@ EOSQL;
 
         // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
         $sql = $wpdb->prepare($sql, $to_namespace, $from_namespace);
-        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
         $wpdb->query($sql);
     }
 }

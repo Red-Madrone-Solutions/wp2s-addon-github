@@ -16,6 +16,7 @@ class OptionSet implements \IteratorAggregate {
     }
 
     protected function setup() {
+        // phpcs:disable Generic.Formatting.MultipleStatementAlignment.NotSameWarning
         $this->list[]= new Option('account', 'Account', 'The account at GitHub that owns the repository you want to deploy to');
         $this->list[]= new Option('repository', 'Repository');
         $this->list[]= new Option('source_branch', 'Source Branch', 'Branch in GitHub that a PR for the target branch should be based on');
@@ -29,6 +30,7 @@ class OptionSet implements \IteratorAggregate {
         $this->list[]= new Option('pr_merge_message', 'PR Merge Message', 'Message to use with commit to merge PR');
         // $this->list[]= new DisabledOption('subdirectory', 'Subdirectory');
         // $this->list[]= new DisabledOption('commit_message', 'Commit Message');
+        // phpcs:enable Generic.Formatting.MultipleStatementAlignment.NotSameWarning
     }
 
     protected function load_option_values_from_db() {
@@ -39,6 +41,7 @@ class OptionSet implements \IteratorAggregate {
 
     protected function populate($data) {
         foreach ( $data as $name => $value ) {
+            // phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found
             if ( $option = $this->findByName($name) ) {
                 $option->update($value);
             }

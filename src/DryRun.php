@@ -7,10 +7,10 @@ class DryRun {
     private $processed_site_path_len;
 
     public function setup(string $processed_site_path) : void {
-        $this->processed_site_path = $processed_site_path;
+        $this->processed_site_path     = $processed_site_path;
         $this->processed_site_path_len = strlen($processed_site_path);
-        $standard_cache_namespace = DeployCache::$CACHE_NAMESPACE;
-        DeployCache::$CACHE_NAMESPACE = 'GitHub Dry Run';
+        $standard_cache_namespace      = DeployCache::$CACHE_NAMESPACE;
+        DeployCache::$CACHE_NAMESPACE  = 'GitHub Dry Run';
         DeployCache::seedFrom($standard_cache_namespace);
     }
 
@@ -41,7 +41,7 @@ class DryRun {
             $file->mark_deployed();
         }
         Log::l('Finished GitHub dry-run');
-        // Log::l('Looking at deleted files');
+        Log::stub('Looking at deleted files');
         // $deleted_file = DeployCache::findDeleted($branch->fileList());
     }
 }

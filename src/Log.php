@@ -62,7 +62,7 @@ class Log {
             array_map(
                 function($obj) {
                     return '<pre><code>'
-                        . print_r($obj, 1)
+                        . print_r($obj, 1) // phpcs:ignore
                         . '</pre></code>'
                     ; // phpcs:ignore
                 },
@@ -147,10 +147,10 @@ class Log {
 
     protected static function levelLabel($level) : string {
         $lookup = [
-            self::ERROR => 'Error',
-            self::WARN  => 'Warn',
-            self::INFO  => 'Info',
-            self::DEBUG => 'Debug',
+            self::ERROR  => 'Error',
+            self::WARN   => 'Warn',
+            self::INFO   => 'Info',
+            self::DEBUG  => 'Debug',
             self::DEBUG2 => 'Debug-2',
             self::DEBUG3 => 'Debug-3',
             self::STUB   => 'Stub',

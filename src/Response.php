@@ -14,19 +14,19 @@ class Response {
     }
 
     public function __construct() {
-        $this->body = '';
+        $this->body      = '';
         $this->body_json = '';
-        $this->headers = [];
+        $this->headers   = [];
     }
 
     public function body($value = null) : string {
         if ( !is_null($value) ) {
             if ( $this->is_gzipped() ) {
                 $value = gzdecode($value);
-            } else if ( $this->is_deflated() ) {
+            } elseif ( $this->is_deflated() ) {
                 $value = gzinflate($value);
             }
-            $this->body = $value;
+            $this->body      = $value;
             $this->body_json = json_decode($value, $assoc = true);
             Log::debug2('Response: %s', $this->simpleBody());
         }
@@ -57,7 +57,7 @@ class Response {
         // phpcs:enable
 
         foreach ( array_keys($simple_body) as $key ) {
-            if ( !in_array($key, $wanted_keys) ) {
+            if ( !in_array($key, $wanted_keys, true) ) {
                 unset($simple_body[$key]);
             }
         }
@@ -75,7 +75,11 @@ class Response {
 
     private function is_encoded_as($encoding) {
         if ( isset($this->headers['content-encoding']) ) {
-            return in_array($encoding, $this->headers['content-encoding']);
+            return in_array(
+                $encoding,
+                $this->headers['content-encoding'],
+                true
+            );
         }
         return false;
     }
@@ -107,12 +111,13 @@ class Response {
     }
 
     public function collect_headers($curl, $header) : int {
-        $len = strlen($header);
+        $len   = strlen($header);
         $parts = explode(':', $header, 2);
         if ( count($parts) < 2 ) {
             return $len; // ignore invalid headers
         }
 
+        // phpcs:ignore
         $this->headers[strtolower(trim($parts[0]))][]= trim($parts[1]);
 
         return $len;

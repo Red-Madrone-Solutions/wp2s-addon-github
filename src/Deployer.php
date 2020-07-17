@@ -9,7 +9,7 @@ class Deployer {
     private $processed_site_path_len;
 
     public function setup(string $processed_site_path) : void {
-        $this->processed_site_path = $processed_site_path;
+        $this->processed_site_path     = $processed_site_path;
         $this->processed_site_path_len = strlen($processed_site_path);
     }
 
@@ -35,7 +35,8 @@ class Deployer {
         );
 
         $option_set = new OptionSet($load_from_db = 1);
-        $client = new Client($option_set);
+        $client     = new Client($option_set);
+
         // Use the hash for this branch when creating files
         $branch = $client->deploySetup();
         if ( !$branch->is_valid() ) {

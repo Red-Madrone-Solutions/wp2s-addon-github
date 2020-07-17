@@ -40,9 +40,12 @@ class Request {
     }
 
     public function exec() : Response {
+        // TODO consider using `wp_remote_get()` or `WP_Http` class instead of curl
+        // phpcs:disable WordPress.WP.AlternativeFunctions.curl_curl_init
         $ch = curl_init();
 
         $response = new Response();
+        // phpcs:disable WordPress.WP.AlternativeFunctions.curl_curl_setopt
         curl_setopt($ch, CURLOPT_URL, $this->url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -57,7 +60,7 @@ class Request {
         }
 
         $custom_types = [ 'DELETE', 'PATCH', 'PUT' ];
-        if ( in_array(strtoupper($this->type), $custom_types) ) {
+        if ( in_array(strtoupper($this->type), $custom_types, true) ) {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, strtoupper($this->type));
         }
 
@@ -68,22 +71,30 @@ class Request {
         ];
 
         $log_template = 'Request: %s';
-        $log_args = [
+        $log_args     = [
             '[' . $this->type . '] ' . $this->url,
         ];
         if ( $this->body ) {
-            $body = json_encode($this->body);
+            // TODO consider using `wp_json_encode()` instead of `json_encode()`
+            $body = json_encode($this->body); // phpcs:ignore WordPress.WP.AlternativeFunctions
             curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+
+            // phpcs:disable Generic.Formatting.MultipleStatementAlignment
             $request_headers[]= 'Content-Length: ' . strlen($body);
             $log_template .= ' %s';
             $log_args[]= $this->body;
+            // phpcs:enable Generic.Formatting.MultipleStatementAlignment
         }
 
         Log::debug3($log_template, ...$log_args);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $request_headers);
 
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_exec
         $response->body(curl_exec($ch));
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_close
         curl_close($ch);
+        // phpcs:enable WordPress.WP.AlternativeFunctions.curl_curl_setopt
+        // phpcs:enable WordPress.WP.AlternativeFunctions.curl_curl_init
 
         if ( $response->is_error() && $request->should_retry($response) ) {
             Log::info('Retrying request after error');
@@ -103,7 +114,7 @@ class Request {
 
     protected function should_retry(Response $response) : bool {
         // TODO implement some kind of "back-off" by time - reset/reduce the retry count as we get further from last retry time
-        if ( in_array($response->status_code(), self::$RETRIABLE_STATUS_CODES) ) {
+        if ( in_array($response->status_code(), self::$RETRIABLE_STATUS_CODES, true) ) {
             if ( self::$RETRY_COUNT++ <= self::$RETRY_MAX ) {
                 return true;
             }

@@ -37,7 +37,7 @@ class Branch {
     }
 
     protected function update(Branch $branch) {
-        $this->ancestors[]= $this->clone();
+        $this->ancestors[]= $this->clone(); // phpcs:ignore
 
         $this->node_id = $branch->node_id();
         $this->url     = $branch->url();

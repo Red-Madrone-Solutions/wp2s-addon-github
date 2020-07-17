@@ -11,7 +11,7 @@ class AdminNotice {
     private $message;
     private $dismissible;
 
-    private function _valid_types() {
+    private function _valid_types() { // phpcs:ignore
         return [ 'info', 'success', 'warning', 'error' ];
     }
 
@@ -62,6 +62,7 @@ class AdminNotice {
     }
 
     public static function setup() {
+        // phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found
         if ( $notice_data = get_option(self::NOTICE_KEY) ) {
             $notice = self::deserialize($notice_data);
             add_action('admin_notices', [ $notice, 'display' ]);
