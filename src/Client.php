@@ -126,20 +126,12 @@ class Client {
 
     public function source_branch() {
         return $this->option_value('source_branch')
-            ?: apply_filters(
-                'rms/wp2s/github/default-source-branch',
-                'master'
-            )
-        ;
+            ?: apply_filters('rms/wp2s/github/default-source-branch', 'master');
     }
 
     public function target_branch() {
         return $this->option_value('target_branch')
-            ?: apply_filters(
-                'rms/wp2s/github/default-target-branch',
-                'master'
-            )
-        ;
+            ?: apply_filters('rms/wp2s/github/default-target-branch', 'master');
     }
 
     /**
@@ -201,11 +193,7 @@ class Client {
 
     public function commit_message() {
         return $this->option_value('commit_message')
-            ?: apply_filters(
-                'rms/wp2s/github/default-commit-message',
-                'WP2Static commit'
-            )
-        ;
+            ?: apply_filters('rms/wp2s/github/default-commit-message', 'WP2Static commit');
     }
 
     private function option_value($name) {
@@ -353,38 +341,22 @@ class Client {
 
     public function pr_title() : string {
         return $this->option_value('pr_title')
-            ?: apply_filters(
-                'rms/wp2s/github/default-pr-title',
-                'WP2Static PR'
-            )
-        ;
+            ?: apply_filters('rms/wp2s/github/default-pr-title', 'WP2Static PR');
     }
 
     public function pr_body() : string {
         return $this->option_value('pr_body')
-            ?: apply_filters(
-                'rms/wp2s/github/default-pr-body',
-                ''
-            )
-        ;
+            ?: apply_filters('rms/wp2s/github/default-pr-body', '');
     }
 
     public function pr_merge_title() : string {
         return $this->option_value('pr_merge_title')
-            ?: apply_filters(
-                'rms/wp2s/github/default-pr-merge-title',
-                'WP2Static Auto-merge PR'
-            )
-        ;
+            ?: apply_filters('rms/wp2s/github/default-pr-merge-title', 'WP2Static Auto-merge PR');
     }
 
     public function pr_merge_body() : string {
         return $this->option_value('pr_merge_body')
-            ?: apply_filters(
-                'rms/wp2s/github/default-pr-merge-body',
-                ''
-            )
-        ;
+            ?: apply_filters('rms/wp2s/github/default-pr-merge-body', '');
     }
 
     public function merge_pull_request(PullRequest $pr) {
