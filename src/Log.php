@@ -153,6 +153,7 @@ class Log {
             self::DEBUG => 'Debug',
             self::DEBUG2 => 'Debug-2',
             self::DEBUG3 => 'Debug-3',
+            self::STUB   => 'Stub',
         ];
 
         return isset($lookup[$level])
