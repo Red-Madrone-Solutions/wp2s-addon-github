@@ -29,5 +29,6 @@
       <exclude name="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis"/>
       <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterOpen"/>
       <exclude name="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceBeforeCloseParenthesis"/>
+      <exclude name="Squiz.PHP.DisallowMultipleAssignments.FoundInControlStructure"/>
     </rule>
 </ruleset>
