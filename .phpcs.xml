@@ -30,5 +30,15 @@
       <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterOpen"/>
       <exclude name="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceBeforeCloseParenthesis"/>
       <exclude name="Squiz.PHP.DisallowMultipleAssignments.FoundInControlStructure"/>
+      <exclude name="WordPress.PHP.YodaConditions.NotYoda"/>
+      <exclude name="WordPress.WhiteSpace.OperatorSpacing.NoSpaceBefore"/>
+      <exclude name="WordPress.Arrays.ArrayDeclarationSpacing.NoSpaceAfterArrayOpener"/>
+      <exclude name="WordPress.Arrays.ArrayDeclarationSpacing.NoSpaceBeforeArrayCloser"/>
+      <exclude name="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid"/>
+      <exclude name="Squiz.PHP.DisallowMultipleAssignments.Found"/>
+      <exclude name="WordPress.NamingConventions.ValidVariableName.PropertyNotSnakeCase"/>
+      <exclude name="WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase"/>
+      <exclude name="WordPress.PHP.DisallowShortTernary" />
+      <exclude name="WordPress.Arrays.ArrayKeySpacingRestrictions.NoSpacesAroundArrayKeys"/>
     </rule>
 </ruleset>
