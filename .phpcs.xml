@@ -41,5 +41,12 @@
       <exclude name="WordPress.PHP.DisallowShortTernary" />
       <exclude name="WordPress.Arrays.ArrayKeySpacingRestrictions.NoSpacesAroundArrayKeys"/>
       <exclude name="Generic.WhiteSpace.ArbitraryParenthesesSpacing"/>
+      <exclude name="WordPress.NamingConventions.ValidHookName.UseUnderscores"/>
+    </rule>
+
+    <rule ref="WordPress.NamingConventions.ValidHookName">
+      <properties>
+        <property name="additionalWordDelimiters" value="/"/>
+      </properties>
     </rule>
 </ruleset>
