@@ -11,6 +11,7 @@ class Log {
     const DEBUG  = 20;
     const DEBUG2 = 30;
     const DEBUG3 = 40;
+    const STUB   = 100;
 
     public static function setup() {
         add_action('init', [self, 'init']);
@@ -106,6 +107,10 @@ class Log {
 
     public static function debug3($message, ...$message_args) {
         self::l($message, self::DEBUG3, ...$message_args);
+    }
+
+    public static function stub($message, ...$message_args) {
+        self::l($message, self::STUB, ...$message_args);
     }
 
     public static function error($message, ...$message_args) {
