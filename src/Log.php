@@ -31,6 +31,26 @@ class Log {
                 apply_filters('rms/wp2s/github/log-level', self::INFO)
             );
         }
+
+        if ( !defined('RMS_WP2S_GITHUB_ERROR_LOG_ENABLED') ) {
+            define(
+                'RMS_WP2S_GITHUB_ERROR_LOG_ENABLED',
+                /**
+                 * ```
+                 * add_filter('rms/wp2s/github/error-log-enabled', function($log_level) {
+                 *   return true;
+                 * });
+                 * ```
+                 */
+                apply_filters('rms/wp2s/github/error-log-enabled', false)
+            );
+        }
+    }
+
+    public static function el($message) {
+        if ( RMS_WP2S_GITHUB_ERROR_LOG_ENABLED ) {
+            error_log($message); // phpcs:ignore
+        }
     }
 
     private static function format_message_for_browser(
