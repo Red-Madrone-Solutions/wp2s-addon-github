@@ -40,5 +40,6 @@
       <exclude name="WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase"/>
       <exclude name="WordPress.PHP.DisallowShortTernary" />
       <exclude name="WordPress.Arrays.ArrayKeySpacingRestrictions.NoSpacesAroundArrayKeys"/>
+      <exclude name="Generic.WhiteSpace.ArbitraryParenthesesSpacing"/>
     </rule>
 </ruleset>
