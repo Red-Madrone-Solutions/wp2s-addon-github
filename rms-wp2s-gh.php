@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Plugin Name: RMS WP2Static Add-on - GitHub Deployment
  * Plugin URI:  https://redmadronesolutions.com/wp2static-github/
@@ -10,6 +9,8 @@
  * License:     Unlicense
  * License URI: https://unlicense.org
  * Text Domain: rms-wp2s-gh
+ *
+ * @package     RMSWP2SGH
  */
 
 if ( !defined('WPINC') ) {
@@ -21,6 +22,11 @@ define( 'RMS_WP2S_GH_VERSION', '1.0-alpha-001' );
 
 require RMS_WP2S_GH_PATH . 'vendor/autoload.php';
 
+/**
+ * Plugin entry point
+ *
+ * @since 1.0
+ */
 function run_rms_wp2s_gh() {
     $controller = new RMS\WP2S\GitHub\Controller();
     $controller->run();
