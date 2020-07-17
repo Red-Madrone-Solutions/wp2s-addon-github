@@ -5,10 +5,15 @@
     <input name="action" type="hidden" value="<?php echo esc_attr($view_params['action']); ?>">
     <table class="form-table" role="presentation">
         <tbody>
-            <?php foreach ( $view_params['option_set'] as $option ) : $description = $option->description(); ?>
+            <?php foreach ( $view_params['option_set'] as $option ) : ?>
                 <tr>
                     <th scope="row"><label for="<?php echo esc_attr($option->id()); ?>"><?php echo esc_html($option->label()); ?></label></th>
-                    <td><?php require $option->partial(); ?></td>
+                    <td>
+                        <?php
+                            $description = $option->description();
+                            require $option->partial();
+                        ?>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
