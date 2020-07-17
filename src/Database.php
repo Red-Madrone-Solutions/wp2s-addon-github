@@ -2,7 +2,7 @@
 
 namespace RMS\WP2S\GitHub;
 
-if ( !defined('ABSPATH') ) exit;
+if ( !defined('ABSPATH') ) exit; // phpcs:ignore
 
 class Database {
     private $db_version     = '0.7.0';
@@ -30,11 +30,13 @@ class Database {
     private function teardown_db() {
         global $wpdb;
 
+        // @codingStandardsIgnoreStart
         $sql = "DROP TABLE IF EXISTS {$this->options_table_name}";
         $wpdb->query($sql);
 
         $sql = "DROP TABLE IF EXISTS {$this->meta_table_name}";
         $wpdb->query($sql);
+        // @codingStandardsIgnoreEnd
 
         delete_option($this->db_version_key);
     }
@@ -105,13 +107,13 @@ EOSQL;
         }
 
         $prepare_sql = sprintf(
-            "SELECT count(*) FROM %s WHERE `name` IN (%s)",
+            'SELECT count(*) FROM %s WHERE `name` IN (%s)',
             $this->options_table_name,
             implode(', ', $placeholders)
         );
 
-
         $seeded_count = (int) $wpdb->get_var(
+            // @codingStandardsIgnoreLine
             $wpdb->prepare($prepare_sql, $query_vals)
         );
 
@@ -131,6 +133,7 @@ EOSQL;
 
         return (string) $wpdb->get_var(
             $wpdb->prepare(
+                // @codingStandardsIgnoreLine
                 "SELECT `value` FROM {$this->options_table_name} WHERE `name` = %s",
                 $option->name()
             )
@@ -143,6 +146,7 @@ EOSQL;
         // Check for existing option
         $count = (int) $wpdb->get_var(
             $wpdb->prepare(
+                // @codingStandardsIgnoreLine
                 "SELECT count(*) FROM {$this->options_table_name} WHERE `name` = %s", $option->name()
             )
         );
@@ -151,7 +155,10 @@ EOSQL;
         if ( $count === 0 ) {
             $result = $wpdb->insert(
                 $this->options_table_name,
-                [ 'name' => $option->name(), 'value' => $option->default_value() ],
+                [
+                    'name'  => $option->name(),
+                    'value' => $option->default_value(),
+                ],
                 [ '%s', '%s' ]
             );
             return $result === 1;
@@ -181,7 +188,7 @@ EOSQL;
     public function upsertMetaInfo(
         string $path_hash,
         string $namespace,
-        array  $meta
+        array $meta
     ) : void {
         global $wpdb;
 
@@ -197,6 +204,7 @@ ON DUPLICATE KEY UPDATE
 EOSQL;
 
         foreach ( $meta as $name => $value ) {
+            // @codingStandardsIgnoreStart
             $sql = $wpdb->prepare(
                 $sql_template,
 
@@ -212,6 +220,7 @@ EOSQL;
                 $meta_name
             );
             $wpdb->query($sql);
+            // @codingStandardsIgnoreEnd
         }
     }
 
@@ -228,7 +237,10 @@ FROM {$this->meta_table_name}
 WHERE path_hash = %s AND namespace = %s AND meta_name = %s
 LIMIT 1
 EOSQL;
+
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
         $sql = $wpdb->prepare($sql, $path_hash, $namespace, $meta_name);
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
         return $wpdb->get_var($sql);
     }
 
@@ -251,7 +263,9 @@ FROM {$this->deploy_cache_table_name}
 WHERE namespace = %s
 EOSQL;
 
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
         $sql = $wpdb->prepare($sql, $to_namespace, $from_namespace);
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
         $wpdb->query($sql);
     }
 }

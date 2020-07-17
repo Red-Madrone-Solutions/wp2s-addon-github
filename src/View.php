@@ -2,6 +2,8 @@
 
 namespace RMS\WP2S\GitHub;
 
+if ( !defined('ABSPATH') ) exit; // phpcs:ignore
+
 class View {
     public static function render(string $partial) {
         require self::partialPath($partial);

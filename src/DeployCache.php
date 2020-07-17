@@ -2,6 +2,8 @@
 
 namespace RMS\WP2S\GitHub;
 
+if ( !defined('ABSPATH') ) exit; // phpcs:ignore
+
 class DeployCache {
     public static $CACHE_NAMESPACE = 'GitHub';
 

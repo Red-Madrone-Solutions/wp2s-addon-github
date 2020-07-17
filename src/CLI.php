@@ -4,6 +4,8 @@ namespace RMS\WP2S\GitHub;
 
 use WP_CLI;
 
+if ( !defined('ABSPATH') ) exit; // phpcs:ignore
+
 /**
  * WP2StaticZip WP-CLI commands
  *

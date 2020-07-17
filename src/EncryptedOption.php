@@ -2,20 +2,23 @@
 
 namespace RMS\WP2S\GitHub;
 
-if ( !defined('ABSPATH') ) exit;
+if ( !defined('ABSPATH') ) exit; // phpcs:ignore
 
 class EncryptedOption extends Option {
     // Don't detect private files
     public static function setup() {
-        add_filter('wp2static_filenames_to_ignore', function($filenames_to_ignore) {
-            return array_merge(
-                $filenames_to_ignore,
-                [
-                    self::encryption_key_file(),
-                    self::hash_salt_file()
-                ]
-            );
-        });
+        add_filter(
+            'wp2static_filenames_to_ignore',
+            function($filenames_to_ignore) {
+                return array_merge(
+                    $filenames_to_ignore,
+                    [
+                        self::encryption_key_file(),
+                        self::hash_salt_file(),
+                    ]
+                );
+            }
+        );
     }
 
     private static function encryption_key_file() {
@@ -55,7 +58,7 @@ class EncryptedOption extends Option {
         self::create_hash_salt_file($overwrite);
     }
 
-    private static final function create_encryption_key_file($overwrite = false) {
+    final private static function create_encryption_key_file($overwrite = false) {
         $key_file = self::encryption_key_file();
         if ( !file_exists($key_file) || $overwrite ) {
             $key = Util::random_bytes(32);
@@ -64,7 +67,7 @@ class EncryptedOption extends Option {
         }
     }
 
-    private static final function create_hash_salt_file($overwrite = false) {
+    final private static function create_hash_salt_file($overwrite = false) {
         $salt_file = self::hash_salt_file();
         if ( !file_exists($salt_file) || $overwrite ) {
             $salt = Util::random_bytes(16);

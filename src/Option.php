@@ -2,7 +2,7 @@
 
 namespace RMS\WP2S\GitHub;
 
-if ( !defined('ABSPATH') ) exit;
+if ( !defined('ABSPATH') ) exit; // phpcs:ignore
 
 class Option {
     private $name;
@@ -33,13 +33,17 @@ class Option {
 
         return implode(
             ' ',
-            array_map(function($k, $v) {
-                if ( is_int($k) ) {
-                    return $v;
-                } else {
-                    return sprintf('%s="%s"', $k, esc_attr($v));
-                }
-            }, array_keys($attrs), array_values($attrs))
+            array_map(
+                function($k, $v) {
+                    if ( is_int($k) ) {
+                        return $v;
+                    } else {
+                        return sprintf('%s="%s"', $k, esc_attr($v));
+                    }
+                },
+                array_keys($attrs),
+                array_values($attrs)
+            )
         );
     }
 

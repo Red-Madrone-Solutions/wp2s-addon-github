@@ -2,7 +2,7 @@
 
 namespace RMS\WP2S\GitHub;
 
-if ( !defined('ABSPATH') ) exit;
+if ( !defined('ABSPATH') ) exit; // phpcs:ignore
 
 class Client {
     private $option_set;
@@ -162,8 +162,8 @@ class Client {
         );
 
         $request_body = [
-            "ref" => "refs/heads/$name",
-            "sha" => $hash,
+            'ref' => "refs/heads/$name",
+            'sha' => $hash,
         ];
 
         $request = new Request($this->token(), $url, 'POST');

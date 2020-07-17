@@ -2,7 +2,7 @@
 
 namespace RMS\WP2S\GitHub;
 
-if ( !defined('ABSPATH') ) exit;
+if ( !defined('ABSPATH') ) exit; // phpcs:ignore
 
 class Request {
     private $token;
@@ -15,17 +15,20 @@ class Request {
     private static $RETRIABLE_STATUS_CODES;
 
     public static function setup() {
-        add_action('init', function() {
-            self::$RETRY_MAX = apply_filters(
-                'rms/wp2s/github/retry-max',
-                10
-            );
+        add_action(
+            'init',
+            function() {
+                self::$RETRY_MAX = apply_filters(
+                    'rms/wp2s/github/retry-max',
+                    10
+                );
 
-            self::$RETRIABLE_STATUS_CODES = apply_filters(
-                'rms/wp2s/github/retriable-status-codes',
-                [ 502 ]
-            );
-        });
+                self::$RETRIABLE_STATUS_CODES = apply_filters(
+                    'rms/wp2s/github/retriable-status-codes',
+                    [ 502 ]
+                );
+            }
+        );
     }
 
     public function __construct($token, $url, $type = 'GET') {

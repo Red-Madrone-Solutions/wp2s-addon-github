@@ -2,7 +2,7 @@
 
 namespace RMS\WP2S\GitHub;
 
-if ( !defined('ABSPATH') ) exit;
+if ( !defined('ABSPATH') ) exit; // phpcs:ignore
 
 class AdminNotice {
     const NOTICE_KEY = 'rms_admin_notice_data';
@@ -15,15 +15,28 @@ class AdminNotice {
         return [ 'info', 'success', 'warning', 'error' ];
     }
 
-    public function __construct($message, $type = 'success', $dismissible = true) {
-        if ( !in_array($type, $this->_valid_types()) ) {
+    /**
+     * Constructor
+     *
+     * @since 1.0
+     *
+     * @param string $message
+     * @param string $type
+     * @param bool $dismissible
+     */
+    public function __construct(
+        string $message,
+        string $type = 'success',
+        bool $dismissible = true
+    ) {
+        if ( !in_array($type, $this->_valid_types(), true) ) {
             throw new \Exception(
                 "Invalid notice type: '$type' - type must be one of " . implode(', ', $this->_valid_types())
             );
         }
 
-        $this->message = $message;
-        $this->type = $type;
+        $this->message     = $message;
+        $this->type        = $type;
         $this->dismissible = $dismissible;
     }
 
@@ -34,8 +47,8 @@ class AdminNotice {
 
     private static function serialize($notice) {
         return [
-            'message' => $notice->message,
-            'type' => $notice->type,
+            'message'     => $notice->message,
+            'type'        => $notice->type,
             'dismissible' => $notice->dismissible,
         ];
     }
@@ -57,10 +70,10 @@ class AdminNotice {
     }
 
     public function display() {
-?>
-<div class="notice notice-<?php echo $this->type; ?> <?php echo $this->dismissible ? 'is-dismissible' : ''; ?>">
-    <p><?php echo esc_html($this->message); ?></p>
-</div>
-<?php
+        ?>
+        <div class="notice notice-<?php echo esc_attr($this->type); ?> <?php echo $this->dismissible ? 'is-dismissible' : ''; ?>">
+            <p><?php echo esc_html($this->message); ?></p>
+        </div>
+        <?php
     }
 }

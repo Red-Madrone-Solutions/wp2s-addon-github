@@ -2,7 +2,7 @@
 
 namespace RMS\WP2S\GitHub;
 
-if ( !defined('ABSPATH') ) exit;
+if ( !defined('ABSPATH') ) exit; // phpcs:ignore
 
 class File {
     /**
@@ -22,7 +22,7 @@ class File {
     protected static $processed_site_path_len;
 
     /**
-     * finfo reference for getting mime info for a file
+     * `finfo` reference for getting mime info for a file
      *
      * @var finfo
      */
@@ -89,6 +89,7 @@ class File {
         $this->is_cached    = DeployCache::fileIsCached($this->cache_key());
         $this->needs_delete = $needs_delete;
 
+        // phpcs:disable Squiz.WhiteSpace.SemicolonSpacing.Incorrect
         $this->stored_sha
             = DeployCache::getFileMetaValue(MetaName::SHA)
             ?: null
@@ -103,6 +104,7 @@ class File {
             = DeployCache::getFileMetaValue(MetaName::FILE_HASH)
             ?: null
         ;
+        // phpcs:enable Squiz.WhiteSpace.SemicolonSpacing.Incorrect
     }
 
     /**
@@ -224,15 +226,15 @@ class File {
     }
 
     public function blob_exists() : bool {
+        // phpcs:disable Squiz.WhiteSpace.SemicolonSpacing.Incorrect
         return $this->file_status !== FileStatus::LOCAL_ONLY
             && $this->file_hash === $this->localFileHash()
-            && !is_null($this->stored_sha)
+            && !is_null($this->stored_sha) // phpcs:ignore
         ;
+        // phpcs:enable Squiz.WhiteSpace.SemicolonSpacing.Incorrect
     }
 
     /**
-     * create
-     *
      * Create a new File object if valid.
      *
      * @uses File::is_valid to check if file is valid
@@ -283,6 +285,7 @@ class File {
      *
      * @since 1.0
      *
+     * @return string
      */
     private function mime_type() : string {
         return self::$mime_type->file($this->file_path);
@@ -354,6 +357,6 @@ class File {
             $payload['content'] = $this->contents();
         }
 
-       return $payload;
+        return $payload;
     }
 }

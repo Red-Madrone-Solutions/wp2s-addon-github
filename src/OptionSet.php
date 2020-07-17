@@ -2,7 +2,7 @@
 
 namespace RMS\WP2S\GitHub;
 
-if ( !defined('ABSPATH') ) exit;
+if ( !defined('ABSPATH') ) exit; // phpcs:ignore
 
 class OptionSet implements \IteratorAggregate {
     private $list = [];
@@ -56,9 +56,12 @@ class OptionSet implements \IteratorAggregate {
     }
 
     public function changedOptions() {
-        return array_filter($this->list, function($option) {
-            return $option->value_changed();
-        });
+        return array_filter(
+            $this->list,
+            function($option) {
+                return $option->value_changed();
+            }
+        );
     }
 
     public function getIterator() {

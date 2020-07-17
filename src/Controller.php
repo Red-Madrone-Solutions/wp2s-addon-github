@@ -2,11 +2,13 @@
 
 namespace RMS\WP2S\GitHub;
 
+if ( !defined('ABSPATH') ) exit; // phpcs:ignore
+
 class Controller {
-    private static $options_action = 'rms_wp2s_gh_options';
+    private static $options_action     = 'rms_wp2s_gh_options';
     private static $options_nonce_name = 'rms_options_security_nonce';
-    private static $test_action = 'rms_wp2s_gh_test';
-    private static $test_nonce_name = 'rms_test_security_nonce';
+    private static $test_action        = 'rms_wp2s_gh_test';
+    private static $test_nonce_name    = 'rms_test_security_nonce';
 
     public function run() : void {
         add_filter('wp2static_add_menu_items', [ 'RMS\WP2S\GitHub\Controller', 'addSubMenuPage' ]);

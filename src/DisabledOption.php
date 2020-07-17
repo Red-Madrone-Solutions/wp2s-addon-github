@@ -2,10 +2,12 @@
 
 namespace RMS\WP2S\GitHub;
 
-class DisabledOption extends Option{
+if ( !defined('ABSPATH') ) exit; // phpcs:ignore
+
+class DisabledOption extends Option {
     public function attrs() {
         return [
-            'disabled'
+            'disabled',
         ];
     }
 }

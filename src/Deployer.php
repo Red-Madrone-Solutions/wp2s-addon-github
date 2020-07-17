@@ -2,6 +2,8 @@
 
 namespace RMS\WP2S\GitHub;
 
+if ( !defined('ABSPATH') ) exit; // phpcs:ignore
+
 class Deployer {
     private $processed_site_path;
     private $processed_site_path_len;
@@ -59,7 +61,6 @@ class Deployer {
             //     $already_deployed_files->addFile($file);
             //     continue;
             // }
-
 
             // Collect file for commit
             $branch->addFile($file);

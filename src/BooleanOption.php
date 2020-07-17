@@ -2,6 +2,8 @@
 
 namespace RMS\WP2S\GitHub;
 
+if ( !defined('ABSPATH') ) exit; // phpcs:ignore
+
 class BooleanOption extends Option {
     const TRUE_VALUE = '1';
 
@@ -34,13 +36,13 @@ class BooleanOption extends Option {
 
     public function update($value) {
         $sanitized_value = $this->sanitize($value);
-        $new_value = '';
+        $new_value       = '';
         if ( $value === $this->ui_value() ) {
             $new_value = $this->ui_value();
         }
 
         if ( $new_value !== $this->value ) {
-            $this->value = $new_value;
+            $this->value         = $new_value;
             $this->value_changed = true;
         }
     }

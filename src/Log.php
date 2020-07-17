@@ -2,6 +2,8 @@
 
 namespace RMS\WP2S\GitHub;
 
+if ( !defined('ABSPATH') ) exit; // phpcs:ignore
+
 class Log {
     const ERROR = 0;
     const WARN = 5;
@@ -11,21 +13,24 @@ class Log {
     const DEBUG3 = 40;
 
     public static function setup() {
-        add_action('init', function() {
-            if ( !defined('RMS_WP2S_GITHUB_LOG_LEVEL') ) {
-                define(
-                    'RMS_WP2S_GITHUB_LOG_LEVEL',
-                    /**
-                     * ```
-                     * add_action('rms/wp2s/github/log-level', function($log_level) {
-                     *   return \RMS\WP2S\GitHub\Log::INFO;
-                     * });
-                     * ```
-                     */
-                    apply_filters('rms/wp2s/github/log-level', self::INFO)
-                );
+        add_action(
+            'init',
+            function() {
+                if ( !defined('RMS_WP2S_GITHUB_LOG_LEVEL') ) {
+                    define(
+                        'RMS_WP2S_GITHUB_LOG_LEVEL',
+                        /**
+                         * ```
+                         * add_action('rms/wp2s/github/log-level', function($log_level) {
+                         *   return \RMS\WP2S\GitHub\Log::INFO;
+                         * });
+                         * ```
+                         */
+                        apply_filters('rms/wp2s/github/log-level', self::INFO)
+                    );
+                }
             }
-        });
+        );
     }
 
     private static function format_message_for_browser(
@@ -39,7 +44,7 @@ class Log {
                     return '<pre><code>'
                         . print_r($obj, 1)
                         . '</pre></code>'
-                        ;
+                    ; // phpcs:ignore
                 },
                 $message_args
             )
@@ -53,7 +58,7 @@ class Log {
         return vsprintf(
             $message,
             array_map(
-                function($obj) { return print_r($obj, 1); },
+                function($obj) { return print_r($obj, 1); }, // phpcs:ignore
                 $message_args
             )
         );
@@ -77,7 +82,7 @@ class Log {
             defined('WP_CLI')
             ? '[%s] %s'
             : '<code>[%s]</code> %s'
-        ;
+        ; // phpcs:ignore
 
         $log_message = sprintf(
             $log_template,
@@ -129,6 +134,6 @@ class Log {
         return isset($lookup[$level])
             ? $lookup[$level]
             : 'Unknown'
-        ;
+        ; // phpcs:ignore
     }
 }

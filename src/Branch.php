@@ -2,7 +2,7 @@
 
 namespace RMS\WP2S\GitHub;
 
-if ( !defined('ABSPATH') ) exit;
+if ( !defined('ABSPATH') ) exit; // phpcs:ignore
 
 class Branch {
     private $node_id;
@@ -17,10 +17,10 @@ class Branch {
     private $merged = false;
 
     public function __construct($node_id, $url, $ref, $object = []) {
-        $this->node_id = $node_id;
-        $this->url     = $url;
-        $this->ref     = $ref;
-        $this->object  = $object;
+        $this->node_id   = $node_id;
+        $this->url       = $url;
+        $this->ref       = $ref;
+        $this->object    = $object;
         $this->file_list = new FileList();
         $this->ancestors = [];
     }
@@ -119,16 +119,18 @@ class Branch {
         // $deleted_files = DeployCache::findDeleted($this->file_list);
         // $this->file_list->merge($deleted_files);
 
-        $tree = array_map(function($file) {
-            return $file->tree_payload();
-        }, $this->file_list->updatableFiles());
+        $tree = array_map(
+            function($file) {
+                return $file->tree_payload();
+            },
+            $this->file_list->updatableFiles()
+        );
 
         $tree_hash = $this->client->create_tree($this->hash(), array_values($tree));
         // error_log("tree_hash: " . $tree_hash);
         $commit_hash = $this->client->create_commit($tree_hash, $this->hash());
         // TODO Mark files in commit
         // error_log("commit_hash: " . $commit_hash);
-
 
         $this->update_to_hash($commit_hash);
         $pr = $this->client->create_pull_request($this);

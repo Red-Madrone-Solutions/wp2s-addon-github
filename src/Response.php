@@ -2,7 +2,7 @@
 
 namespace RMS\WP2S\GitHub;
 
-if ( !defined('ABSPATH') ) exit;
+if ( !defined('ABSPATH') ) exit; // phpcs:ignore
 
 class Response {
     private $headers;
@@ -42,6 +42,7 @@ class Response {
             return [];
         }
 
+        // phpcs:disable
         $wanted_keys = [
             # Common Keys
             'url', 'node_id',
@@ -53,6 +54,7 @@ class Response {
             # Branch keys
             'ref', 'object', 'sha', 'merged'
         ];
+        // phpcs:enable
 
         foreach ( array_keys($simple_body) as $key ) {
             if ( !in_array($key, $wanted_keys) ) {
@@ -73,15 +75,18 @@ class Response {
 
     private function is_encoded_as($encoding) {
         if ( isset($this->headers['content-encoding']) ) {
-           return in_array($encoding, $this->headers['content-encoding']);
+            return in_array($encoding, $this->headers['content-encoding']);
         }
         return false;
     }
 
     public function pluckAll($keys) {
-        return array_map( function($key) {
-            return $this->pluck($key);
-        }, $keys );
+        return array_map(
+            function($key) {
+                return $this->pluck($key);
+            },
+            $keys
+        );
     }
 
     public function pluck($keys) {
@@ -93,7 +98,7 @@ class Response {
     }
 
     public function find($key, $value) {
-        foreach( $this->body_json as $entry ) {
+        foreach ( $this->body_json as $entry ) {
             if ( isset($entry[$key]) && $entry[$key] === $value ) {
                 return $entry;
             }
