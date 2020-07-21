@@ -53,6 +53,7 @@ class File {
     private $status            = null;
     private $local_content_hash = null;
     private $content_hash      = null;
+    private $cache_key = null;
 
     /**
      * Setup File class for future usage
