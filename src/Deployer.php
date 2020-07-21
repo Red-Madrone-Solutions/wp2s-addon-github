@@ -49,7 +49,7 @@ class Deployer {
         Log::l('Finished GitHub deploy');
     }
 
-    private function build_file_list() {
+    protected function build_file_list() {
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator(
                 $this->processed_site_path,
@@ -78,7 +78,7 @@ class Deployer {
         }
     }
 
-    private function deployableFiles() : FileList {
+    protected function deployableFiles() : FileList {
         // TODO Build new FileList with files that can be deployed
         return $this->file_list->filter(
             function($file) {
