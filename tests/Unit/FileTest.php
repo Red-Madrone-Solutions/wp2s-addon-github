@@ -39,10 +39,33 @@ it('Has local file state by default', function() {
     assertEquals(FileStatus::LOCAL_ONLY, $file->state());
 });
 
-it('Calculates sha-256 for local content hash', function() {
+it('Calculates md5 for local content hash', function() {
     $content = 'Some sample content';
-    $hash = hash('sha256', $content);
+    $hash = md5($content);
     $file = setupTestFile($content);
     assertEquals($hash, $file->localContentHash());
 });
 
+it('Identifies a new file as needing update', function() {
+    $file = setupTestFile();
+    assertTrue($file->needsUpdate());
+});
+
+it('Calculates sha-256 for path hash', function() {
+    $path = '/tmp/sample-path.txt';
+    $hash = hash('sha256', $path);
+    $file = setupTestFile('contents', $path);
+    assertEquals($hash, $file->path_hash());
+});
+
+it('Identifies an existing file as not needing update', function() {
+    $file = setupExistingTestFile();
+    // debug("file: " . print_r($file, 1));
+    assertFalse($file->needsUpdate());
+});
+
+it('Identifies an existing file that is updated as needing update', function() {
+    $file = setupExistingTestFile();
+    file_put_contents($file->file_path(), 'updated content');
+    assertTrue($file->needsUpdate());
+});
