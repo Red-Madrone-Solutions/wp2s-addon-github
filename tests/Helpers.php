@@ -94,6 +94,13 @@ class TestFileMapper extends \RMS\WP2S\GitHub\FileMapper {
         }
         return [];
     }
+
+    protected function set_details(
+        string $path_hash,
+        array $params
+    ) {
+        // Stub
+    }
 }
 
 class TestFile extends \RMS\WP2S\GitHub\File {

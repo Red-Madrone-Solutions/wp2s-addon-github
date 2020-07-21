@@ -4,7 +4,7 @@
 namespace Tests;
 
 use RMS\WP2S\GitHub\File;
-use RMS\WP2S\GitHub\FileStatus;
+use RMS\WP2S\GitHub\DeployState;
 
 beforeAll(function() {
     File::setup('/tmp', new TestFileMapper);
@@ -36,7 +36,7 @@ it('Has no `stored_content_hash` by default', function() {
 
 it('Has local file state by default', function() {
     $file = setupTestFile();
-    assertEquals(FileStatus::LOCAL_ONLY, $file->state());
+    assertEquals(DeployState::LOCAL_ONLY, $file->state());
 });
 
 it('Calculates md5 for local content hash', function() {
@@ -68,4 +68,58 @@ it('Identifies an existing file that is updated as needing update', function() {
     $file = setupExistingTestFile();
     file_put_contents($file->file_path(), 'updated content');
     assertTrue($file->needsUpdate());
+});
+
+it('Updates data on store', function() {
+    global $temp_dir;
+    $contents = 'contents';
+    $file_path = $temp_dir . '/update-test.txt';
+    $file = setupTestFile($contents, $file_path);
+    $sha = sha1('git hash');
+    $file->stored($sha);
+    assertEquals($sha                     , $file->sha());
+    assertEquals(DeployState::BLOB_CREATED, $file->state());
+    assertEquals(md5($contents)           , $file->storedContentHash());
+
+    $file2 = TestFile::create($file_path);
+    assertEquals($sha                     , $file2->sha());
+    assertEquals(DeployState::BLOB_CREATED, $file2->state());
+    assertEquals(md5($contents)           , $file2->storedContentHash());
+});
+
+
+it('Updates state on commit', function() {
+    $file = setupTestFile();
+    $sha = sha1('git hash');
+    $file->stored($sha);
+    $file->committed();
+    assertEquals(DeployState::IN_COMMIT, $file->state());
+
+    $file2 = TestFile::create($file->file_path());
+    assertEquals(DeployState::IN_COMMIT, $file2->state());
+});
+
+it('Updates state on PR create', function() {
+    $file = setupTestFile();
+    $sha = sha1('git hash');
+    $file->stored($sha);
+    $file->committed();
+    $file->pr_created();
+    assertEquals(DeployState::IN_PULL_REQUEST, $file->state());
+
+    $file2 = TestFile::create($file->file_path());
+    assertEquals(DeployState::IN_PULL_REQUEST, $file2->state());
+});
+
+it('Updates state on PR merge', function() {
+    $file = setupTestFile();
+    $sha = sha1('git hash');
+    $file->stored($sha);
+    $file->committed();
+    $file->pr_created();
+    $file->pr_merged();
+    assertEquals(DeployState::IN_TARGET_BRANCH, $file->state());
+
+    $file2 = TestFile::create($file->file_path());
+    assertEquals(DeployState::IN_TARGET_BRANCH, $file2->state());
 });

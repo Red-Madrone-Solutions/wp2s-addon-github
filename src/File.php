@@ -136,17 +136,46 @@ class File {
      * @return void
      */
     public function stored(string $sha) {
-        $this->stored_sha  = $sha;
-        $this->file_status = FileStatus::BLOB_CREATED;
-        $this->file_hash   = $this->localFileHash();
+        $this->sha                 = $sha;
+        $this->state               = DeployState::BLOB_CREATED;
+        $this->stored_content_hash = $this->localContentHash();
 
-        DeployCache::upsertMetaInfo(
-            $file,
+        self::$file_mapper->set(
+            $this->path_hash(),
             [
-                // TODO Move MetaName bits into DeployCache - to keep details isolated
-                MetaName::SHA         => $this->stored_sha,
-                MetaName::FILE_STATUS => $this->file_status,
-                MetaName::FILE_HASH   => $this->file_hash,
+                'sha'          => $this->sha,
+                'state'        => $this->state,
+                'content_hash' => $this->stored_content_hash,
+            ]
+        );
+    }
+
+    public function committed() {
+        $this->state = DeployState::IN_COMMIT;
+        self::$file_mapper->set(
+            $this->path_hash(),
+            [
+                'state' => $this->state,
+            ]
+        );
+    }
+
+    public function pr_created() {
+        $this->state = DeployState::IN_PULL_REQUEST;
+        self::$file_mapper->set(
+            $this->path_hash(),
+            [
+                'state' => $this->state,
+            ]
+        );
+    }
+
+    public function pr_merged() {
+        $this->state = DeployState::IN_TARGET_BRANCH;
+        self::$file_mapper->set(
+            $this->path_hash(),
+            [
+                'state' => $this->state,
             ]
         );
     }
