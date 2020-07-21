@@ -7,7 +7,7 @@ if ( !defined('ABSPATH') ) exit; // phpcs:ignore
 class Deployer {
     private $processed_site_path;
     private $processed_site_path_len;
-    private $file_list;
+    protected $file_list;
 
     public function setup(string $processed_site_path) : void {
         $this->processed_site_path     = $processed_site_path;
