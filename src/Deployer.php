@@ -29,7 +29,7 @@ class Deployer {
      */
     public function execute() : void {
         Log::l('Starting GitHub deploy');
-        File::setup($this->processed_site_path);
+        File::setup($this->processed_site_path, new DatabaseFileMapper() );
         $this->build_file_list();
 
         $deployable_files = $this->deployableFiles();
