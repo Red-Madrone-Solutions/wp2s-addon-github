@@ -68,7 +68,7 @@ class File {
         // }
         self::$processed_site_path_len = strlen($processed_site_path);
         self::$mime_type               = new \finfo(FILEINFO_MIME);
-        self::$file_mapper = $file_mapper;
+        self::$file_mapper             = $file_mapper;
     }
 
     /**
