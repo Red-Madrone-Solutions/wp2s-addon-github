@@ -33,7 +33,7 @@ class File {
      *
      * @var mixed
      */
-    private $file_path = null;
+    protected $file_path = null;
 
     protected static $file_mapper = null;
 
