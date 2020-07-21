@@ -342,7 +342,7 @@ class File {
      */
     public function localContentHash(bool $refresh = false) : string {
         if ( is_null($this->local_content_hash) || $refresh ) {
-            $this->local_content_hash = hash('sha256', $this->contents());
+            $this->local_content_hash = md5($this->contents());
         }
 
         return $this->local_content_hash;
