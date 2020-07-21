@@ -160,7 +160,7 @@ class File {
      */
     public function path_hash() : string {
         if ( is_null($this->path_hash) ) {
-            $this->path_hash = md5($this->file_path);
+            $this->path_hash = hash('sha256', $this->file_path);
         }
         return $this->path_hash;
     }
