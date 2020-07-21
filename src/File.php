@@ -112,7 +112,7 @@ class File {
         }
 
         // If contents of file have changed
-        if ( $this->content_hash != $this->localContentHash() ) {
+        if ( $this->stored_content_hash != $this->localContentHash() ) {
             return true;
         }
 
