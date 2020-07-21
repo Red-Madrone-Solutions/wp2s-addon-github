@@ -35,6 +35,8 @@ class File {
      */
     private $file_path = null;
 
+    protected static $file_mapper = null;
+
     /**
      * Path to file in target repo
      *
@@ -44,15 +46,13 @@ class File {
      *
      * @var mixed
      */
-    private $commit_path     = null;
-    private $stored_sha      = null;
-    private $size            = null;
-    private $is_cached       = false;
-    private $needs_delete    = false;
-    private $path_hash       = null;
-    private $file_status     = null;
-    private $file_hash       = null;
-    private $local_file_hash = null;
+    private $commit_path       = null;
+    private $sha               = null;
+    private $size              = null;
+    private $path_hash         = null;
+    private $status            = null;
+    private $local_content_hash = null;
+    private $content_hash      = null;
 
     /**
      * Setup File class for future usage
@@ -61,13 +61,14 @@ class File {
      *
      * @param string $processed_site_path
      */
-    public static function setup(string $processed_site_path) : void {
+    public static function setup(string $processed_site_path, FileMapper $file_mapper) : void {
         self::$processed_site_path = $processed_site_path;
         // if ( substr($processed_site_path, -1) !== '/' ) {
         //     self::$processed_site_path .= '/';
         // }
         self::$processed_site_path_len = strlen($processed_site_path);
         self::$mime_type               = new \finfo(FILEINFO_MIME);
+        self::$file_mapper = $file_mapper;
     }
 
     /**
@@ -84,27 +85,37 @@ class File {
      *
      * @return self
      */
-    private function __construct(string $filepath, bool $needs_delete = false) {
-        $this->file_path    = $filepath;
-        $this->is_cached    = DeployCache::fileIsCached($this->cache_key());
-        $this->needs_delete = $needs_delete;
+    private function __construct(string $filepath) {
+        $this->file_path = $filepath;
+        $this->load();
+    }
 
-        // phpcs:disable Squiz.WhiteSpace.SemicolonSpacing.Incorrect
-        $this->stored_sha
-            = DeployCache::getFileMetaValue(MetaName::SHA)
-            ?: null
-        ;
+    private function load() {
+        $this->sha                 = self::$file_mapper->get($this->path_hash(), 'sha');
+        $this->stored_content_hash = self::$file_mapper->get($this->path_hash(), 'content_hash');
+        $this->state               = self::$file_mapper->get($this->path_hash(), 'state', FileStatus::LOCAL_ONLY);
+    }
 
-        $this->file_status
-            = DeployCache::getFileMetaValue(MetaName::FILE_STATUS)
-            ?: FileStatus::LOCAL_ONLY
-        ;
+    public function storedContentHash() {
+        return $this->stored_content_hash;
+    }
 
-        $this->file_hash
-            = DeployCache::getFileMetaValue(MetaName::FILE_HASH)
-            ?: null
-        ;
-        // phpcs:enable Squiz.WhiteSpace.SemicolonSpacing.Incorrect
+    public function state() {
+        return $this->state;
+    }
+
+    public function needsUpdate() {
+        // If file doesn't exist in git
+        if ( empty($this->sha) ) {
+            return true;
+        }
+
+        // If contents of file have changed
+        if ( $this->content_hash != $this->localContentHash() ) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -117,7 +128,7 @@ class File {
      * @uses MetaName::FILE_STATUS
      * @uses MetaName::FILE_HASH
      * @uses DeployCache::upsertMetaInfo()
-     * @uses self::localFileHash()
+     * @uses self::contentHash()
      *
      * @param string $sha
      *
@@ -328,12 +339,12 @@ class File {
      *
      * @return string hash value
      */
-    public function localFileHash(bool $refresh = false) : string {
-        if ( is_null($this->local_file_hash) || $refresh ) {
-            $this->local_file_hash = md5($this->contents());
+    public function localContentHash(bool $refresh = false) : string {
+        if ( is_null($this->local_content_hash) || $refresh ) {
+            $this->local_content_hash = hash('sha256', $this->contents());
         }
 
-        return $this->local_file_hash;
+        return $this->local_content_hash;
     }
 
     public function contents($encoding = 'none') {

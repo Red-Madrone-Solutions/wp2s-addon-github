@@ -82,6 +82,10 @@ class Branch {
         return $this->hash;
     }
 
+    public function addFiles(FileList $file_list) {
+        $this->file_list->merge($file_list);
+    }
+
     public function addFile(File $file) {
         $this->file_list->add($file);
     }

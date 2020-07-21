@@ -12,7 +12,9 @@ class Database {
 
     private $options_table_name      = '';
     private $meta_table_name         = '';
-    private $deploy_cache_table_name = '';
+    private $deploy_state_table_name = '';
+
+    const DEFAULT_NAMESPACE = 'default';
 
     public static function instance() {
         static $instance = null;
@@ -44,7 +46,7 @@ class Database {
     private function __construct() {
         global $wpdb;
         $this->options_table_name      = $wpdb->prefix . 'rms_wp2s_addon_github_options';
-        $this->deploy_cache_table_name = $wpdb->prefix . 'wp2static_deploy_cache';
+        $this->deploy_state_table_name = $wpdb->prefix . 'rms_wp2s_addon_github_deploystate';
         $this->meta_table_name         = $wpdb->prefix . 'rms_wp2s_addon_github_filemeta';
     }
 
@@ -82,8 +84,20 @@ CREATE TABLE {$this->meta_table_name} (
 ) $charset_collate
 EOSQL;
 
+        $deploy_state_table_sql = <<< EOSQL
+CREATE TABLE {$this->deploy_state_table_name} (
+    `namespace` VARCHAR(128) NOT NULL, // Namespace for different deploy targets
+    `path_hash` CHAR(40) NOT NULL, // SHA-1 hash of path for faster lookups
+    `path` VARCHAR(2083) NOT NULL,
+    `content_hash` CHAR(32) NOT NULL, // MD5 hash of contents to detect changes
+    `sha` CHAR(64) NULL, // Use 64 to support future SHA-256 values
+    `state` TINYINT NOT NULL,
+    PRIMARY KEY (`path_hash`, `namespace`)
+) $charset_collate
+EOSQL;
+
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-        dbDelta([$options_table_sql, $meta_table_sql]);
+        dbDelta([$options_table_sql, $meta_table_sql, $deploy_state_table_sql]);
     }
 
     private function optionSet() : OptionSet {
@@ -196,6 +210,45 @@ EOSQL;
         );
     }
 
+    public function upsertCacheEntry(Params $params) {
+        global $wpdb;
+
+        $required_keys = [ 'path_hash', 'path', 'content_hash' ];
+        if ( !$params->is_valid($required_keys) ) {
+            throw new InvalidArgumentException(
+                'Missing required params: ' . implode(', ', $params->missing_keys())
+            );
+        }
+
+        // phpcs:ignore
+        $sql = <<< EOSQL
+INSERT INTO {$this->deploy_cache_table_name}
+    (namespace, path_hash, path, content_hash)
+VALUES
+    (%s, %s, %s, %s)
+ON DUPLICATE KEY UPDATE
+    namespace = %s,
+    path_hash = %s
+EOSQL;
+
+        // phpcs:disable
+        $prepared_sql = $wpdb->prepare(
+            $sql,
+
+            // Insert values
+            $params->get('namespace', self::DEFAULT_NAMESPACE),
+            $params->get('path_hash'),
+            $params->get('path'),
+            $params->get('content_hash'),
+
+            // Duplicate key values
+            $params->get('namespace', self::DEFAULT_NAMESPACE),
+            $params->get('path_hash')
+        );
+        $wpdb->query($prepared_sql);
+        // phpcs:enable
+    }
+
     public function upsertMetaInfo(
         string $path_hash,
         string $namespace,
@@ -254,6 +307,43 @@ EOSQL;
         // TODO consider caching result
         // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
         return $wpdb->get_var($sql);
+    }
+
+    public function getFileDetails(
+        string $path_hash,
+        string $namespace
+    ) {
+        global $wpdb;
+
+        $sql = <<< EOSQL
+SELECT content_hash, sha, state
+FROM {$this->deploy_state_table_name}
+WHERE namespace = %s AND path_hash = %s
+EOSQL;
+
+        // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
+        $sql = $wpdb->prepare($sql, $namespace, $path_hash);
+        return $wpdb->get_row($sql, ARRAY_A);
+        // phpcs:enable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
+    }
+
+    public function getPathHash(
+        string $path_hash,
+        string $content_hash,
+        string $namespace
+    ) {
+        global $wpdb;
+
+        $sql = <<< EOSQL
+SELECT path_hash
+FROM {$this->deploy_cache_table_name}
+WHERE namespace = %s AND path_hash = %s AND content_hash = %s
+LIMIT 1
+EOSQL;
+        // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
+        $sql = $wpdb->prepare($sql, $namespace, $path_hash, $content_hash);
+        return $wpdb->get_var($sql);
+        // phpcs:enable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
     }
 
     public function truncateAndSeedDeployCache(string $from_namespace, string $to_namespace) {

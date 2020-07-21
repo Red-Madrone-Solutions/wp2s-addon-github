@@ -80,6 +80,21 @@ class FileList {
         return count($this->files);
     }
 
+    public function filter($callable) : FileList {
+        if ( !is_callable($callable) ) {
+            throw new InvalidArgumentException('Must provide a valid callable');
+        }
+
+        $new_list = new self();
+        foreach ( $this->files as $file ) {
+            if ( $callable($file) ) {
+                $new_list->add($file);
+            }
+        }
+
+        return $new_list;
+    }
+
     public function cacheKeyExists($cache_key) : bool {
         return isset($this->files[$cache_key]);
     }
