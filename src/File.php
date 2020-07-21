@@ -257,7 +257,7 @@ class File {
      */
     public static function create(string $filepath) {
         if ( self::is_valid($filepath) ) {
-            return new self($filepath);
+            return new static($filepath);
         }
 
         return null;
