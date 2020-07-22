@@ -13,6 +13,8 @@ class Log {
     const DEBUG3 = 40;
     const STUB   = 100;
 
+    private static $inited = false;
+
     public static function setup() {
         add_action('init', [self, 'init']);
     }
@@ -45,6 +47,8 @@ class Log {
                 apply_filters('rms/wp2s/github/error-log-enabled', false)
             );
         }
+
+        self::$inited = true;
     }
 
     public static function el($message) {
@@ -86,6 +90,10 @@ class Log {
 
     // TODO add support for limiting logging by levels
     public static function l($message, int $level = self::INFO, ...$message_args) {
+        if ( !self::$inited ) {
+            self::init();
+        }
+
         if ( $level > RMS_WP2S_GITHUB_LOG_LEVEL) {
             return;
         }
