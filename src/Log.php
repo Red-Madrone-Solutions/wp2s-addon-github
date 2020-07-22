@@ -121,7 +121,11 @@ class Log {
         if ( defined('WP_CLI') ) {
             \WP_CLI::line($log_message);
         } else {
-            \WP2Static\WsLog::l($log_message);
+            if ( class_exists('\WP2Static\WsLog') ) {
+                \WP2Static\WsLog::l($log_message);
+            } else {
+                error_log($log_message);
+            }
         }
     }
 
