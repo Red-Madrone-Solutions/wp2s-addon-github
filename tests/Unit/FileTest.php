@@ -132,3 +132,14 @@ it('Updates state on PR merge', function() {
     $file2 = TestFile::create($file->file_path());
     assertEquals(DeployState::IN_TARGET_BRANCH, $file2->state());
 });
+
+it('Confirms blob does not exist for new file', function() {
+    $file = setupTestFile();
+    assertFalse($file->blob_exists());
+});
+
+it('Confirms blob exists for existing file', function() {
+    $file = setupExistingTestFile();
+    assertTrue($file->blob_exists());
+});
+

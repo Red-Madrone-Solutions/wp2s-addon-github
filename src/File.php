@@ -268,9 +268,9 @@ class File {
 
     public function blob_exists() : bool {
         // phpcs:disable Squiz.WhiteSpace.SemicolonSpacing.Incorrect
-        return $this->file_status !== FileStatus::LOCAL_ONLY
-            && $this->file_hash === $this->localFileHash()
-            && !is_null($this->stored_sha) // phpcs:ignore
+        return $this->state !== DeployState::LOCAL_ONLY
+            && $this->stored_content_hash === $this->localContentHash()
+            && !is_null($this->sha) // phpcs:ignore
         ;
         // phpcs:enable Squiz.WhiteSpace.SemicolonSpacing.Incorrect
     }
