@@ -11,5 +11,18 @@ class DatabaseFileMapper extends FileMapper {
             $this->$namespace
         );
     }
+
+    protected function set_details(string $path_hash, array $details) {
+        $params = array_merge(
+            [
+                'path_hash' => $path_hash,
+                'namespace' => $this->namespace,
+            ],
+            $details
+        );
+
+        $params = new Params($params);
+        return Database::instance()->setFileDetails($params);
+    }
 }
 
