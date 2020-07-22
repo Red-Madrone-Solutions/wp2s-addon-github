@@ -101,6 +101,10 @@ class TestFileMapper extends \RMS\WP2S\GitHub\FileMapper {
     ) {
         // Stub
     }
+
+    public function clear_map() {
+        $this->map = [];
+    }
 }
 
 class TestFile extends \RMS\WP2S\GitHub\File {

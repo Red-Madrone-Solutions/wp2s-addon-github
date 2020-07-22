@@ -6,8 +6,17 @@ namespace Tests;
 use RMS\WP2S\GitHub\File;
 use RMS\WP2S\GitHub\DeployState;
 
+
+$file_mapper = null;
 beforeAll(function() {
-    File::setup('/tmp', new TestFileMapper);
+    global $file_mapper;
+    $file_mapper = new TestFileMapper();
+    File::setup('/tmp', $file_mapper);
+});
+
+beforeEach(function() {
+    global $file_mapper;
+    $file_mapper->clear_map();
 });
 
 it('asserts true is true', function() {
