@@ -67,6 +67,29 @@ function tempdir($dir = null, $prefix = 'tmp_', $mode = 0700, $maxAttempts = 100
     return $path;
 }
 
+function setupFiles($temp_dir) {
+    $fixtures_dir = DIRNAME(__FILE__) . '/Fixtures';
+    $data_dir = $fixtures_dir . '/data/';
+    $dh = opendir($data_dir);
+    while ( ($file = readdir($dh)) !== false ) {
+        if ( $file === '.' || $file === '..' ) {
+            continue;
+        }
+        copy($data_dir . $file, $temp_dir . '/' . $file);
+    }
+    closedir($dh);
+}
+
+function cleanupFiles($temp_dir) {
+    $dh = opendir($temp_dir);
+    while ( ($file = readdir($dh)) !== false ) {
+        if ( $file === '.' || $file === '..' ) {
+            continue;
+        }
+        unlink($temp_dir . '/' . $file);
+    }
+    rmdir($temp_dir);
+}
 
 use RMS\WP2S\GitHub\DeployState;
 
