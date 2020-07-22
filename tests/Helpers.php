@@ -7,6 +7,8 @@ namespace Tests;
 // So that code doesn't exit
 define('ABSPATH', __DIR__);
 
+\WP_Mock::bootstrap();
+
 /**
  * Creates a random unique temporary directory, with specified parameters,
  * that does not already exist (like tempnam(), but for dirs).
