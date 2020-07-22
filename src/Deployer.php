@@ -8,11 +8,13 @@ class Deployer {
     private $processed_site_path;
     private $processed_site_path_len;
     protected $file_list;
+    protected $file_mapper;
 
-    public function setup(string $processed_site_path) : void {
+    public function setup(string $processed_site_path, $file_mapper = null) : void {
         $this->processed_site_path     = $processed_site_path;
         $this->processed_site_path_len = strlen($processed_site_path);
         $this->file_list               = new FileList();
+        $this->file_mapper             = $file_mapper ?: new DatabaseFileMapper();
     }
 
     /**
@@ -29,7 +31,7 @@ class Deployer {
      */
     public function execute() : void {
         Log::l('Starting GitHub deploy');
-        File::setup($this->processed_site_path, new DatabaseFileMapper() );
+        File::setup($this->processed_site_path, $this->file_mapper);
         $this->build_file_list();
 
         $deployable_files = $this->deployableFiles();
