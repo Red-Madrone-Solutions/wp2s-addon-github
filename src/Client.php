@@ -4,7 +4,7 @@ namespace RMS\WP2S\GitHub;
 
 if ( !defined('ABSPATH') ) exit; // phpcs:ignore
 
-class Client {
+class Client implements ClientInterface {
     private $option_set;
     private $api_base = 'https://api.github.com';
     private $account  = null;
