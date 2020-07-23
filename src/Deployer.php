@@ -60,6 +60,11 @@ class Deployer {
         Log::l('Finished GitHub deploy');
     }
 
+    protected function deletableFiles() {
+        // TODO Iterate over files from DeployState and identify ones that are not in the filesystem. This represents files that have been removed from WP and should be deleted from git.
+        return new FileList();
+    }
+
     protected function build_file_list() {
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator(
