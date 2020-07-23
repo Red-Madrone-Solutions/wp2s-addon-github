@@ -90,6 +90,10 @@ class Branch {
         $this->file_list->add($file);
     }
 
+    public function deleteFiles(FileList $file_list) {
+        // TODO flesh out function
+    }
+
     public function files() {
         return $this->file_list->allFiles();
     }
