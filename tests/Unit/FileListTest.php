@@ -4,6 +4,11 @@
 namespace Tests;
 
 use RMS\WP2S\GitHub\FileList;
+use RMS\WP2S\GitHub\File;
+
+beforeAll(function() {
+    File::setup('/tmp', new TestFileMapper());
+});
 
 it('Allows instantiation', function() {
     $file_list = new FileList();
