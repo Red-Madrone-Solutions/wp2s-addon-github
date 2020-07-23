@@ -27,6 +27,9 @@ class EncryptedOption extends Option {
     }
 
     private static function key() {
+        if ( isset($_ENV['RMS_WP2S_GitHub_Encryption_Key']) ) {
+            return $_ENV['RMS_WP2S_GitHub_Encryption_Key'];
+        }
         $key_file = self::encryption_key_file();
         if ( !file_exists($key_file) ) {
             self::create_encryption_key_file();
@@ -43,6 +46,9 @@ class EncryptedOption extends Option {
     }
 
     private static function salt() {
+        if ( isset($_ENV['RMS_WP2S_GitHub_Salt']) ) {
+            return $_ENV['RMS_WP2S_GitHub_Salt'];
+        }
         $salt_file = self::hash_salt_file();
         if ( !file_exists($salt_file) ) {
             self::create_hash_salt_file();
