@@ -15,6 +15,10 @@ class FileList {
         $this->files[$file->cache_key()] = $file;
     }
 
+    public function empty() : bool {
+        return $this->count() === 0;
+    }
+
     public function binaryFiles($filter_for_update = true) : array {
         return array_filter(
             array_values($this->files),
