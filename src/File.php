@@ -394,7 +394,7 @@ class File {
             'type' => 'blob',
         ];
 
-        if ( $this->needs_delete ) {
+        if ( $this->needs_delete() ) {
             $payload['sha'] = null;
         } elseif ( $this->sha ) {
             $payload['sha'] = $this->sha;
