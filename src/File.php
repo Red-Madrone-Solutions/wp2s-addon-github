@@ -345,6 +345,8 @@ class File {
     }
 
     public function needs_delete() : bool {
+        // TODO actually test for delete
+        return false;
         return $this->needs_delete;
     }
 
