@@ -151,4 +151,23 @@ class TestDeployer extends \RMS\WP2S\GitHub\Deployer {
         return parent::deployableFiles();
     }
 }
+
+class TestOptionSet extends \RMS\WP2S\GitHub\OptionSet {
+    public function __construct($load_from_db = false, $data = []) {
+        parent::__construct(false, $data);
+    }
+}
+
+class TestClient {
+    public function deploySetup() {
+        return new TestBranch(
+            'MDM6UmVmcmVmcy9oZWFkcy9mZWF0dXJlQQ==',
+            'https://api.github.com/repos/octocat/Hello-World/git/refs/heads/featureA',
+            'refs/heads/featureA'
+        );
+    }
+}
+
+class TestBranch extends \RMS\WP2S\GitHub\Branch {
+}
 // ..
