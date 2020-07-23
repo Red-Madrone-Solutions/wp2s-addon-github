@@ -19,7 +19,9 @@ afterAll(function() {
 
 it('Deploys', function() {
     global $temp_dir;
+    $_ENV['RMS_WP2S_GitHub_Encryption_Key'] = 'encryption key';
+    $_ENV['RMS_WP2S_GitHub_Salt']           = 'salt';
     $deployer = new Deployer();
-    $deployer->setup($temp_dir, new TestFileMapper());
+    $deployer->setup($temp_dir, new TestFileMapper(), new TestOptionSet(), new TestClient());
     $deployer->execute();
-});
+})->group('integration');
