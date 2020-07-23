@@ -19,12 +19,11 @@ class FileList {
         return $this->count() === 0;
     }
 
-    public function binaryFiles($filter_for_update = true) : array {
+    public function binaryFiles() : array {
         return array_filter(
             array_values($this->files),
             function($file) use ($filter_for_update) {
-                return $file->is_binary()
-                    && ($filter_for_update ? $file->needs_update() : true);
+                return $file->is_binary();
             }
         );
     }
@@ -47,8 +46,7 @@ class FileList {
         return array_filter(
             array_values($this->files),
             function($file) use ($fifty_k, $filter_for_update) {
-                return ($file->size() > $fifty_k)
-                    && ($filter_for_update ? $file->needs_update() : true);
+                return ($file->size() > $fifty_k);
             }
         );
     }
@@ -59,16 +57,6 @@ class FileList {
 
     public function deployableFiles() {
 
-    }
-
-    public function updatableFiles() {
-        // TODO Make sure that we are taking into account all state information
-        return array_filter(
-            array_values($this->files),
-            function($file) {
-                return $file->needs_update() || $file->needs_delete();
-            }
-        );
     }
 
     public function deletableFiles() {
