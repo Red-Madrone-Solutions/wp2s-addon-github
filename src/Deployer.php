@@ -9,12 +9,21 @@ class Deployer {
     private $processed_site_path_len;
     protected $file_list;
     protected $file_mapper;
+    protected $option_set;
+    protected $client;
 
-    public function setup(string $processed_site_path, $file_mapper = null) : void {
+    public function setup(
+        string $processed_site_path,
+        $file_mapper = null,
+        $option_set = null,
+        $client = null
+    ) : void {
         $this->processed_site_path     = $processed_site_path;
         $this->processed_site_path_len = strlen($processed_site_path);
         $this->file_list               = new FileList();
         $this->file_mapper             = $file_mapper ?: new DatabaseFileMapper();
+        $this->option_set              = $option_set ?: new OptionSet($load_from_db = 1);
+        $this->client                  = $client ?: new Client($this->option_set);
     }
 
     /**
@@ -96,8 +105,7 @@ class Deployer {
     }
 
     private function setup_branch() : Branch {
-        $option_set = new OptionSet($load_from_db = 1);
-        $client     = new Client($option_set);
+        $client = $this->client;
 
         // Use the hash for this branch when creating files
         $branch = $client->deploySetup();
