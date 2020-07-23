@@ -99,11 +99,7 @@ class Branch {
     }
 
     public function empty() : bool {
-        return count($this->updated_files()) === 0;
-    }
-
-    public function updated_files() : array {
-        return $this->file_list->updatableFiles();
+        return $this->file_list->empty();
     }
 
     public function commit() {
@@ -131,7 +127,7 @@ class Branch {
             function($file) {
                 return $file->tree_payload();
             },
-            $this->file_list->updatableFiles()
+            $this->file_list->allFiles()
         );
 
         $tree_hash = $this->client->create_tree($this->hash(), array_values($tree));
