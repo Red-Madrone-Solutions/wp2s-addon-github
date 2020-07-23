@@ -8,7 +8,7 @@ class PullRequest {
     protected $client;
     private $pull_number;
 
-    public function __construct(int $pull_number, Client $client) {
+    public function __construct(int $pull_number, ClientInterface $client) {
         $this->pull_number = $pull_number;
         $this->client      = $client;
     }
