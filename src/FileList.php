@@ -22,7 +22,7 @@ class FileList {
     public function binaryFiles() : array {
         return array_filter(
             array_values($this->files),
-            function($file) use ($filter_for_update) {
+            function($file) {
                 return $file->is_binary();
             }
         );
