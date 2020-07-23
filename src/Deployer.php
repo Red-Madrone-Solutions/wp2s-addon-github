@@ -24,6 +24,8 @@ class Deployer {
         $this->file_mapper             = $file_mapper ?: new DatabaseFileMapper();
         $this->option_set              = $option_set ?: new OptionSet($load_from_db = 1);
         $this->client                  = $client ?: new Client($this->option_set);
+
+        File::setup($this->processed_site_path, $this->file_mapper);
     }
 
     /**
@@ -40,7 +42,6 @@ class Deployer {
      */
     public function execute() : void {
         Log::l('Starting GitHub deploy');
-        File::setup($this->processed_site_path, $this->file_mapper);
         $this->build_file_list();
 
         $deployable_files = $this->deployableFiles();
