@@ -7,22 +7,25 @@ namespace Tests;
 use RMS\WP2S\GitHub\Deployer;
 use RMS\WP2S\GitHub\FileList;
 
-$temp_dir = '/tmp';
+$deployer_test_temp_dir = '/tmp';
 $deployer = null;
 
 beforeAll(function() {
-    global $temp_dir;
-    $temp_dir = tempdir();
-    TestFile::setup($temp_dir, new TestFileMapper);
 });
 
 beforeEach(function() {
-    global $temp_dir, $deployer;
-    file_put_contents($temp_dir . '/file1.html', 'file 1');
-    file_put_contents($temp_dir . '/file2.html', 'file 2');
+    global $deployer_test_temp_dir, $deployer;
+    $deployer_test_temp_dir = tempdir();
+    file_put_contents($deployer_test_temp_dir . '/file1.html', 'file 1');
+    file_put_contents($deployer_test_temp_dir . '/file2.html', 'file 2');
     $deployer = new TestDeployer();
-    $deployer->setup($temp_dir);
+    $deployer->setup($deployer_test_temp_dir, new TestFileMapper(), new TestOptionSet(), new TestClient());
     $deployer->build_file_list();
+});
+
+afterEach(function() {
+    global $deployer_test_temp_dir;
+    cleanupFiles($deployer_test_temp_dir);
 });
 
 it('Builds a file list', function() {
