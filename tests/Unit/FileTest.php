@@ -8,8 +8,10 @@ use RMS\WP2S\GitHub\DeployState;
 
 
 $file_mapper = null;
+$file_temp_dir;
 beforeAll(function() {
-    global $file_mapper;
+    global $file_temp_dir, $file_mapper;
+    $file_temp_dir = tempdir();
     $file_mapper = new TestFileMapper();
     File::setup('/tmp', $file_mapper);
 });
@@ -80,9 +82,9 @@ it('Identifies an existing file that is updated as needing update', function() {
 });
 
 it('Updates data on store', function() {
-    global $temp_dir;
+    global $file_temp_dir;
     $contents = 'contents';
-    $file_path = $temp_dir . '/update-test.txt';
+    $file_path = $file_temp_dir . '/update-test.txt';
     $file = setupTestFile($contents, $file_path);
     $sha = sha1('git hash');
     $file->stored($sha);
