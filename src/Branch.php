@@ -142,14 +142,33 @@ class Branch {
 
         // error_log("tree_hash: " . $tree_hash);
         $commit_hash = $this->client->create_commit($tree_hash, $this->hash());
+        $this->file_list->each(
+            function($file) {
+                $file->committed();
+            }
+        );
+
         // TODO Mark files in commit
         // error_log("commit_hash: " . $commit_hash);
 
         $this->update_to_hash($commit_hash);
         $pr = $this->client->create_pull_request($this);
+        $this->file_list->each(
+            function($file) {
+                $file->pr_created();
+            }
+        );
+
         if ( $pr->merge() ) {
             // TODO check merged response from PR request
             $this->merged(true);
+
+            $this->file_list->each(
+                function($file) {
+                    $file->pr_merged();
+                }
+            );
+
             $this->delete();
         }
     }
