@@ -87,6 +87,14 @@ class FileList {
         return $new_list;
     }
 
+    public function each(callable $callable) {
+        foreach ($this->files as $file) {
+            if ($callable($file) === false) {
+                break;
+            }
+        }
+    }
+
     public function cacheKeyExists($cache_key) : bool {
         return isset($this->files[$cache_key]);
     }
