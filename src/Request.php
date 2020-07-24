@@ -101,7 +101,7 @@ class Request {
         // phpcs:enable WordPress.WP.AlternativeFunctions.curl_curl_setopt
         // phpcs:enable WordPress.WP.AlternativeFunctions.curl_curl_init
 
-        if ( $response->is_error() && $request->should_retry($response) ) {
+        if ( $response->is_error() && $this->should_retry($response) ) {
             Log::info('Retrying request after error');
             return $this->exec();
         }
