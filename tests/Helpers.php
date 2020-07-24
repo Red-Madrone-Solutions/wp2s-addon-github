@@ -223,4 +223,45 @@ class TestPullRequest extends \RMS\WP2S\GitHub\PullRequest {
 
 class TestBranch extends \RMS\WP2S\GitHub\Branch {
 }
+
+class TestRequest {
+    private $url;
+    private $type;
+    private $body;
+
+    public function __construct($token, $url, $type = 'GET') {
+        $this->url = $url;
+        $this->type = $type;
+        $this->body = null;
+    }
+
+    public function body($body) {
+        $this->body = $body;
+    }
+
+    public function exec() {
+        $response = new TestResponse();
+        $response->body($this->getResponseBody());
+        return $response;
+    }
+
+    private function getResponseBody() {
+        if ( preg_match('|/blobs$|', $this->url) ) {
+            $sha = TestUtil::randomSha();
+            return json_encode([
+                'url' => sprintf(
+                    'https://api.github.com/repos/%s/%s/git/blobs/%s',
+                    'account',
+                    'repo',
+                    $sha
+                ),
+                'sha' => $sha,
+            ]);
+        }
+    }
+}
+
+class TestResponse extends \RMS\WP2S\GitHub\Response {
+
+}
 // ..
