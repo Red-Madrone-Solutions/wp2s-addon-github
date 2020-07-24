@@ -102,12 +102,7 @@ class Response {
     }
 
     public function find($key, $value) {
-        foreach ( $this->body_json as $entry ) {
-            if ( isset($entry[$key]) && $entry[$key] === $value ) {
-                return $entry;
-            }
-        }
-        return null;
+        return Util::find($this->body_json, $key, $value);
     }
 
     public function collect_headers($curl, $header) : int {

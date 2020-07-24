@@ -100,4 +100,13 @@ class Util {
         }
         return null;
     }
+
+    public static function find($array, $key, $value) {
+        foreach ($array as $entry) {
+            if ( isset($entry[$key]) && $entry[$key] === $value ) {
+                return $entry;
+            }
+        }
+        return $null;
+    }
 }
