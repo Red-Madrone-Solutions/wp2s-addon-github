@@ -259,10 +259,117 @@ class TestRequest {
                 'sha' => $sha,
             ]);
         }
+
+        // get_latest_commit_hash
+        elseif ( preg_match('|/refs/heads$|', $this->url) ) {
+            return '[
+                {
+                    "ref": "refs/heads/master",
+                    "node_id": "MDM6UmVmMjU5Nzc3MTU5OnJlZnMvaGVhZHMvbWFzdGVy",
+                    "url": "https://api.github.com/repos/Red-Madrone-Solutions/wp2s-addon-github-static/git/refs/heads/master",
+                    "object": {
+                        "sha": "548ce6a6742cab21d877eada746e4ce5d432d9ac",
+                        "type": "commit",
+                        "url": "https://api.github.com/repos/Red-Madrone-Solutions/wp2s-addon-github-static/git/commits/548ce6a6742cab21d877eada746e4ce5d432d9ac"
+                    }
+                },
+                {
+                    "ref": "refs/heads/production",
+                    "node_id": "MDM6UmVmMjU5Nzc3MTU5OnJlZnMvaGVhZHMvcHJvZHVjdGlvbg==",
+                    "url": "https://api.github.com/repos/Red-Madrone-Solutions/wp2s-addon-github-static/git/refs/heads/production",
+                    "object": {
+                        "sha": "83db88575a87b57cd0ffd75ff174f023113e73ff",
+                        "type": "commit",
+                        "url": "https://api.github.com/repos/Red-Madrone-Solutions/wp2s-addon-github-static/git/commits/83db88575a87b57cd0ffd75ff174f023113e73ff"
+                    }
+                },
+                {
+                    "ref": "refs/heads/rms-wp2s-gh-deploy-branch-1589239953",
+                    "node_id": "MDM6UmVmMjU5Nzc3MTU5OnJlZnMvaGVhZHMvcm1zLXdwMnMtZ2gtZGVwbG95LWJyYW5jaC0xNTg5MjM5OTUz",
+                    "url": "https://api.github.com/repos/Red-Madrone-Solutions/wp2s-addon-github-static/git/refs/heads/rms-wp2s-gh-deploy-branch-1589239953",
+                    "object": {
+                        "sha": "b91d895cc46365c0d3f3b5e5db84141adacf8c20",
+                        "type": "commit",
+                        "url": "https://api.github.com/repos/Red-Madrone-Solutions/wp2s-addon-github-static/git/commits/b91d895cc46365c0d3f3b5e5db84141adacf8c20"
+                    }
+                }
+              ]';
+        }
+
+        // create_branch
+        elseif ( preg_match('|/git/refs$|', $this->url) && $this->isPost() ) {
+            return json_encode([
+                'ref'     => 'refs/heads/featureA',
+                'node_id' => 'MDM6UmVmcmVmcy9oZWFkcy9mZWF0dXJlQQ==',
+                'url'     => 'https://api.github.com/repos/octocat/Hello-World/git/refs/heads/featureA',
+                'object' => [
+                    'sha' => TestUtil::randomSha(),
+                ],
+            ]);
+        }
+
+        // create_tree
+        elseif ( preg_match('|/git/trees$|', $this->url) && $this->isPost() ) {
+            $tree_hash = TestUtil::randomSha();
+            return json_encode([
+                'sha' => $tree_hash,
+                'url' => sprintf(
+                    'https://api.github.com/repos/octocat/Hello-World/trees/%s',
+                    $tree_hash
+                ),
+            ]);
+        }
+
+        // create_commit
+        elseif ( preg_match('|/git/commits$|', $this->url) && $this->isPost() ) {
+            $commit_hash = TestUtil::randomSha();
+            return json_encode([
+                'sha'     => $commit_hash,
+                'node_id' => 'MDY6Q29tbWl0NzYzODQxN2RiNmQ1OWYzYzQzMWQzZTFmMjYxY2M2MzcxNTU2ODRjZA==',
+                'url'     => sprintf(
+                    'https://api.github.com/repos/octocat/Hello-World/git/commits/%s',
+                    $commit_hash
+                ),
+
+            ]);
+        }
+
+        // update_reference
+        elseif ( preg_match('|/git/refs/|', $this->url) && $this->isPatch() ) {
+            $commit_hash = TestUtil::randomSha();
+            return json_encode([
+                'ref' => 'refs/heads/featureA',
+                'node_id' => 'MDM6UmVmcmVmcy9oZWFkcy9mZWF0dXJlQQ==',
+                'url' => 'https://api.github.com/repos/octocat/Hello-World/git/refs/heads/featureA',
+                'object' => [
+                    'type' => 'commit',
+                    'sha' => $commit_hash,
+                    'url' => sprintf(
+                        'https://api.github.com/repos/octocat/Hello-World/git/commits/%s',
+                        $commit_hash
+                    ),
+                ]
+            ]);
+        }
+
+        // create_pull_request
+        elseif ( preg_match('|/pulls$|', $this->url) && $this->isPost() ) {
+            return json_encode([
+                'number' => 1234,
+            ]);
+        }
+    }
+
+    private function isPost() {
+        return $this->type === 'POST';
+    }
+
+    private function isPatch() {
+        return $this->type === 'PATCH';
     }
 }
 
 class TestResponse extends \RMS\WP2S\GitHub\Response {
-
+    protected $status_code = 200;
 }
 // ..
