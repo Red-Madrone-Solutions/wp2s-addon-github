@@ -196,7 +196,7 @@ class Client {
             throw new DeployException('Error creating tree: ' . $response->pluck('message'));
         }
 
-        return $response->pluck('sha');
+        return $response->pluckAll(['sha', 'tree']);
     }
 
     public function commit_message() {
