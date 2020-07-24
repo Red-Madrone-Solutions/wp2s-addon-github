@@ -246,6 +246,7 @@ class TestRequest {
     }
 
     private function getResponseBody() {
+        // create_blob
         if ( preg_match('|/blobs$|', $this->url) ) {
             $sha = TestUtil::randomSha();
             return json_encode([
