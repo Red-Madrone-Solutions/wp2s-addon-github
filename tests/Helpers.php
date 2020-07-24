@@ -264,12 +264,23 @@ class TestRequest {
         // create_tree
         elseif ( preg_match('|/git/trees$|', $this->url) && $this->isPost() ) {
             $tree_hash = TestUtil::randomSha();
+            $tree = [];
+            foreach ($this->body['tree'] as $entry) {
+                $sha = isset($entry['sha']) ? $entry['sha'] : TestUtil::randomSha();
+                $tree[]= [
+                    'path' => $entry['path'],
+                    'mode' => '100644',
+                    'type' => 'blob',
+                    'sha'  => $sha,
+                ];
+            }
             return json_encode([
                 'sha' => $tree_hash,
                 'url' => sprintf(
                     'https://api.github.com/repos/octocat/Hello-World/trees/%s',
                     $tree_hash
                 ),
+                'tree' => $tree,
             ]);
         }
 
