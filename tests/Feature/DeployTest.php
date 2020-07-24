@@ -27,4 +27,6 @@ it('Deploys', function() {
     $deployer->setup($deploy_test_temp_dir, new TestFileMapper(), $option_set, $client);
     $deployer->execute();
     assertEquals(3, $deployer->file_list()->count());
+    assertEquals(0, $deployer->deployableFiles()->count());
+    assertTrue($deployer->deployableFiles()->empty());
 })->group('integration');
