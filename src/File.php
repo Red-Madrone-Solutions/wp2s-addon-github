@@ -340,10 +340,6 @@ class File {
         return !$this->is_text();
     }
 
-    public function needs_update() : bool {
-        return $this->needs_update;
-    }
-
     public function needs_delete() : bool {
         // TODO actually test for delete
         return false;
