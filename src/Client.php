@@ -120,7 +120,7 @@ class Client implements ClientInterface {
             $this->repo()
         );
 
-        $request  = new Request($this->token(), $url);
+        $request  = new $this->request_class($this->token(), $url);
         $response = $request->exec();
 
         $entry = $response->find('ref', sprintf('refs/heads/%s', $this->source_branch()));
@@ -167,7 +167,7 @@ class Client implements ClientInterface {
             'sha' => $hash,
         ];
 
-        $request = new Request($this->token(), $url, 'POST');
+        $request = new $this->request_class($this->token(), $url, 'POST');
         $request->body($request_body);
 
         $response = $request->exec();
@@ -188,7 +188,7 @@ class Client implements ClientInterface {
             'tree'      => $tree,
         ];
 
-        $request = new Request($this->token(), $url, 'POST');
+        $request = new $this->request_class($this->token(), $url, 'POST');
         $request->body($request_body);
 
         $response = $request->exec();
@@ -229,7 +229,7 @@ class Client implements ClientInterface {
             // TODO Does it make sense to set the author to be for someone in WP? Should we group commits by WP author?
         ];
 
-        $request = new Request($this->token(), $url, 'POST');
+        $request = new $this->request_class($this->token(), $url, 'POST');
         $request->body($request_body);
 
         $response = $request->exec();
@@ -252,7 +252,7 @@ class Client implements ClientInterface {
 
         $request_body = [ 'sha' => $hash ];
 
-        $request = new Request($this->token(), $url, 'PATCH');
+        $request = new $this->request_class($this->token(), $url, 'PATCH');
         $request->body($request_body);
 
         $response = $request->exec();
@@ -281,7 +281,7 @@ class Client implements ClientInterface {
             $branch->name()
         );
 
-        $request = new Request($this->token(), $url, 'DELETE');
+        $request = new $this->request_class($this->token(), $url, 'DELETE');
         $request->exec();
         unset($request);
     }
@@ -335,7 +335,7 @@ class Client implements ClientInterface {
             'body'  => $this->pr_body(),
         ];
 
-        $request = new Request($this->token(), $url, 'POST');
+        $request = new $this->request_class($this->token(), $url, 'POST');
         $request->body($request_body);
         $response = $request->exec();
         unset($request);
@@ -388,7 +388,7 @@ class Client implements ClientInterface {
             'commit_message' => $this->pr_merge_body(),
         ];
 
-        $request = new Request($this->token(), $url, 'PUT');
+        $request = new $this->request_class($this->token(), $url, 'PUT');
         $request->body($request_body);
         $response = $request->exec();
         unset($request);
