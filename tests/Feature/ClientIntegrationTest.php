@@ -30,7 +30,7 @@ afterEach(function() {
 
 it('Sets state on blob create', function() {
     global $option_set, $client_integration_test_temp_dir;
-    $client = new Client($option_set, '\Tests\TestRequest', '\Tests\TestResponse');
+    $client = new Client($option_set, '\Tests\TestRequest');
     $file = setupTestFile('content', $client_integration_test_temp_dir . '/test.txt');
     $client->create_blob($file);
     assertNotEmpty($file->sha());
