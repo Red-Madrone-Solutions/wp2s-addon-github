@@ -41,6 +41,11 @@ class Request {
 
     public function exec() : Response {
         // TODO consider using `wp_remote_get()` or `WP_Http` class instead of curl
+
+        if ( empty($this->token) ) {
+            throw new \UnexpectedValueException('Token must not be empty');
+        }
+
         // phpcs:disable WordPress.WP.AlternativeFunctions.curl_curl_init
         $ch = curl_init();
 
