@@ -18,8 +18,10 @@ beforeEach(function() {
     $deployer_test_temp_dir = tempdir();
     file_put_contents($deployer_test_temp_dir . '/file1.html', 'file 1');
     file_put_contents($deployer_test_temp_dir . '/file2.html', 'file 2');
+    $option_set = new TestOptionSet();
+    $client = new \RMS\WP2S\GitHub\Client($option_set, '\Tests\TestRequest');
     $deployer = new TestDeployer();
-    $deployer->setup($deployer_test_temp_dir, new TestFileMapper(), new TestOptionSet(), new TestClient());
+    $deployer->setup($deployer_test_temp_dir, new TestFileMapper(), $option_set, $client);
     $deployer->build_file_list();
 });
 

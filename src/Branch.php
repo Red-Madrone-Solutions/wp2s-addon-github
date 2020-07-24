@@ -26,7 +26,7 @@ class Branch {
     }
 
     public function client($client = null) {
-        if ( !is_null($client) && is_a($client, '\RMS\WP2S\GitHub\ClientInterface') ) {
+        if ( !is_null($client) && is_a($client, '\RMS\WP2S\GitHub\Client') ) {
             $this->client = $client;
         }
         return $this->client;

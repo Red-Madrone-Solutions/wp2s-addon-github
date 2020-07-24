@@ -171,53 +171,6 @@ class TestUtil {
     }
 }
 
-class TestClient implements \RMS\WP2S\GitHub\ClientInterface {
-    public function deploySetup() {
-        $branch = new TestBranch(
-            'MDM6UmVmcmVmcy9oZWFkcy9mZWF0dXJlQQ==',
-            'https://api.github.com/repos/octocat/Hello-World/git/refs/heads/featureA',
-            'refs/heads/featureA'
-        );
-
-        $branch->client($this);
-        return $branch;
-    }
-
-    public function create_blob(\RMS\WP2S\GitHub\File $file) {
-        $file->stored( TestUtil::randomSha() );
-    }
-
-    public function create_tree($hash, $tree_values) {
-        return TestUtil::randomSha();
-    }
-
-    public function create_commit($tree_hash, $branch_hash) {
-        return TestUtil::randomSha();
-    }
-
-    public function update_reference($ref, $hash) : \RMS\WP2S\GitHub\Branch {
-        $branch = new TestBranch(
-            'NDM6UmVmcmVmcy9oZWFkcy9mZWF0dXJlQQ==',
-            'https://api.github.com/repos/octocat/Hello-World/git/refs/heads/featureB',
-            'refs/heads/featureB'
-        );
-
-        $branch->client($this);
-        return $branch;
-    }
-
-    public function create_pull_request(\RMS\WP2S\GitHub\Branch $source_branch) : \RMS\WP2S\GitHub\PullRequest {
-        return new TestPullRequest(1, $this);
-    }
-
-    public function merge_pull_request(\RMS\WP2S\GitHub\PullRequest $pr) : bool {
-        return true;
-    }
-
-    public function delete_branch(\RMS\WP2S\GitHub\Branch $branch) {
-    }
-}
-
 class TestPullRequest extends \RMS\WP2S\GitHub\PullRequest {
 }
 
