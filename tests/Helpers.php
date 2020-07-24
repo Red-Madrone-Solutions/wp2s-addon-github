@@ -156,6 +156,13 @@ class TestOptionSet extends \RMS\WP2S\GitHub\OptionSet {
     public function __construct($load_from_db = false, $data = []) {
         parent::__construct(false, $data);
     }
+
+    public function findByName($name) {
+        if ( $name === 'personal_access_token' ) {
+            return new \RMS\WP2S\GitHub\Option($name, 'Test Personal Access Token');
+        }
+        return parent::findByName($name);
+    }
 }
 
 class TestClient implements \RMS\WP2S\GitHub\ClientInterface {
