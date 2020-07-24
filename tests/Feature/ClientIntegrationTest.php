@@ -32,6 +32,9 @@ it('Sets state on blob create', function() {
     global $option_set, $client_integration_test_temp_dir;
     $client = new Client($option_set, '\Tests\TestRequest');
     $file = setupTestFile('content', $client_integration_test_temp_dir . '/test.txt');
+    assertTrue($file->needsUpdate());
     $client->create_blob($file);
     assertNotEmpty($file->sha());
+    assertNotEmpty($file->storedContentHash());
+    assertFalse($file->needsUpdate());
 });
