@@ -4,6 +4,8 @@
 namespace Tests;
 
 use RMS\WP2S\GitHub\Deployer;
+use RMS\WP2S\GitHub\DeployState;
+
 
 $deploy_test_temp_dir = null;
 beforeAll(function() {
@@ -29,4 +31,10 @@ it('Deploys', function() {
     assertEquals(3, $deployer->file_list()->count());
     assertEquals(0, $deployer->deployableFiles()->count());
     assertTrue($deployer->deployableFiles()->empty());
+    $files_in_pr = $deployer->file_list()->filter(
+        function($file) {
+            return $file->state === DeployState::IN_PULL_REQUEST;
+        }
+    );
+    assertEquals(3, $files_in_pr->count());
 })->group('integration');
