@@ -231,7 +231,7 @@ class Client implements ClientInterface {
         return $response->pluck('sha');
     }
 
-    public function update_reference($ref, $hash) {
+    public function update_reference($ref, $hash) : Branch {
         if ( substr($ref, 0, 5) === 'refs/' ) {
             $ref = substr($ref, 5);
         }
@@ -314,7 +314,7 @@ class Client implements ClientInterface {
         $file->stored($response->pluck('sha'));
     }
 
-    public function create_pull_request(Branch $source_branch) {
+    public function create_pull_request(Branch $source_branch) : PullRequest {
         $url = sprintf(
             // https://api.github.com/repos/:owner/:repo/pulls
             '%s/repos/%s/%s/pulls',
@@ -363,7 +363,7 @@ class Client implements ClientInterface {
             ?: apply_filters('rms/wp2s/github/default-pr-merge-body', '');
     }
 
-    public function merge_pull_request(PullRequest $pr) {
+    public function merge_pull_request(PullRequest $pr) : bool {
         if ( !$this->should_auto_merge_pr() ) {
             Log::l('Skipping auto-merge of PR per option setting');
             return false;
