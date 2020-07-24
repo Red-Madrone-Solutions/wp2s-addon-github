@@ -8,7 +8,7 @@ class Response {
     private $headers;
     private $body;
     private $body_json;
-    private $status_code = null;
+    protected $status_code = null;
 
     public static function setup() {
     }
