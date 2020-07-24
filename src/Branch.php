@@ -132,7 +132,7 @@ class Branch {
 
         list($tree_hash, $tree) = $this->client->create_tree($this->hash(), array_values($tree));
         $this->file_list->each(
-            function($file) {
+            function($file) use ($tree) {
                 $entry = Util::find($tree, 'path', $file->commit_path());
                 if ( !is_null($entry) && isset($entry['sha']) ) {
                     $file->stored($entry['sha']);
