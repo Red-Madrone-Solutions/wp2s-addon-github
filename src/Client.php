@@ -9,14 +9,19 @@ class Client implements ClientInterface {
     private $api_base = 'https://api.github.com';
     private $account  = null;
     private $repo     = null;
+    private $request_class;
 
     /**
      * __construct
      *
      * @param OptionSet $option_set
      */
-    public function __construct(OptionSet $option_set) {
-        $this->option_set = $option_set;
+    public function __construct(
+        OptionSet $option_set,
+        string $request_class = null
+    ) {
+        $this->option_set    = $option_set;
+        $this->request_class = $request_class ?: 'Request';
     }
 
     public function canAccess() : bool {
@@ -306,7 +311,7 @@ class Client implements ClientInterface {
             'encoding' => $encoding,
         ];
 
-        $request = new Request($this->token(), $url, 'POST');
+        $request = new $this->request_class($this->token(), $url, 'POST');
         $request->body($request_body);
         $response = $request->exec();
         unset($request);
