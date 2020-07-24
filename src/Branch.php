@@ -130,7 +130,13 @@ class Branch {
             $this->file_list->allFiles()
         );
 
-        $tree_hash = $this->client->create_tree($this->hash(), array_values($tree));
+        list($tree_hash, $tree) = $this->client->create_tree($this->hash(), array_values($tree));
+        foreach ( $this->file_list->allFiles() as $file ) {
+            $entry = Util::find($tree, 'path', $file->commit_path());
+            if ( !is_null($entry) && isset($entry['sha']) ) {
+                $file->stored($entry['sha']);
+            }
+        }
         // error_log("tree_hash: " . $tree_hash);
         $commit_hash = $this->client->create_commit($tree_hash, $this->hash());
         // TODO Mark files in commit
