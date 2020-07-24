@@ -165,6 +165,12 @@ class TestOptionSet extends \RMS\WP2S\GitHub\OptionSet {
     }
 }
 
+class TestUtil {
+    public static function randomSha() {
+        return sha1(rand(1,99));
+    }
+}
+
 class TestClient implements \RMS\WP2S\GitHub\ClientInterface {
     public function deploySetup() {
         $branch = new TestBranch(
@@ -177,20 +183,16 @@ class TestClient implements \RMS\WP2S\GitHub\ClientInterface {
         return $branch;
     }
 
-    protected function randomSha() {
-        return sha1(rand(1,99));
-    }
-
     public function create_blob(\RMS\WP2S\GitHub\File $file) {
-        $file->stored( $this->randomSha() );
+        $file->stored( TestUtil::randomSha() );
     }
 
     public function create_tree($hash, $tree_values) {
-        return $this->randomSha();
+        return TestUtil::randomSha();
     }
 
     public function create_commit($tree_hash, $branch_hash) {
-        return $this->randomSha();
+        return TestUtil::randomSha();
     }
 
     public function update_reference($ref, $hash) : \RMS\WP2S\GitHub\Branch {
