@@ -146,6 +146,7 @@ class File {
                 'sha'          => $this->sha,
                 'state'        => $this->state,
                 'content_hash' => $this->stored_content_hash,
+                'path'         => $this->commit_path(),
             ]
         );
     }
