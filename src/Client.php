@@ -92,7 +92,7 @@ class Client {
         $entry = $response->find('ref', sprintf('refs/heads/%s', $this->source_branch()));
         if ( is_null($entry) ) {
             Log::warn(
-                sprintf('Cannot find branch: ', $this->source_branch())
+                sprintf('Cannot find branch: %s', $this->source_branch())
             );
             return null;
         }
