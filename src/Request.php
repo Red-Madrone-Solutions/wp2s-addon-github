@@ -39,7 +39,7 @@ class Request {
     public function exec() : Response {
         $ch = curl_init();
 
-        $response = new Response();
+        $response = new Response($ch);
         curl_setopt($ch, CURLOPT_URL, $this->url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HEADER, 0);

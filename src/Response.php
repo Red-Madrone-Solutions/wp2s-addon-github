@@ -9,14 +9,16 @@ class Response {
     private $body;
     private $body_json;
     private $status_code = null;
+    private $curl_handle = null;
 
     public static function setup() {
     }
 
-    public function __construct() {
+    public function __construct($curl_handle = null) {
         $this->body = '';
         $this->body_json = '';
         $this->headers = [];
+        $this->curl_handle = $curl_handle;
     }
 
     public function body($value = null) : string {
@@ -28,7 +30,11 @@ class Response {
             }
             $this->body = $value;
             $this->body_json = json_decode($value, $assoc = true);
+            if ( !is_null($this->curl_handle) ) {
+                $this->status_code = (int) curl_getinfo($this->curl_handle, CURLINFO_RESPONSE_CODE);
+            }
             Log::debug2('Response: %s', $this->simpleBody());
+            Log::debug2('Status Code: %s', $this->status_code);
         }
 
         return $this->body;
