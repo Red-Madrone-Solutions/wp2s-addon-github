@@ -19,7 +19,9 @@ if ( !defined('WPINC') ) {
 define( 'RMS_WP2S_GH_PATH', plugin_dir_path(__FILE__) );
 define( 'RMS_WP2S_GH_VERSION', '1.0-alpha-001' );
 
-require RMS_WP2S_GH_PATH . 'vendor/autoload.php';
+if ( file_exists( RMS_WP2S_GH_PATH . 'vendor/autoload.php' ) ) {
+    require RMS_WP2S_GH_PATH . 'vendor/autoload.php';
+}
 
 function run_rms_wp2s_gh() {
     $controller = new RMS\WP2S\GitHub\Controller();
