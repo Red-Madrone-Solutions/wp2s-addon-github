@@ -40,6 +40,10 @@ class Response {
         return $this->body;
     }
 
+    public function debug() {
+        return print_r($this, 1);
+    }
+
     private function simpleBody() {
         $simple_body = $this->body_json;
 
