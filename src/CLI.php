@@ -36,6 +36,11 @@ class CLI {
             WP_CLI::line( 'dry run...' );
         }
 
+        if ( $action === 'deploy' ) {
+            $path = \WP2Static\ProcessedSite::getPath();
+            Controller::deploy($path);
+        }
+
         if ( $action === 'site_path' ) {
             $path = \WP2Static\ProcessedSite::getPath();
             WP_CLI::line( $path );
