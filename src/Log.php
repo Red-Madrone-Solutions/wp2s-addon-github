@@ -17,7 +17,7 @@ class Log {
                     'RMS_WP2S_GITHUB_LOG_LEVEL',
                     /**
                      * ```
-                     * add_action('rms/wp2s/github/log-level', function($log_level) {
+                     * add_filter('rms/wp2s/github/log-level', function($log_level) {
                      *   return \RMS\WP2S\GitHub\Log::INFO;
                      * });
                      * ```

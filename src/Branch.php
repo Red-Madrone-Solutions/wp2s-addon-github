@@ -36,6 +36,10 @@ class Branch {
         return new self($this->node_id, $this->url, $this->ref, $this->object);
     }
 
+    /**
+     * Update _this_ Branch object to point at a different
+     * Branch object (after creating a commit)
+     */
     protected function update(Branch $branch) {
         $this->ancestors[]= $this->clone();
 

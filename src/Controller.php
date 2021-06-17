@@ -9,6 +9,9 @@ class Controller {
     private static $test_nonce_name = 'rms_test_security_nonce';
     private static $slug = 'rms-wp2s-addon-gh';
 
+    /**
+     * Add-on initialization routine
+     */
     public function run() : void {
         // register add-on option page
         add_action(
