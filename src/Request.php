@@ -46,7 +46,6 @@ class Request {
         curl_setopt($ch, CURLOPT_USERAGENT, 'RMS WP2S Addon - GitHub v1');
         curl_setopt($ch, CURLOPT_HEADERFUNCTION, [ $response, 'collect_headers' ]);
 
-        curl_setopt($ch, CURLOPT_PROXY, 'localhost:8888');
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_PROXY_SSL_VERIFYPEER, false);
 
@@ -57,6 +56,17 @@ class Request {
         $custom_types = [ 'DELETE', 'PATCH', 'PUT' ];
         if ( in_array(strtoupper($this->type), $custom_types) ) {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, strtoupper($this->type));
+        }
+
+        if (
+            defined('WP_PROXY_HOST') && !empty(constant('WP_PROXY_HOST'))
+            && defined('WP_PROXY_PORT') && !empty(constant('WP_PROXY_PORT'))
+        ) {
+            curl_setopt(
+                $ch,
+                CURLOPT_PROXY,
+                implode(':', [ WP_PROXY_HOST, WP_PROXY_PORT ])
+            );
         }
 
         $request_headers = [
