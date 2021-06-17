@@ -7,15 +7,32 @@ class Controller {
     private static $options_nonce_name = 'rms_options_security_nonce';
     private static $test_action = 'rms_wp2s_gh_test';
     private static $test_nonce_name = 'rms_test_security_nonce';
+    private static $slug = 'rms-wp2s-addon-gh';
 
     public function run() : void {
-        add_filter('wp2static_add_menu_items', [ 'RMS\WP2S\GitHub\Controller', 'addSubMenuPage' ]);
+        // register add-on option page
+        add_action(
+            'admin_menu',
+            [ $this, 'addOptionsPage' ],
+            15,
+            1
+        );
+
+        // Ensure WP2Static > Options is active menu when in Add-on's options view
+        add_filter( 'parent_file', [ $this, 'setActiveParentMenu' ] );
+
+        add_filter( 'wp2static_deploy_cache_totals_by_namespace', '__return_true' );
+
+        // Handler to trigger during deploy phase
+        add_action('wp2static_deploy', [ $this, 'deploy' ], 15, 2);
+
+        // Handler to trigger after deploy phase
+        add_action('wp2static_post_deploy_trigger', [ $this, 'postDeploy' ], 15, 2);
+
+        // add_filter('wp2static_add_menu_items', [ 'RMS\WP2S\GitHub\Controller', 'addSubMenuPage' ]);
 
         add_action('admin_post_' . self::$options_action, [ $this, 'saveOptionsFromUi' ]);
         add_action('admin_post_' . self::$test_action, [ $this, 'testGitHubIntegration' ]);
-
-        add_action('wp2static_deploy', [ $this, 'deploy' ]);
-        add_action('wp2static_post_deploy_trigger', [ $this, 'postDeploy' ]);
 
         self::setup();
 
@@ -37,13 +54,23 @@ class Controller {
         Response::setup();
     }
 
-    public static function addSubMenuPage(array $submenu_pages) : array {
-        $submenu_pages['GitHub'] = [ 'RMS\WP2S\GitHub\Controller', 'renderOptionsPage' ];
-
-        return $submenu_pages;
+    /**
+     * Register Add-on options page
+     *
+     * Will be linked to from WP2Static > Add-ons page
+     */
+    public function addOptionsPage() : void {
+        add_submenu_page(
+            'null', // don't add within WP2Static menu directly
+            'RMS GitHub Deployment Options', // page name / title
+            'RMS GitHUb Deployment Options', // page name / title
+            'manage_options', // user level required to access page
+            self::$slug, // page slug
+            [ $this, 'renderOptionsPage' ] // function to render page
+        );
     }
 
-    public static function renderOptionsPage() : void {
+    public function renderOptionsPage() : void {
         $view_params = [
             'action'          => self::$options_action,
             'nonce_name'      => self::$options_nonce_name,
@@ -56,6 +83,16 @@ class Controller {
 
     public static function activate() : void {
         EncryptedOption::activate();
+
+        // Tell WP2Static about this addon
+        do_action(
+            'wp2static_register_addon',
+            self::$slug,
+            'deploy',
+            'RMS WP2Static GitHub Deploy',
+            '',
+            'Deploy static site scrape to GitHub',
+        );
     }
 
     public static function deactivate() : void {
@@ -69,7 +106,7 @@ class Controller {
         $option_set = new OptionSet($load_from_db = 1, $_POST);
         Database::instance()->updateOptions($option_set);
         ( new AdminNotice('Options saved') )->save();
-        wp_safe_redirect( admin_url('admin.php?page=wp2static-GitHub') );
+        wp_safe_redirect( admin_url('admin.php?page=' . self::$slug) );
         exit;
     }
 
@@ -94,7 +131,7 @@ class Controller {
         }
         Log::l('Finished check GitHub integration');
 
-        wp_safe_redirect( admin_url('admin.php?page=wp2static-GitHub') );
+        wp_safe_redirect( admin_url('admin.php?page=' . self::$slug) );
         exit;
     }
 
@@ -115,5 +152,13 @@ class Controller {
         $dry_run = new DryRun();
         $dry_run->setup($processed_site_path);
         $dry_run->execute();
+    }
+
+    public function setActiveParentMenu() : void {
+        global $plugin_page;
+
+        if ( self::$slug === $plugin_page ) {
+            $plugin_page = 'wp2static-options';
+        }
     }
 }
