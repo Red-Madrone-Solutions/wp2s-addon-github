@@ -138,7 +138,7 @@ class Controller {
         exit;
     }
 
-    public function deploy(string $processed_site_path) : void {
+    public static function deploy(string $processed_site_path) : void {
         $deployer = new Deployer();
         $deployer->setup($processed_site_path);
         try {
